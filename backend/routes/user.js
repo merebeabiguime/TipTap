@@ -22,14 +22,4 @@ router.get("/:id", async (req, res) => {
     : res.send("Impossible de charger cet utilisateur");
 });
 
-/***************************************** DELETE  ***************************************************** */
-
-router.get("/delete/:id", async (req, res) => {
-  const id = req.params.id;
-  const result = await db.deleteUser(id);
-  result != 0
-    ? res.send(result)
-    : res.send("Impossible de supprimer cet utilisateur");
-});
-
 export default router;

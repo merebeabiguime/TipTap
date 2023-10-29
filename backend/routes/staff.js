@@ -17,12 +17,4 @@ router.get("/:id", async (req, res) => {
   result != 0 ? res.send(result) : res.send("Impossible de charger ce staff");
 });
 
-/***************************************** DELETE  ***************************************************** */
-
-router.get("/delete/:id", async (req, res) => {
-  const id = req.params.id;
-  const result = await db.deleteStaff(id);
-  result != 0 ? res.send(result) : res.send("Impossible de supprimer ce staff");
-});
-
 export default router;
