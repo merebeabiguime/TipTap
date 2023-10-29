@@ -1,0 +1,29 @@
+/* Définition des polices personnalisées */
+@font-face {
+  font-family: "Satoshi Variable";
+  src: url("./fonts/Satoshi/Variable/Satoshi-Variable.ttf") format("truetype");
+  /* Ajoutez d'autres formats de police si nécessaire */
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Satoshi Black";
+  src: url("./fonts/Satoshi/OTF/Satoshi-Black.otf") format("opentype");
+  /* Ajoutez d'autres formats de police si nécessaire */
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Styles pour les éléments HTML */
+h1 {
+  font-family: "Satoshi Black", sans-serif;
+  font-size: 28px;
+  color: #492b29;
+  width: 80%;
+}
+
+p {
+  font-family: "Satoshi Variable", sans-serif;
+  width: 80%;
+}
