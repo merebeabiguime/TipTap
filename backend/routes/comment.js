@@ -20,15 +20,3 @@ router.get("/:id", async (req, res) => {
     ? res.send(result)
     : res.send("Impossible de charger ce commentaire");
 });
-
-/***************************************** DELETE  ***************************************************** */
-
-router.get("/delete/:id", async (req, res) => {
-  const id = req.params.id;
-  const result = await db.deleteComment(id);
-  result != 0
-    ? res.send(result)
-    : res.send("Impossible de supprimer ce commentaire");
-});
-
-export default router;

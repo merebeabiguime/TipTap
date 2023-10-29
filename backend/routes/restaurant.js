@@ -20,15 +20,3 @@ router.get("/:id", async (req, res) => {
     ? res.send(result)
     : res.send("Impossible de charger ce restaurant");
 });
-
-/***************************************** DELETE  ***************************************************** */
-
-router.get("/delete/:id", async (req, res) => {
-  const id = req.params.id;
-  const result = await db.deleteRestaurant(id);
-  result != 0
-    ? res.send(result)
-    : res.send("Impossible de supprimer ce restaurant");
-});
-
-export default router;
