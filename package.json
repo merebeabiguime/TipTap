@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "type": "module",
-  "main": "index.js",
+  "main": "database.js",
   "scripts": {
-    "dev": "npx nodemon app.js"
+    "dev": "npx nodemon server.js"
   },
   "keywords": [],
   "author": "",
