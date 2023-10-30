@@ -35,23 +35,26 @@ form {
   width: 100% !important;
   height: 65px !important;
   border: 0 !important;
-  margin-right: 25px !important;
-  margin-left: 25px !important;
+}
+.col-button {
+  margin-left: 25px;
+  margin-right: 25px;
 }
 
 .customButton4 {
   margin-top: 25px !important;
   margin-bottom: 25px !important;
-  width: 80% !important;
+  width: 100% !important;
   border-radius: 10px !important;
   box-shadow: 1px 3px 5px 0px rgba(0, 0, 0, 0.5) !important;
 }
 .customButton2 {
+  font-family: "Satoshi Black", sans-serif !important;
+  width: 100% !important;
+  height: 65px !important;
+  border-color: #fbbc04 !important;
   background-color: white !important;
   color: black !important;
-  border-color: #fbbc04 !important;
-  width: 323px !important;
-  height: 65px !important;
 }
 
 .customForm {

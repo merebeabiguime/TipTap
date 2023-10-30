@@ -34,13 +34,22 @@ function HomePage() {
           nostra, per inceptos himenaeos. Nconubia nostra, per{" "}
         </p>
       </Col>
-      <Link to="/signup" style={{ textDecoration: "none", color: "inherit" }}>
-        <Col className="d-flex justify-content-center" sm={12}>
+      <Link
+        to="/selectRole"
+        style={{ textDecoration: "none", color: "inherit" }}
+      >
+        <Col className="d-flex justify-content-center col-button " sm={12}>
           <Button className="customButton1">Log In</Button>
         </Col>
       </Link>
-      <Link to="/signup" style={{ textDecoration: "none", color: "inherit" }}>
-        <Col className="d-flex justify-content-center col-m-25" sm={12}>
+      <Link
+        to="/selectRole"
+        style={{ textDecoration: "none", color: "inherit" }}
+      >
+        <Col
+          className="d-flex justify-content-center col-m-25 col-button "
+          sm={12}
+        >
           <Button className="customButton2">Sign Up</Button>
         </Col>
       </Link>
