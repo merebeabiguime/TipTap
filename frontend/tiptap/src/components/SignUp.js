@@ -1,98 +1,56 @@
 import "../style.css";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import vector3 from "../images/Vector 3.png";
-import vector4 from "../images/Vector 4.png";
-import logo from "../images/logo.PNG";
-import homepageIcon from "../images/homepage_icon.png";
-import customerIcon from "../images/customer_icon.png";
-import managerIcon from "../images/manager_icon.png";
 import UploadImage from "../images/upload_image_signup.png";
 import UserIcon from "../images/signup_user_icon.png";
 import PhoneIcon from "../images/signup_phone_icon.png";
 import MailIcon from "../images/signup_mail_icon.png";
 import PasswordIcon from "../images/signup_password_icon.png";
 
-import { Link } from "react-router-dom";
-import React, { useState } from "react";
 import { Button, InputGroup, Form } from "react-bootstrap";
+import { useUserContext } from "../contexts/AuthContext";
+import { useRef, useState } from "react";
 
 function SignUp() {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [userRole, setUserRole] = useState(0);
+  const { userRole, signUp } = useUserContext();
+  const inputs = useRef([]);
+  const [validation, setValidation] = useState("");
 
-  const handleRole = (role) => {
-    setUserRole(role);
-    setCurrentStep(currentStep + 1);
+  console.log("aa :" + signUp);
+
+  const addInput = (el) => {
+    if (el && !inputs.current.includes(el)) {
+      inputs.current.push(el);
+    }
   };
 
-  let content;
-  if (currentStep === 0) {
-    content = (
-      <Row>
-        <Col className="justify-content-end" sm={12}>
-          <div>
-            <img src={vector3} alt="Vector 3" className="vector" />
-          </div>
-          <div>
-            <img src={vector4} alt="Vector 4" className="vector" />
-          </div>
-        </Col>
-        <Col className=" d-flex justify-content-center " sm={12}>
-          <img className="col-m-200" src={logo} alt="logo" />
-        </Col>
-        <Col className=" d-flex justify-content-center  col-m-50">
-          <img src={homepageIcon} alt="logo" />
-        </Col>
-        <Col className="d-flex justify-content-center  col-m-50" sm={12}>
-          <h1 className="text-center">How would you like to register? </h1>
-        </Col>
-        <Link
-          to="/signup"
-          style={{ textDecoration: "none", color: "inherit" }}
-          onClick={() => handleRole(1)}
-        >
-          <Col
-            className="d-flex justify-content-center  border border-gray mx-auto align-items-center customButton4"
-            sm={12}
-          >
-            <div className="mr-4">
-              <img src={customerIcon} alt="logo" />
-            </div>
-            <div className="text-left">
-              <h1>Customer</h1>
-              <p>
-                Show your appreciation for good service by leaving a small
-                amount
-              </p>
-            </div>
-          </Col>
-        </Link>
-        <Link
-          to="/signup"
-          style={{ textDecoration: "none", color: "inherit" }}
-          onClick={() => handleRole(2)}
-        >
-          <Col
-            className="d-flex justify-content-center  border border-gray mx-auto align-items-center customButton4"
-            sm={12}
-          >
-            <div className="mr-4">
-              <img src={managerIcon} alt="logo" />
-            </div>
-            <div className="text-left">
-              <h1>Manager</h1>
-              <p>
-                Managing the hotel overall operation adding staff, check staff
-                performance
-              </p>
-            </div>
-          </Col>
-        </Link>
-      </Row>
-    );
-  } else if (currentStep === 1) {
-    content = (
+  const formRef = useRef();
+
+  const handleForm = async (e) => {
+    e.preventDefault();
+
+    if (
+      (inputs.current[4].value.length || inputs.current[5].value.length) < 6
+    ) {
+      setValidation("6 characters min");
+      return;
+    } else if (inputs.current[4].value != inputs.current[5].value) {
+      setValidation("Passwords dont match");
+      return;
+    }
+
+    try {
+      const credentials = await signUp(
+        inputs.current[2].value,
+        inputs.current[4].value
+      );
+      formRef.current.reset();
+      setValidation("");
+      console.log(credentials);
+    } catch (err) {}
+  };
+  return (
+    <div>
       <Row>
         <Col className="d-flex justify-content-center  " sm={12}>
           <h1 className="col-m-25">Create Account </h1>
@@ -100,17 +58,18 @@ function SignUp() {
         <Col className="d-flex justify-content-center  col-m-50" sm={12}>
           <p>
             Join the community with just a few taps. Enter the following
-            information
+            information {userRole}
           </p>
         </Col>
         <Col className=" d-flex justify-content-center  col-m-50" sm={12}>
           <img src={UploadImage} alt="logo" />
         </Col>
         <Col className=" d-flex justify-content-center" sm={12}>
-          <Form>
+          <Form onSubmit={handleForm} ref={formRef}>
             <InputGroup>
               <img className="iconForm" src={UserIcon} alt="User" />
               <Form.Control
+                ref={addInput}
                 type="text"
                 placeholder="First name"
                 className="customForm"
@@ -119,6 +78,7 @@ function SignUp() {
             <InputGroup>
               <img className="iconForm" src={UserIcon} alt="User" />
               <Form.Control
+                ref={addInput}
                 type="text"
                 placeholder="Last name"
                 className="customForm"
@@ -127,6 +87,7 @@ function SignUp() {
             <InputGroup>
               <img className="iconForm" src={MailIcon} alt="User" />
               <Form.Control
+                ref={addInput}
                 type="email"
                 placeholder="Email"
                 className="customForm"
@@ -135,6 +96,7 @@ function SignUp() {
             <InputGroup>
               <img className="iconForm" src={PhoneIcon} alt="User" />
               <Form.Control
+                ref={addInput}
                 type="text"
                 placeholder="Phone number"
                 className="customForm"
@@ -143,6 +105,7 @@ function SignUp() {
             <InputGroup>
               <img className="iconForm" src={PasswordIcon} alt="User" />
               <Form.Control
+                ref={addInput}
                 type="password"
                 placeholder="Password"
                 className="customForm"
@@ -151,20 +114,23 @@ function SignUp() {
             <InputGroup>
               <img className="iconForm" src={PasswordIcon} alt="User" />
               <Form.Control
+                ref={addInput}
                 type="password"
                 placeholder="Confirm Password"
                 className="customForm"
               />
             </InputGroup>
+            <p className="text-danger mt-1">{validation}</p>
+            <Col className="d-flex justify-content-center  col-m-25" sm={12}>
+              <Button type="submit" className="customButton1">
+                Sign Up
+              </Button>
+            </Col>
           </Form>
         </Col>
-        <Col className="d-flex justify-content-center  col-m-25" sm={12}>
-          <Button className="customButton1">Sign Up</Button>
-        </Col>
       </Row>
-    );
-  }
-  return <div>{content}</div>;
+    </div>
+  );
 }
 
 export default SignUp;
