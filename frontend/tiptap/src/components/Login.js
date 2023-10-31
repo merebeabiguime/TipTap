@@ -14,6 +14,7 @@ import { Button, InputGroup, Form } from "react-bootstrap";
 import { useUserContext } from "../contexts/AuthContext";
 import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import PreviousPageButton from "./PreviousPageButton";
 function Login() {
   const { signIn } = useUserContext();
   const inputs = useRef([]);
@@ -45,6 +46,9 @@ function Login() {
   return (
     <div>
       <Row>
+        <Col className="previous-button" sm={12}>
+          <PreviousPageButton />
+        </Col>
         <Col className="justify-content-end" sm={12}>
           <div>
             <img src={vector3} alt="Vector 3" className="vector" />
