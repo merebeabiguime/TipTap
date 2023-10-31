@@ -35,6 +35,9 @@ form {
   width: 100% !important;
   height: 65px !important;
   border: 0 !important;
+  &:disabled {
+    background-color: #b286046a !important;
+  }
 }
 .col-button {
   margin-left: 25px;
@@ -112,4 +115,12 @@ form {
   height: 1px;
   background: linear-gradient(to right, #757575, #757575, transparent);
   margin: 0 10px; /* Ajustez la marge pour contrôler la distance entre les lignes */
+}
+
+.circular-image {
+  width: 122px; /* Ajustez la taille de l'image comme vous le souhaitez */
+  height: 122px;
+  border-radius: 50%; /* Cela rendra l'image circulaire */
+  object-fit: cover; /* Ajuste l'image pour remplir le cercle */
+  box-shadow: 1px 2px 4px 0px rgba(0, 0, 0, 0.5) !important;
 }
