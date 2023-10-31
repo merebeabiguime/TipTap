@@ -3,6 +3,8 @@ import HomePage from "./HomePage";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SignUp from "./SignUp";
 import SelectRole from "./SelectRole";
+import Private from "./Private/Private";
+import PrivateHome from "./Private/PrivateHome/PrivateHome";
 
 function App() {
   return (
@@ -12,6 +14,9 @@ function App() {
           <Route path="/homepage" Component={HomePage}></Route>
           <Route path="/selectRole" Component={SelectRole}></Route>
           <Route path="/signup" Component={SignUp}></Route>
+          <Route path="/private" element={<Private />}>
+            <Route path="/private/private-home" element={<PrivateHome />} />
+          </Route>
         </Routes>
       </Router>
     </Container>
