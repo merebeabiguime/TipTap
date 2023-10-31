@@ -1,7 +1,6 @@
 import "../style.css";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import UploadImage from "../images/upload_image_signup.png";
 import vector3 from "../images/Vector 3.png";
 import vector4 from "../images/Vector 4.png";
 import PasswordIcon from "../images/signup_password_icon.png";
@@ -66,9 +65,6 @@ function ResetPassword() {
         </Col>
         <Col className="d-flex justify-content-center  col-m-50" sm={12}>
           <p>Here you can reset your password</p>
-        </Col>
-        <Col className=" d-flex justify-content-center  col-m-50" sm={12}>
-          <img src={UploadImage} alt="logo" />
         </Col>
         <Col className=" d-flex justify-content-center" sm={12}>
           <Form onSubmit={handleForm} ref={formRef}>
