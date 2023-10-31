@@ -10,13 +10,66 @@ import axios from "axios";
 
 import { Button, InputGroup, Form } from "react-bootstrap";
 import { useUserContext } from "../contexts/AuthContext";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FirebaseError } from "firebase/app";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { storage } from "../firebase";
+
 function SignUp() {
   const { userRole, signUp, currentUser } = useUserContext();
   const inputs = useRef([]);
   const [validation, setValidation] = useState("");
   const navigate = useNavigate();
+  const [file, setFile] = useState("");
+  const [data, setData] = useState({});
+  const [percentage, setPercentage] = useState(null);
+
+  useEffect(() => {
+    const uploadFile = () => {
+      const name = new Date().getTime() + file.name;
+      const storageRef = ref(storage, name);
+
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          // Observe state change events such as progress, pause, and resume
+          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log("Upload is " + progress + "% done");
+          setPercentage(progress);
+          switch (snapshot.state) {
+            case "paused":
+              console.log("Upload is paused");
+              break;
+            case "running":
+              console.log("Upload is running");
+              break;
+            default:
+              break;
+          }
+        },
+        (error) => {
+          console.log(error);
+        },
+        () => {
+          // Handle successful uploads on complete
+          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            setData((prev) => ({ ...prev, img: downloadURL }));
+          });
+        }
+      );
+    };
+    file && uploadFile();
+  }, [file]);
+
+  useEffect(() => {
+    console.log("data image" + data.img);
+  }, [data]);
 
   const addInput = (el) => {
     if (el && !inputs.current.includes(el)) {
@@ -54,7 +107,7 @@ function SignUp() {
             phone: inputs.current[3].value,
             password: "password",
             role: userRole,
-            pictureUrl: "pictureURL",
+            pictureUrl: data.img ? data.img : "default.png",
             ID_restaurant: 0,
             UID: credentials.user.uid,
           },
@@ -89,8 +142,22 @@ function SignUp() {
             information {userRole}
           </p>
         </Col>
+
         <Col className=" d-flex justify-content-center  col-m-50" sm={12}>
-          <img src={UploadImage} alt="logo" />
+          <input
+            type="file"
+            className="form-control"
+            id="file"
+            style={{ display: "none" }}
+            onChange={(e) => setFile(e.target.files[0])}
+          />
+          {data.img ? ( // Vérifiez si une image a été téléchargée
+            <img src={data.img} alt="Profile" className="circular-image" />
+          ) : (
+            <label htmlFor="file" className="btn ">
+              <img src={UploadImage} alt="Upload" className="mr-2" />
+            </label>
+          )}
         </Col>
         <Col className=" d-flex justify-content-center" sm={12}>
           <Form onSubmit={handleForm} ref={formRef}>
@@ -150,7 +217,11 @@ function SignUp() {
             </InputGroup>
             <p className="text-danger mt-1">{validation}</p>
             <Col className="d-flex justify-content-center  col-m-25" sm={12}>
-              <Button type="submit" className="customButton1">
+              <Button
+                disabled={percentage !== null && percentage < 100}
+                type="submit"
+                className="customButton1"
+              >
                 Sign Up
               </Button>
             </Col>
