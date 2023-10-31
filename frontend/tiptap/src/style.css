@@ -82,7 +82,7 @@ form {
   margin-bottom: 25px !important;
 }
 .col-m-200 {
-  margin-top: 200px !important;
+  margin-top: 160px !important;
   margin-bottom: 25px !important;
 }
 
@@ -90,4 +90,26 @@ form {
   position: absolute !important;
   top: 0 !important;
   right: 0 !important;
+}
+
+/* Style des lignes */
+.line-divider {
+  display: flex;
+  align-items: center;
+}
+
+.line-divider::before {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #757575, #757575);
+  margin: 0 10px; /* Ajustez la marge pour contrôler la distance entre les lignes */
+}
+
+.line-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, #757575, #757575, transparent);
+  margin: 0 10px; /* Ajustez la marge pour contrôler la distance entre les lignes */
 }

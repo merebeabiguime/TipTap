@@ -6,12 +6,14 @@ import UserIcon from "../images/signup_user_icon.png";
 import PasswordIcon from "../images/signup_password_icon.png";
 import vector3 from "../images/Vector 3.png";
 import vector4 from "../images/Vector 4.png";
-import axios from "axios";
+import facebook from "../images/signin_with_facebook.png";
+import google from "../images/signin_with_google.png";
+import apple from "../images/signin_with_apple.png";
 
 import { Button, InputGroup, Form } from "react-bootstrap";
 import { useUserContext } from "../contexts/AuthContext";
 import { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 function Login() {
   const { signIn } = useUserContext();
   const inputs = useRef([]);
@@ -80,13 +82,56 @@ function Login() {
                 className="customForm"
               />
             </InputGroup>
+
             <p className="text-danger mt-1">{validation}</p>
+            <Col sm={12}>
+              <Link
+                to="/forgotpassword"
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <p className="d-flex justify-content-end mx-auto">
+                  Forgot password ?
+                </p>
+              </Link>
+            </Col>
+
             <Col className="d-flex justify-content-center  col-m-25" sm={12}>
               <Button type="submit" className="customButton1">
                 Sign In
               </Button>
             </Col>
           </Form>
+        </Col>
+        <Col className="d-flex justify-content-center  " sm={12}>
+          <p className="d-flex justify-content-center line-divider ">
+            Or continue with
+          </p>
+        </Col>
+        <Col className="d-flex justify-content-center col-m-25" sm={12}>
+          <div>
+            <img src={facebook} alt="facebook" />
+          </div>
+          <div>
+            <img src={google} alt="google" />
+          </div>
+          <div>
+            <img src={apple} alt="apple" />
+          </div>
+        </Col>
+        <Col className="d-flex justify-content-center mx-auto " sm={12}>
+          <p
+            style={{ fontWeight: "bold" }}
+            className="d-flex justify-content-center"
+          >
+            Not a member ?{" "}
+            <Link
+              to="/signup"
+              style={{ color: "#E09C4A", textDecoration: "none" }}
+            >
+              {" "}
+              Register Now
+            </Link>
+          </p>
         </Col>
       </Row>
     </div>
