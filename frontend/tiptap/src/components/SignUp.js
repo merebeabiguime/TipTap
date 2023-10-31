@@ -13,7 +13,7 @@ import { useUserContext } from "../contexts/AuthContext";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 function SignUp() {
-  const { userRole, signUp } = useUserContext();
+  const { userRole, signUp, currentUser } = useUserContext();
   const inputs = useRef([]);
   const [validation, setValidation] = useState("");
   const navigate = useNavigate();
@@ -56,9 +56,12 @@ function SignUp() {
             role: userRole,
             pictureUrl: "pictureURL",
             ID_restaurant: 0,
+            UID: credentials.user.uid,
           },
         ];
+        console.log("JSON:" + jsonData[0].UID);
         await axios.post("http://localhost:8081/user/addUser", jsonData);
+        console.log("credentials11 : " + credentials.user.uid);
         setValidation("");
         navigate("/private/private-home");
         formRef.current.reset();

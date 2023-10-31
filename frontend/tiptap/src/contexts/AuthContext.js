@@ -34,14 +34,17 @@ export function UserContextProvider(props) {
   }, []);
 
   return (
-    <UserContext.Provider value={{ userRole, selectRole, signUp, signIn }}>
+    <UserContext.Provider
+      value={{ userRole, selectRole, signUp, signIn, currentUser }}
+    >
       {!loadingData && props.children}
     </UserContext.Provider>
   );
 }
 
 export function useUserContext() {
-  const { userRole, selectRole, signUp, signIn } = useContext(UserContext);
+  const { userRole, selectRole, signUp, signIn, currentUser } =
+    useContext(UserContext);
 
-  return { userRole, selectRole, signUp, signIn };
+  return { userRole, selectRole, signUp, signIn, currentUser };
 }
