@@ -1,0 +1,115 @@
+/* Définition des polices personnalisées */
+@font-face {
+  font-family: "Satoshi Variable";
+  src: url("./fonts/Satoshi/Variable/Satoshi-Variable.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Satoshi Black";
+  src: url("./fonts/Satoshi/OTF/Satoshi-Black.otf") format("opentype");
+}
+
+/* Styles pour les éléments HTML */
+h1 {
+  font-family: "Satoshi Black", sans-serif !important;
+  font-size: 28px !important;
+  color: #492b29 !important;
+  width: 80% !important;
+}
+
+p {
+  font-family: "Satoshi Variable", sans-serif !important;
+  width: 80% !important;
+  font-size: 16px !important;
+}
+form {
+  width: 100% !important;
+  margin-right: 25px !important;
+  margin-left: 25px !important;
+}
+
+/* Styles pour les éléments React Bootstrap */
+.customButton1 {
+  background-color: #fbbc04 !important;
+  font-family: "Satoshi Black", sans-serif !important;
+  width: 100% !important;
+  height: 65px !important;
+  border: 0 !important;
+}
+.col-button {
+  margin-left: 25px;
+  margin-right: 25px;
+}
+
+.customButton4 {
+  margin-top: 25px !important;
+  margin-bottom: 25px !important;
+  width: 100% !important;
+  border-radius: 10px !important;
+  box-shadow: 1px 3px 5px 0px rgba(0, 0, 0, 0.5) !important;
+}
+.customButton2 {
+  font-family: "Satoshi Black", sans-serif !important;
+  width: 100% !important;
+  height: 65px !important;
+  border-color: #fbbc04 !important;
+  background-color: white !important;
+  color: black !important;
+}
+
+.customForm {
+  width: 100% !important;
+  height: 65px !important;
+  border: 0 !important;
+  border-radius: 10px !important;
+  color: rgba(117, 117, 117, 1) !important;
+  background-color: rgba(217, 217, 217, 0.46) !important;
+  margin-bottom: 15px !important;
+  font-size: 14px !important;
+  padding-left: 60px !important;
+}
+
+.iconForm {
+  position: absolute !important;
+  top: 25% !important;
+  left: 1.25rem !important;
+}
+.col-m-50 {
+  margin-bottom: 50px !important;
+}
+.col-m-25 {
+  margin-top: 25px !important;
+  margin-bottom: 25px !important;
+}
+.col-m-200 {
+  margin-top: 160px !important;
+  margin-bottom: 25px !important;
+}
+
+.vector {
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+}
+
+/* Style des lignes */
+.line-divider {
+  display: flex;
+  align-items: center;
+}
+
+.line-divider::before {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #757575, #757575);
+  margin: 0 10px; /* Ajustez la marge pour contrôler la distance entre les lignes */
+}
+
+.line-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, #757575, #757575, transparent);
+  margin: 0 10px; /* Ajustez la marge pour contrôler la distance entre les lignes */
+}
