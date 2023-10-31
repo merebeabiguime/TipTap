@@ -2,9 +2,9 @@ import "../style.css";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import UploadImage from "../images/upload_image_signup.png";
-import UserIcon from "../images/signup_user_icon.png";
 import vector3 from "../images/Vector 3.png";
 import vector4 from "../images/Vector 4.png";
+import PasswordIcon from "../images/signup_password_icon.png";
 
 import { Button, InputGroup, Form } from "react-bootstrap";
 import { useUserContext } from "../contexts/AuthContext";
@@ -15,7 +15,7 @@ function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
 
-function ForgotPassword() {
+function ResetPassword() {
   const { resetPassword } = useUserContext();
   const [validation, setValidation] = useState("");
   const navigate = useNavigate();
@@ -104,4 +104,4 @@ function ForgotPassword() {
   );
 }
 
-export default ForgotPassword;
+export default ResetPassword;

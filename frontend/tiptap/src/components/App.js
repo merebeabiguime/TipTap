@@ -7,6 +7,7 @@ import Private from "./Private/Private";
 import PrivateHome from "./Private/PrivateHome/PrivateHome";
 import Login from "./Login";
 import ForgotPassword from "./ForgotPassword";
+import ResetPassword from "./ResetPassword";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/signup" Component={SignUp}></Route>
           <Route path="/signIn" Component={Login}></Route>
           <Route path="/forgotpassword" Component={ForgotPassword}></Route>
+          <Route path="/resetpassword" Component={ResetPassword}></Route>
           <Route path="/private" element={<Private />}>
             <Route path="/private/private-home" element={<PrivateHome />} />
           </Route>
