@@ -3,8 +3,10 @@ import HomePage from "./HomePage";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SignUp from "./SignUp";
 import SelectRole from "./SelectRole";
-import Private from "./Private/Private";
-import PrivateHome from "./Private/PrivateHome/PrivateHome";
+import PrivateManager from "./PrivateManager/PrivateManager";
+import PrivateHomeManager from "./PrivateManager/PrivateHomeManager/PrivateHomeManager";
+import PrivateWorker from "./PrivateWorker/PrivateWorker";
+import PrivateHomeWorker from "./PrivateWorker/PrivateHomeWorker/PrivateHomeWorker";
 import Login from "./Login";
 import ForgotPassword from "./ForgotPassword";
 import ResetPassword from "./ResetPassword";
@@ -20,8 +22,17 @@ function App() {
           <Route path="/signIn" Component={Login}></Route>
           <Route path="/forgotpassword" Component={ForgotPassword}></Route>
           <Route path="/resetpassword" Component={ResetPassword}></Route>
-          <Route path="/private" element={<Private />}>
-            <Route path="/private/private-home" element={<PrivateHome />} />
+          <Route path="/privateManager" element={<PrivateManager />}>
+            <Route
+              path="/privateManager/private-home-manager"
+              element={<PrivateHomeManager />}
+            />
+          </Route>
+          <Route path="/privateWorker" element={<PrivateWorker />}>
+            <Route
+              path="/privateWorker/private-home-worker"
+              element={<PrivateHomeWorker />}
+            />
           </Route>
         </Routes>
       </Router>
