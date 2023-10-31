@@ -95,6 +95,14 @@ export async function getRole(uid) {
   return rows.length === 0 ? 0 : rows;
 }
 
+export async function isEmailOfWorker(email) {
+  const [rows] = await pool.query(
+    "SELECT * FROM user WHERE email=? AND role=1",
+    [email]
+  );
+  return rows.length === 0 ? 0 : rows;
+}
+
 // Obtenir tous les utilisateurs
 export async function getAllUser() {
   const [rows] = await pool.query("SELECT * FROM user");
