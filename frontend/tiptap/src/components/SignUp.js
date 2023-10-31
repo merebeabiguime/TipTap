@@ -6,17 +6,17 @@ import UserIcon from "../images/signup_user_icon.png";
 import PhoneIcon from "../images/signup_phone_icon.png";
 import MailIcon from "../images/signup_mail_icon.png";
 import PasswordIcon from "../images/signup_password_icon.png";
+import axios from "axios";
 
 import { Button, InputGroup, Form } from "react-bootstrap";
 import { useUserContext } from "../contexts/AuthContext";
 import { useRef, useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 function SignUp() {
   const { userRole, signUp } = useUserContext();
   const inputs = useRef([]);
   const [validation, setValidation] = useState("");
-
-  console.log("aa :" + signUp);
+  const navigate = useNavigate();
 
   const addInput = (el) => {
     if (el && !inputs.current.includes(el)) {
@@ -44,10 +44,35 @@ function SignUp() {
         inputs.current[2].value,
         inputs.current[4].value
       );
-      formRef.current.reset();
-      setValidation("");
-      console.log(credentials);
-    } catch (err) {}
+      try {
+        //Creating temporary variable to store input data
+        const jsonData = [
+          {
+            firstName: inputs.current[0].value,
+            lastName: inputs.current[1].value,
+            email: inputs.current[2].value,
+            phone: inputs.current[3].value,
+            password: "password",
+            role: userRole,
+            pictureUrl: "pictureURL",
+            ID_restaurant: 0,
+          },
+        ];
+        await axios.post("http://localhost:8081/user/addUser", jsonData);
+        setValidation("");
+        navigate("/private/private-home");
+        formRef.current.reset();
+      } catch (err) {
+        console.log(err);
+      }
+    } catch (err) {
+      if (err.code === "auth/invalid/email") {
+        setValidation("Email format invalid");
+      }
+      if (err.code === "auth/email-already-in-use") {
+        setValidation("Email already used");
+      }
+    }
   };
   return (
     <div>

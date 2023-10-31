@@ -9,9 +9,6 @@ import { auth } from "../firebase.js";
 export const UserContext = createContext();
 
 export function UserContextProvider(props) {
-  const [currentUser, setCurrentUser] = useState();
-  const [loadingData, setLoadingData] = useState(true);
-
   const [userRole, setUserRole] = useState(0);
 
   function selectRole(userRole) {
@@ -22,15 +19,29 @@ export function UserContextProvider(props) {
     return createUserWithEmailAndPassword(auth, email, password);
   }
 
+  function signIn(email, password) {
+    return signInWithEmailAndPassword(auth, email, password);
+  }
+
+  const [currentUser, setCurrentUser] = useState();
+  const [loadingData, setLoadingData] = useState(true);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setCurrentUser(currentUser);
+      setLoadingData(false);
+    });
+    return unsubscribe;
+  }, []);
+
   return (
-    <UserContext.Provider value={{ userRole, selectRole, signUp }}>
-      {props.children}
+    <UserContext.Provider value={{ userRole, selectRole, signUp, signIn }}>
+      {!loadingData && props.children}
     </UserContext.Provider>
   );
 }
 
 export function useUserContext() {
-  const { userRole, selectRole, signUp } = useContext(UserContext);
+  const { userRole, selectRole, signUp, signIn } = useContext(UserContext);
 
-  return { userRole, selectRole, signUp };
+  return { userRole, selectRole, signUp, signIn };
 }
