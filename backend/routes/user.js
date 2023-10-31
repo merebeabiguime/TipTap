@@ -25,14 +25,20 @@ router.get("/:id", async (req, res) => {
 router.post("/addUser", async (req, res) => {
   // Récupérez les données de la demande POST
   const userObject = req.body; // Assurez-vous que les données POST sont correctement formatées
+  try {
+    // Appelez la fonction pour ajouter un utilisateur
+    const result = await db.addUser(userObject);
 
-  // Appelez la fonction pour ajouter un utilisateur
-  const result = await db.addUser(userObject);
-
-  if (result === 1) {
-    res.status(201).send("Utilisateur ajouté avec succès.");
-  } else {
-    res.status(400).send("Impossible d'ajouter l'utilisateur.");
+    if (result === 1) {
+      res.status(201).send("Utilisateur ajouté avec succès.");
+    } else {
+      res.status(400).send("Impossible d'ajouter l'utilisateur.");
+    }
+  } catch (err) {
+    console.log(err);
+    throw new Error(
+      "Une erreur s'est produite lors de l'ajout de l'utilisateur."
+    );
   }
 });
 
