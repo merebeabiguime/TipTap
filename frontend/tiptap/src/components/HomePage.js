@@ -34,10 +34,7 @@ function HomePage() {
           nostra, per inceptos himenaeos. Nconubia nostra, per{" "}
         </p>
       </Col>
-      <Link
-        to="/selectRole"
-        style={{ textDecoration: "none", color: "inherit" }}
-      >
+      <Link to="/signIn" style={{ textDecoration: "none", color: "inherit" }}>
         <Col className="d-flex justify-content-center col-button " sm={12}>
           <Button className="customButton1">Log In</Button>
         </Col>

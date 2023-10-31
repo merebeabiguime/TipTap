@@ -28,7 +28,7 @@ export async function verifyLogin(email, password) {
 export async function addUser(userObject) {
   try {
     const [rows] = await pool.query(
-      "INSERT INTO user (firstName, lastName, email, phone, password, role, pictureUrl, ID_restaurant) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO user (firstName, lastName, email, phone, password, role, pictureUrl, ID_restaurant, UID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
       [
         userObject[0].firstName,
         userObject[0].lastName,
@@ -38,6 +38,7 @@ export async function addUser(userObject) {
         userObject[0].role,
         userObject[0].pictureUrl,
         userObject[0].ID_restaurant,
+        userObject[0].UID,
       ]
     );
 
