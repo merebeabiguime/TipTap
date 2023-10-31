@@ -3,6 +3,8 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  sendPasswordResetEmail,
+  confirmPasswordReset,
 } from "firebase/auth";
 import { auth } from "../firebase.js";
 
@@ -22,6 +24,12 @@ export function UserContextProvider(props) {
   function signIn(email, password) {
     return signInWithEmailAndPassword(auth, email, password);
   }
+  function forgotPassword(email) {
+    return sendPasswordResetEmail(auth, email);
+  }
+  function resetPassword(oobCode, newPassword) {
+    return confirmPasswordReset(auth, oobCode, newPassword);
+  }
 
   const [currentUser, setCurrentUser] = useState();
   const [loadingData, setLoadingData] = useState(true);
@@ -35,7 +43,15 @@ export function UserContextProvider(props) {
 
   return (
     <UserContext.Provider
-      value={{ userRole, selectRole, signUp, signIn, currentUser }}
+      value={{
+        userRole,
+        selectRole,
+        signUp,
+        signIn,
+        currentUser,
+        forgotPassword,
+        resetPassword,
+      }}
     >
       {!loadingData && props.children}
     </UserContext.Provider>
@@ -43,8 +59,23 @@ export function UserContextProvider(props) {
 }
 
 export function useUserContext() {
-  const { userRole, selectRole, signUp, signIn, currentUser } =
-    useContext(UserContext);
+  const {
+    userRole,
+    selectRole,
+    signUp,
+    signIn,
+    currentUser,
+    forgotPassword,
+    resetPassword,
+  } = useContext(UserContext);
 
-  return { userRole, selectRole, signUp, signIn, currentUser };
+  return {
+    userRole,
+    selectRole,
+    signUp,
+    signIn,
+    currentUser,
+    forgotPassword,
+    resetPassword,
+  };
 }
