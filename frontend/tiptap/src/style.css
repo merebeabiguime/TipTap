@@ -124,3 +124,8 @@ form {
   object-fit: cover; /* Ajuste l'image pour remplir le cercle */
   box-shadow: 1px 2px 4px 0px rgba(0, 0, 0, 0.5) !important;
 }
+
+.previous-button {
+  position: absolute;
+  top: 50px;
+}

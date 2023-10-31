@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { FirebaseError } from "firebase/app";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "../firebase";
+import PreviousPageButton from "./PreviousPageButton";
 
 function SignUp() {
   const { userRole, signUp, currentUser } = useUserContext();
@@ -133,6 +134,9 @@ function SignUp() {
   return (
     <div>
       <Row>
+        <Col className="previous-button" sm={12}>
+          <PreviousPageButton />
+        </Col>
         <Col className="d-flex justify-content-center  " sm={12}>
           <h1 className="col-m-25">Create Account </h1>
         </Col>
