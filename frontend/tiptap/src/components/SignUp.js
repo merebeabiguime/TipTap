@@ -114,11 +114,34 @@ function SignUp() {
           },
         ];
         console.log("JSON:" + jsonData[0].UID);
-        await axios.post("http://localhost:8081/user/addUser", jsonData);
-        console.log("credentials11 : " + credentials.user.uid);
-        setValidation("");
-        navigate("/private/private-home");
-        formRef.current.reset();
+        try {
+          await axios.post("http://localhost:8081/user/addUser", jsonData);
+          console.log("credentials11 : " + credentials.user.uid);
+          setValidation("");
+
+          try {
+            const response = await axios.get(
+              `http://localhost:8081/user/role/${credentials.user.uid}`
+            );
+            const role = response.data; // Extrait la valeur du rôle depuis la réponse
+
+            console.log(credentials.user.uid);
+
+            if (role[0].role === 1) {
+              navigate("/privateWorker/private-home-worker");
+            } else if (role[0].role === 2) {
+              navigate("/privateManager/private-home-manager");
+            } else {
+              console.log("impossible" + role);
+            }
+          } catch (err) {
+            console.log(err);
+          }
+          setValidation("");
+          formRef.current.reset();
+        } catch (err) {
+          console.log(err);
+        }
       } catch (err) {
         console.log(err);
       }
