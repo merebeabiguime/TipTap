@@ -25,7 +25,6 @@ router.get("/:id", async (req, res) => {
 router.post("/addUser", async (req, res) => {
   // Récupérez les données de la demande POST
   const userObject = req.body; // Assurez-vous que les données POST sont correctement formatées
-  console.log("req.body : " + req.body);
 
   // Appelez la fonction pour ajouter un utilisateur
   const result = await db.addUser(userObject);
