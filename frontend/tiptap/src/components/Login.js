@@ -82,9 +82,6 @@ function Login() {
         <Col className="d-flex justify-content-center  col-m-50" sm={12}>
           <p>Sign In with user ID & password provided by the management</p>
         </Col>
-        <Col className=" d-flex justify-content-center  col-m-50" sm={12}>
-          <img src={UploadImage} alt="logo" />
-        </Col>
         <Col className=" d-flex justify-content-center" sm={12}>
           <Form onSubmit={handleForm} ref={formRef}>
             <InputGroup>

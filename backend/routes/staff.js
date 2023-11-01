@@ -18,9 +18,19 @@ router.get("/:id", async (req, res) => {
 });
 
 router.get("/email/:email", async (req, res) => {
-  const email = req.params.email;
-  const result = await db.isEmailOfWorker(email);
-  result != 0 ? res.send(result) : res.send("Email invalide");
+  try {
+    const email = req.params.email;
+    const result = await db.isEmailOfWorker(email);
+    if (result === 0) {
+      res.send("Email Invalide");
+    } else if (result === 2) {
+      res.send("Staff déjà existant");
+    } else {
+      res.send(result);
+    }
+  } catch (err) {
+    throw new Error("Une erreur s'est produite lors de l'ajout du staff.");
+  }
 });
 
 router.post("/addStaff", async (req, res) => {
