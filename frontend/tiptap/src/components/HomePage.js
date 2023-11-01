@@ -7,8 +7,15 @@ import homepageIcon from "../images/homepage_icon.png";
 import "../style.css";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
 
 function HomePage() {
+  useEffect(() => {
+    console.log("composant créer home page");
+    return () => {
+      console.log("détruit homr page");
+    };
+  }, []);
   return (
     <Row>
       <Col className="justify-content-end" sm={12}>
