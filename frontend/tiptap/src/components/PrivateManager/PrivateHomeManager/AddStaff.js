@@ -1,13 +1,9 @@
 import "../../../style.css";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import UploadImage from "../../../images/upload_image_signup.png";
 import UserIcon from "../../../images/signup_user_icon.png";
 import vector3 from "../../../images/Vector 3.png";
 import vector4 from "../../../images/Vector 4.png";
-import facebook from "../../../images/signin_with_facebook.png";
-import google from "../../../images/signin_with_google.png";
-import apple from "../../../images/signin_with_apple.png";
 
 import { Button, InputGroup, Form } from "react-bootstrap";
 import { useUserContext } from "../../../contexts/AuthContext";
