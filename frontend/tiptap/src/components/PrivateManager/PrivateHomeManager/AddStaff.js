@@ -33,7 +33,7 @@ function AddStaff() {
       const role = response.data; // Extrait la valeur du rôle depuis la réponse
       console.log(inputs.current.value);
       console.log(role);
-      if (role != "Staff déjà existant" && role != "Email Invalide") {
+      if (role.status == "Error") {
         staffObject.current = {
           firstName: role[0].firstName,
           lastName: role[0].lastName,

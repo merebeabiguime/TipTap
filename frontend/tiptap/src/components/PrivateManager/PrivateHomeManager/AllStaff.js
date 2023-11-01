@@ -1,56 +1,48 @@
-import React, { useRef, useEffect, useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import iconWaiter from "../../../images/icon_waiter.png";
 import DeleteButton from "../../../images/delete_staff_button.png";
 import EditButton from "../../../images/edit_staff_button.png";
-import axios from "axios";
-
-import { useUserContext } from "../../../contexts/AuthContext";
-import PreviousPageButton from "../../PreviousPageButton";
-import { Button } from "react-bootstrap";
 
 export default function AllStaff() {
   const [staffList, setStaffList] = useState([{}]);
 
-  useEffect(() => {
-    const asyncFn = async () => {
-      const newStaffList = [];
-      try {
-        const response = await axios.get(`http://localhost:8081/staff/`);
+  const asyncFn = async () => {
+    const newStaffList = [];
+    try {
+      const response = await axios.get(`http://localhost:8081/staff/`);
 
-        for (var i = 0; i < response.data.length; i++) {
-          try {
-            const response1 = await axios.get(
-              `http://localhost:8081/user/${response.data[i].ID_user}`
-            );
-            let roleName = "";
-            console.log("i" + i);
-            console.log("id firsname :" + response1.data[0].firstName);
+      for (var i = 0; i < response.data.length; i++) {
+        const response1 = await axios.get(
+          `http://localhost:8081/user/${response.data[i].ID_user}`
+        );
+        let roleName = "";
+        console.log("i" + i);
+        console.log("id firsname :" + response1.data[0].firstName);
 
-            if (response.data[i].role === 1) {
-              roleName = "Chef";
-            } else if (response.data[i].role === 2) {
-              roleName = "Waiter";
-            } else if (response.data[i].role === 3) {
-              roleName = "Cleaner";
-            }
-            newStaffList.push({
-              role: roleName,
-              stars: response.data[i].stars,
-              firstName: response1.data[0].firstName,
-              lastName: response1.data[0].lastName,
-              pictureUrl: response1.data[0].pictureUrl,
-            });
-          } catch (error) {
-            console.log(error);
-          }
-          setStaffList(newStaffList);
+        if (response.data[i].role === 1) {
+          roleName = "Chef";
+        } else if (response.data[i].role === 2) {
+          roleName = "Waiter";
+        } else if (response.data[i].role === 3) {
+          roleName = "Cleaner";
         }
-      } catch (err) {
-        console.log(err);
+        newStaffList.push({
+          role: roleName,
+          stars: response.data[i].stars,
+          firstName: response1.data[0].firstName,
+          lastName: response1.data[0].lastName,
+          pictureUrl: response1.data[0].pictureUrl,
+        });
       }
-    };
+      setStaffList(newStaffList);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
     asyncFn();
   }, []);
 
