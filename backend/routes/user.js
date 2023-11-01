@@ -5,21 +5,43 @@ const router = express.Router();
 /***************************************** GET ALL ***************************************************** */
 
 router.get("/", async (req, res) => {
-  const result = await db.getAllUser();
-  res.send(result);
-  result != 0
-    ? res.send(result)
-    : res.send("Impossible de charger les utilisateurs");
+  try {
+    const result = await db.getAllUser();
+    res.send(result);
+    result != 0
+      ? res.send(result)
+      : res.send("Impossible de charger les utilisateurs");
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 /***************************************** GET SPECIFIC ***************************************************** */
 
 router.get("/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const result = await db.getUser(id);
+    result != 0
+      ? res.send(result)
+      : res.send("Impossible de charger cet utilisateur");
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.get("/role/:id", async (req, res) => {
   const id = req.params.id;
-  const result = await db.getUser(id);
-  result != 0
-    ? res.send(result)
-    : res.send("Impossible de charger cet utilisateur");
+  try {
+    const result = await db.getRole(id);
+    if (result !== 0) {
+      res.send(result);
+    } else {
+      res.status(400).send("Impossible de charger cet utilisateur");
+    }
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 router.post("/addUser", async (req, res) => {

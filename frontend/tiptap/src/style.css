@@ -14,7 +14,18 @@ h1 {
   font-family: "Satoshi Black", sans-serif !important;
   font-size: 28px !important;
   color: #492b29 !important;
-  width: 80% !important;
+}
+
+h3 {
+  font-family: "Satoshi Variable", sans-serif !important;
+  font-size: 24px !important;
+  color: #757575 !important;
+}
+
+h2 {
+  font-family: "Satoshi Black", sans-serif !important;
+  font-size: 22px !important;
+  color: black !important;
 }
 
 p {
@@ -48,9 +59,29 @@ form {
   margin-top: 25px !important;
   margin-bottom: 25px !important;
   width: 100% !important;
+  height: 130px;
   border-radius: 10px !important;
   box-shadow: 1px 3px 5px 0px rgba(0, 0, 0, 0.5) !important;
 }
+
+.customButton5 {
+  margin-top: 25px !important;
+  margin-bottom: 25px !important;
+  height: 119px !important;
+  width: 35% !important;
+  border-radius: 10px !important;
+  box-shadow: 1px 3px 5px 0px rgba(0, 0, 0, 0.5) !important;
+}
+
+.customButton6 {
+  margin-top: 25px !important;
+  margin-bottom: 25px !important;
+  height: 60px !important;
+  width: 100% !important;
+  border-radius: 10px !important;
+  box-shadow: 1px 3px 5px 0px rgba(0, 0, 0, 0.5) !important;
+}
+
 .customButton2 {
   font-family: "Satoshi Black", sans-serif !important;
   width: 100% !important;
@@ -118,14 +149,31 @@ form {
 }
 
 .circular-image {
-  width: 122px; /* Ajustez la taille de l'image comme vous le souhaitez */
-  height: 122px;
+  width: 90px; /* Ajustez la taille de l'image comme vous le souhaitez */
+  height: 90px;
   border-radius: 50%; /* Cela rendra l'image circulaire */
   object-fit: cover; /* Ajuste l'image pour remplir le cercle */
+  box-shadow: 1px 2px 4px 0px rgba(0, 0, 0, 0.5) !important;
+}
+
+.circular-image-2 {
+  width: 122px; /* Ajustez la taille de l'image comme vous le souhaitez */
+  height: 122px; /* Ajustez la taille de l'image comme vous le souhaitez */
+  border-radius: 10px; /* Cela rendra les coins de l'image arrondis */
+  object-fit: cover; /* Ajuste l'image pour remplir le carré */
+  box-shadow: 1px 2px 4px 0px rgba(0, 0, 0, 0.5) !important;
+}
+
+.circular-image-3 {
+  width: 70px; /* Ajustez la taille de l'image comme vous le souhaitez */
+  height: 70px; /* Ajustez la taille de l'image comme vous le souhaitez */
+  border-radius: 10px; /* Cela rendra les coins de l'image arrondis */
+  object-fit: cover; /* Ajuste l'image pour remplir le carré */
   box-shadow: 1px 2px 4px 0px rgba(0, 0, 0, 0.5) !important;
 }
 
 .previous-button {
   position: absolute;
   top: 50px;
+  margin-bottom: 25px;
 }

@@ -15,8 +15,9 @@ import { useUserContext } from "../contexts/AuthContext";
 import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PreviousPageButton from "./PreviousPageButton";
+import axios from "axios";
 function Login() {
-  const { signIn } = useUserContext();
+  const { signIn, currentUser } = useUserContext();
   const inputs = useRef([]);
   const [validation, setValidation] = useState("");
   const navigate = useNavigate();
@@ -37,8 +38,26 @@ function Login() {
         inputs.current[0].value,
         inputs.current[1].value
       );
+
+      try {
+        const response = await axios.get(
+          `http://localhost:8081/user/role/${credentials.user.uid}`
+        );
+        const role = response.data; // Extrait la valeur du rôle depuis la réponse
+
+        console.log(credentials.user.uid);
+
+        if (role[0].role === 1) {
+          navigate("/privateWorker/private-home-worker");
+        } else if (role[0].role === 2) {
+          navigate("/privateManager/private-home-manager");
+        } else {
+          console.log("impossible" + role);
+        }
+      } catch (err) {
+        console.log(err);
+      }
       setValidation("");
-      navigate("/private/private-home");
     } catch (err) {
       setValidation("Email or password incorrect");
     }
@@ -62,9 +81,6 @@ function Login() {
         </Col>
         <Col className="d-flex justify-content-center  col-m-50" sm={12}>
           <p>Sign In with user ID & password provided by the management</p>
-        </Col>
-        <Col className=" d-flex justify-content-center  col-m-50" sm={12}>
-          <img src={UploadImage} alt="logo" />
         </Col>
         <Col className=" d-flex justify-content-center" sm={12}>
           <Form onSubmit={handleForm} ref={formRef}>
