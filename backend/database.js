@@ -96,11 +96,20 @@ export async function getRole(uid) {
 }
 
 export async function isEmailOfWorker(email) {
-  const [rows] = await pool.query(
-    "SELECT * FROM user WHERE email=? AND role=1",
-    [email]
-  );
-  return rows.length === 0 ? 0 : rows;
+  try {
+    const result = await staffExists(email);
+    if (result === 0) {
+      const [rows] = await pool.query(
+        "SELECT * FROM user WHERE email=? AND role=1",
+        [email]
+      );
+      return rows.length === 0 ? 0 : rows;
+    } else {
+      return 2;
+    }
+  } catch (err) {
+    return 5;
+  }
 }
 
 // Obtenir tous les utilisateurs
@@ -186,6 +195,14 @@ export async function updateStaff(staffObject) {
 // Obtenir un staff par ID, retourne 0 s'il n'existe pas
 export async function getStaff(id) {
   const [rows] = await pool.query("SELECT * FROM staff WHERE id=?", [id]);
+  return rows.length === 0 ? 0 : rows;
+}
+
+export async function staffExists(email) {
+  const [rows] = await pool.query(
+    "SELECT * FROM user INNER JOIN staff ON user.ID = staff.ID_user WHERE user.email = ?",
+    [email]
+  );
   return rows.length === 0 ? 0 : rows;
 }
 

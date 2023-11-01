@@ -10,6 +10,9 @@ import PrivateHomeWorker from "./PrivateWorker/PrivateHomeWorker/PrivateHomeWork
 import Login from "./Login";
 import ForgotPassword from "./ForgotPassword";
 import ResetPassword from "./ResetPassword";
+import AllStaff from "./PrivateManager/PrivateHomeManager/AllStaff";
+import AddStaff from "./PrivateManager/PrivateHomeManager/AddStaff";
+import SelectStaffRole from "./PrivateManager/PrivateHomeManager/SelectStaffRole";
 
 function App() {
   return (
@@ -26,6 +29,18 @@ function App() {
             <Route
               path="/privateManager/private-home-manager"
               element={<PrivateHomeManager />}
+            />
+            <Route
+              path="/privateManager/private-home-manager/all-staff"
+              element={<AllStaff />}
+            />
+            <Route
+              path="/privateManager/private-home-manager/add-staff"
+              element={<AddStaff />}
+            />
+            <Route
+              path="/privateManager/private-home-manager/add-staff/select-staff-role"
+              element={<SelectStaffRole />}
             />
           </Route>
           <Route path="/privateWorker" element={<PrivateWorker />}>

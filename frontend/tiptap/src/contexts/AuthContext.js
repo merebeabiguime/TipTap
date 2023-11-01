@@ -1,4 +1,10 @@
-import React, { useContext, useState, useEffect, createContext } from "react";
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  createContext,
+  useRef,
+} from "react";
 
 import {
   signInWithEmailAndPassword,
@@ -13,6 +19,7 @@ export const UserContext = createContext();
 
 export function UserContextProvider(props) {
   const [userRole, setUserRole] = useState(0);
+  const staffObject = useRef({});
 
   function selectRole(userRole) {
     setUserRole(userRole);
@@ -52,6 +59,7 @@ export function UserContextProvider(props) {
         currentUser,
         forgotPassword,
         resetPassword,
+        staffObject,
       }}
     >
       {!loadingData && props.children}
@@ -68,6 +76,7 @@ export function useUserContext() {
     currentUser,
     forgotPassword,
     resetPassword,
+    staffObject,
   } = useContext(UserContext);
 
   return {
@@ -78,5 +87,6 @@ export function useUserContext() {
     currentUser,
     forgotPassword,
     resetPassword,
+    staffObject,
   };
 }
