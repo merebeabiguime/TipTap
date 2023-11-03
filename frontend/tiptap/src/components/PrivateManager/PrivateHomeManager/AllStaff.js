@@ -4,6 +4,7 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import DeleteButton from "../../../images/delete_staff_button.png";
 import EditButton from "../../../images/edit_staff_button.png";
+import Stars from "../../../images/stars.png";
 
 export default function AllStaff() {
   const [staffList, setStaffList] = useState([{}]);
@@ -85,7 +86,24 @@ export default function AllStaff() {
                       </span>
                     </Col>
                     <Col className="col-12">
-                      <span>Test</span>
+                      {(() => {
+                        const starImages = [];
+                        for (
+                          let starIndex = 0;
+                          starIndex < staff.stars;
+                          starIndex++
+                        ) {
+                          starImages.push(
+                            <img
+                              key={starIndex}
+                              src={Stars}
+                              alt="star"
+                              className=""
+                            />
+                          );
+                        }
+                        return starImages;
+                      })()}
                     </Col>
                   </Col>
                   <Col className="col-2">
