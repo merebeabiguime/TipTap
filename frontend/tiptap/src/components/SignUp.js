@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../contexts/AuthContext";
 import { addUser, getUserRole } from "../fetches/FetchUsers";
 import PreviousPageButton from "../features/PreviousPageButton";
+import UploadingImage from "../features/UploadingImage";
 
 function SignUp() {
   const { userRole, signUp, data, percentage } = useUserContext();
@@ -28,6 +29,7 @@ function SignUp() {
   const formRef = useRef();
 
   async function tryToSignUp() {
+    //Signing up in Firebase
     try {
       const credentials = await signUp(
         inputs.current[2].value,
@@ -47,9 +49,12 @@ function SignUp() {
           UID: credentials.user.uid,
         },
       ];
+
+      //Trying to add user in mysql backend server
       const addUserResponse = await addUser(jsonData);
 
       if (addUserResponse.status === "Success") {
+        //Getting role to know on which page we should send the user to
         const getUserRoleResponse = await getUserRole(credentials.user.uid);
 
         if (getUserRoleResponse.status === "Success") {
@@ -108,7 +113,7 @@ function SignUp() {
             information {userRole}
           </p>
         </Col>
-
+        <UploadingImage />
         <Col className=" d-flex justify-content-center" sm={12}>
           <Form onSubmit={handleForm} ref={formRef}>
             <InputGroup>

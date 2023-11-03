@@ -15,13 +15,11 @@ function useQuery() {
 }
 
 function ResetPassword() {
+  const navigate = useNavigate();
   const { resetPassword } = useUserContext();
   const [validation, setValidation] = useState("");
-  const navigate = useNavigate();
-  const query = useQuery();
 
   const formRef = useRef();
-
   const inputs = useRef([]);
 
   const addInput = (el) => {
@@ -30,6 +28,7 @@ function ResetPassword() {
     }
   };
 
+  const query = useQuery();
   const handleForm = async (e) => {
     e.preventDefault();
 
@@ -39,10 +38,7 @@ function ResetPassword() {
     }
 
     try {
-      const forgot = await resetPassword(
-        query.get("oobCode"),
-        inputs.current[0].value
-      );
+      await resetPassword(query.get("oobCode"), inputs.current[0].value);
       setValidation("");
       navigate("/homepage");
     } catch (err) {

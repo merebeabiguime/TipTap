@@ -23,6 +23,8 @@ export function UserContextProvider(props) {
   const [userObject, setUserObject] = useState({});
   const [percentage, setPercentage] = useState(null);
   const [data, setData] = useState({});
+  const [staffListFilter, setStaffListFilter] = useState([{}]);
+  const [staffList, setStaffList] = useState([{}]);
 
   function selectRole(userRole) {
     setUserRole(userRole);
@@ -71,6 +73,10 @@ export function UserContextProvider(props) {
         setPercentage,
         data,
         setData,
+        staffListFilter,
+        setStaffListFilter,
+        staffList,
+        setStaffList,
       }}
     >
       {!loadingData && props.children}
@@ -94,6 +100,10 @@ export function useUserContext() {
     setPercentage,
     data,
     setData,
+    staffListFilter,
+    setStaffListFilter,
+    staffList,
+    setStaffList,
   } = useContext(UserContext);
 
   return {
@@ -111,5 +121,9 @@ export function useUserContext() {
     setPercentage,
     data,
     setData,
+    staffListFilter,
+    setStaffListFilter,
+    staffList,
+    setStaffList,
   };
 }
