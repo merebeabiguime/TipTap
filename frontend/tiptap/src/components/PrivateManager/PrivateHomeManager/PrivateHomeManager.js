@@ -1,18 +1,15 @@
-import "../../../style.css";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import vector3 from "../../../images/Vector 3.png";
-import vector4 from "../../../images/Vector 4.png";
-import logo from "../../../images/logo.PNG";
-import homepageIcon from "../../../images/homepage_icon.png";
 import customerIcon from "../../../images/customer_icon.png";
 import managerIcon from "../../../images/manager_icon.png";
+import "../../../style.css";
 
 import { Link } from "react-router-dom";
 import { useUserContext } from "../../../contexts/AuthContext";
 
 function PrivateHomeManager() {
-  const { selectRole } = useUserContext();
+  const { selectRole, currentUser } = useUserContext();
+  console.log(currentUser);
   return (
     <div>
       <Row>

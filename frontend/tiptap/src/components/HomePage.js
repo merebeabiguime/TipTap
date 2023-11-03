@@ -1,21 +1,14 @@
+import { Button } from "react-bootstrap";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import { Link } from "react-router-dom";
 import vector3 from "../images/Vector 3.png";
 import vector4 from "../images/Vector 4.png";
-import logo from "../images/logo.PNG";
 import homepageIcon from "../images/homepage_icon.png";
+import logo from "../images/logo.PNG";
 import "../style.css";
-import { Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import { useEffect } from "react";
 
 function HomePage() {
-  useEffect(() => {
-    console.log("composant créer home page");
-    return () => {
-      console.log("détruit homr page");
-    };
-  }, []);
   return (
     <Row>
       <Col className="justify-content-end" sm={12}>

@@ -6,7 +6,11 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   const result = await db.getAllStaff();
-  result != 0 ? res.send(result) : res.send("Impossible de charger le staff");
+  if (result === 0) {
+    res.send({ status: "Error", response: "Impossible de charger le staff" });
+  } else {
+    res.send({ status: "Success", response: result });
+  }
 });
 
 /***************************************** GET SPECIFIC ***************************************************** */
@@ -14,7 +18,12 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const id = req.params.id;
   const result = await db.getStaff(id);
-  result != 0 ? res.send(result) : res.send("Impossible de charger ce staff");
+
+  if (result === 0) {
+    res.send({ status: "Error", response: "Impossible de charger ce staff" });
+  } else {
+    res.send({ status: "Success", response: result });
+  }
 });
 
 router.get("/email/:email", async (req, res) => {
@@ -22,14 +31,14 @@ router.get("/email/:email", async (req, res) => {
     const email = req.params.email;
     const result = await db.isEmailOfWorker(email);
     if (result === 0) {
-      res.send({ status: "Error", data: "Email Invalide" });
+      res.send({ status: "Error", response: "Email Invalide" });
     } else if (result === 2) {
-      res.send({ status: "Error", data: "Staff déjà existant" });
+      res.send({ status: "Error", response: "Staff déjà existant" });
     } else {
-      res.send({ status: "Success", data: result });
+      res.send({ status: "Success", response: result });
     }
   } catch (err) {
-    res.send({ status: "Error", data: "Une erreur s'est produite" });
+    res.send({ status: "Error", response: "Une erreur s'est produite" });
   }
 });
 

@@ -1,18 +1,18 @@
 import Container from "react-bootstrap/Container";
-import HomePage from "./HomePage";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import SignUp from "./SignUp";
-import SelectRole from "./SelectRole";
-import PrivateManager from "./PrivateManager/PrivateManager";
-import PrivateHomeManager from "./PrivateManager/PrivateHomeManager/PrivateHomeManager";
-import PrivateWorker from "./PrivateWorker/PrivateWorker";
-import PrivateHomeWorker from "./PrivateWorker/PrivateHomeWorker/PrivateHomeWorker";
-import Login from "./Login";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import ForgotPassword from "./ForgotPassword";
-import ResetPassword from "./ResetPassword";
-import AllStaff from "./PrivateManager/PrivateHomeManager/AllStaff";
+import HomePage from "./HomePage";
+import Login from "./Login";
 import AddStaff from "./PrivateManager/PrivateHomeManager/AddStaff";
+import AllStaff from "./PrivateManager/PrivateHomeManager/AllStaff";
+import PrivateHomeManager from "./PrivateManager/PrivateHomeManager/PrivateHomeManager";
 import SelectStaffRole from "./PrivateManager/PrivateHomeManager/SelectStaffRole";
+import PrivateManager from "./PrivateManager/PrivateManager";
+import PrivateHomeWorker from "./PrivateWorker/PrivateHomeWorker/PrivateHomeWorker";
+import PrivateWorker from "./PrivateWorker/PrivateWorker";
+import ResetPassword from "./ResetPassword";
+import SelectRole from "./SelectRole";
+import SignUp from "./SignUp";
 
 function App() {
   return (

@@ -9,10 +9,11 @@ import iconCleaner from "../../../images/icon_cleaner.png";
 import axios from "axios";
 
 import { useUserContext } from "../../../contexts/AuthContext";
-import PreviousPageButton from "../../PreviousPageButton";
+import PreviousPageButton from "../../../features/PreviousPageButton";
 import { Button } from "react-bootstrap";
 import { json, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { addStaff } from "../../../fetches/FetchStaff";
 
 function SelectStaffRole() {
   const { staffObject } = useUserContext();
@@ -32,8 +33,12 @@ function SelectStaffRole() {
       },
     ];
     try {
-      await axios.post("http://localhost:8081/staff/addStaff", jsonData);
-      navigate("/privateManager/private-home-manager");
+      const addStaffResponse = await addStaff(jsonData);
+      if (addStaffResponse.status === "Success") {
+        navigate("/privateManager/private-home-manager");
+      } else {
+        console.log(addStaffResponse.response);
+      }
     } catch (err) {
       console.log(err);
     }
