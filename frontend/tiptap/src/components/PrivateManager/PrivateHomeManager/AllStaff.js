@@ -10,80 +10,18 @@ import Filter from "../../../images/filter_icon.png";
 import NoStar from "../../../images/no_star_icon.png";
 import Stars from "../../../images/stars.png";
 import Test from "../../../images/testeee.png";
+import SelectRolePopup from "./SelectRolePopup";
+import { useStaffContext } from "../../../contexts/fetches-contexts/StaffContext";
 
 export default function AllStaff() {
-  const [staffList, setStaffList] = useState([{}]);
-
   const [isPopupVisible, setPopupVisible] = useState(false);
 
-  const [clicked, setClicked] = useState(false);
+  const { staffListFilter, setStaffList, setStaffListFilter } =
+    useStaffContext();
 
   const togglePopup = () => {
     setPopupVisible(!isPopupVisible);
   };
-
-  const updateStaffList = async () => {
-    const newStaffList = [];
-    try {
-      const getStaffResponse = await getAllStaff();
-
-      if (getStaffResponse.status === "Success") {
-        for (var i = 0; i < getStaffResponse.response.length; i++) {
-          const getUserResponse = await getUser(
-            getStaffResponse.response[i].ID_user
-          );
-          if (getUserResponse.status === "Success") {
-            let roleName = "";
-            console.log("i" + i);
-            console.log(
-              "id firsname :" + getStaffResponse.response[0].firstName
-            );
-
-            if (getStaffResponse.response[i].role === 1) {
-              roleName = "Chef";
-            } else if (getStaffResponse.response[i].role === 2) {
-              roleName = "Waiter";
-            } else if (getStaffResponse.response[i].role === 3) {
-              roleName = "Cleaner";
-            }
-            newStaffList.push({
-              role: roleName,
-              stars: getStaffResponse.response[i].stars,
-              firstName: getUserResponse.response[0].firstName,
-              lastName: getUserResponse.response[0].lastName,
-              pictureUrl: getUserResponse.response[0].pictureUrl,
-            });
-          }
-        }
-        setStaffList(newStaffList);
-        setStaffListFilter(newStaffList);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  useEffect(() => {
-    updateStaffList();
-  }, []);
-
-  const [roleFilter, setRoleFilter] = useState("");
-  const [staffListFilter, setStaffListFilter] = useState([{}]);
-
-  function updateStaffListFilter() {
-    if (roleFilter === "") {
-      setStaffListFilter(staffList);
-    } else {
-      const newStaffList = staffList.filter(
-        (staff) => staff.role === roleFilter
-      );
-      setStaffListFilter(newStaffList);
-    }
-  }
-
-  useEffect(() => {
-    updateStaffListFilter();
-  }, [roleFilter]);
 
   return (
     <div>
@@ -182,55 +120,7 @@ export default function AllStaff() {
             </Row>
           ))}
         </Col>
-        <div className={`popup ${isPopupVisible ? "show" : ""}`}>
-          <h1 className="justify-content-center d-flex col-m-25">
-            Select Role
-          </h1>
-          <Button
-            onClick={() => {
-              setRoleFilter("Waiter");
-              setClicked(!clicked);
-            }}
-            type="submit"
-            className="popup-button-gray"
-          >
-            Waiter's
-          </Button>
-          <Button
-            onClick={() => {
-              setRoleFilter("Cleaner");
-              setClicked(!clicked);
-            }}
-            type="submit"
-            className="popup-button-gray"
-          >
-            Cleaner's
-          </Button>
-          <Button
-            onClick={() => {
-              setRoleFilter("Chef");
-              setClicked(!clicked);
-            }}
-            type="submit"
-            className="popup-button-gray"
-          >
-            Chef's
-          </Button>
-          <Button
-            onClick={() => {
-              setRoleFilter("");
-              setClicked(!clicked);
-            }}
-            type="submit"
-            className="popup-button-gray"
-          >
-            All
-          </Button>
-        </div>
-        <div
-          className={`overlay ${isPopupVisible ? "show" : ""}`}
-          onClick={togglePopup}
-        ></div>
+        <SelectRolePopup />
       </Row>
     </div>
   );

@@ -38,6 +38,7 @@ function Login() {
         inputs.current[1].value
       );
 
+      //Searching user in mysql db with same UID as in Firebase db
       const getUserResponse = await getUserFromUID(credentials.user.uid);
 
       if (getUserResponse.status === "Success") {

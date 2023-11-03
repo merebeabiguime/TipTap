@@ -13,6 +13,7 @@ import PrivateWorker from "./PrivateWorker/PrivateWorker";
 import ResetPassword from "./ResetPassword";
 import SelectRole from "./SelectRole";
 import SignUp from "./SignUp";
+import { StaffContextProvider } from "../contexts/fetches-contexts/StaffContext";
 
 function App() {
   return (
@@ -30,10 +31,12 @@ function App() {
               path="/privateManager/private-home-manager"
               element={<PrivateHomeManager />}
             />
-            <Route
-              path="/privateManager/private-home-manager/all-staff"
-              element={<AllStaff />}
-            />
+            <StaffContextProvider>
+              <Route
+                path="/privateManager/private-home-manager/all-staff"
+                element={<AllStaff />}
+              />
+            </StaffContextProvider>
             <Route
               path="/privateManager/private-home-manager/add-staff"
               element={<AddStaff />}

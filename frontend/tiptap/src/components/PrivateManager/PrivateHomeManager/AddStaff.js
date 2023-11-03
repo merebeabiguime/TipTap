@@ -28,6 +28,7 @@ function AddStaff() {
     e.preventDefault();
 
     try {
+      //Is the email attached to this accoung one of a worker ?
       const getValidStaffResponse = isEmailValid(inputs.current.value);
       if (getValidStaffResponse.status == "Success") {
         staffObject.current = {
