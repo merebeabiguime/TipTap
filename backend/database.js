@@ -85,7 +85,12 @@ export async function updateUser(userObject) {
 
 // Obtenir un utilisateur par ID, retourne 0 s'il n'existe pas
 export async function getUser(id) {
-  const [rows] = await pool.query("SELECT * FROM user WHERE id=?", [id]);
+  const [rows] = await pool.query("SELECT * FROM user WHERE ID=?", [id]);
+  return rows.length === 0 ? 0 : rows;
+}
+
+export async function getUserFromUID(id) {
+  const [rows] = await pool.query("SELECT * FROM user WHERE UID=?", [id]);
   return rows.length === 0 ? 0 : rows;
 }
 

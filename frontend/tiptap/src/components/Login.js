@@ -1,23 +1,22 @@
-import "../style.css";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import UploadImage from "../images/upload_image_signup.png";
-import UserIcon from "../images/signup_user_icon.png";
-import PasswordIcon from "../images/signup_password_icon.png";
 import vector3 from "../images/Vector 3.png";
 import vector4 from "../images/Vector 4.png";
+import apple from "../images/signin_with_apple.png";
 import facebook from "../images/signin_with_facebook.png";
 import google from "../images/signin_with_google.png";
-import apple from "../images/signin_with_apple.png";
+import PasswordIcon from "../images/signup_password_icon.png";
+import UserIcon from "../images/signup_user_icon.png";
+import "../style.css";
 
-import { Button, InputGroup, Form } from "react-bootstrap";
-import { useUserContext } from "../contexts/AuthContext";
 import { useRef, useState } from "react";
+import { Button, Form, InputGroup } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import PreviousPageButton from "./PreviousPageButton";
-import axios from "axios";
+import { useUserContext } from "../contexts/AuthContext";
+import PreviousPageButton from "../features/PreviousPageButton";
+import { getUserFromUID } from "../fetches/FetchUsers";
 function Login() {
-  const { signIn, currentUser } = useUserContext();
+  const { signIn, currentUser, setUserObject } = useUserContext();
   const inputs = useRef([]);
   const [validation, setValidation] = useState("");
   const navigate = useNavigate();
@@ -39,25 +38,20 @@ function Login() {
         inputs.current[1].value
       );
 
-      try {
-        const response = await axios.get(
-          `http://localhost:8081/user/role/${credentials.user.uid}`
-        );
-        const role = response.data; // Extrait la valeur du rôle depuis la réponse
+      const getUserResponse = await getUserFromUID(credentials.user.uid);
 
-        console.log(credentials.user.uid);
+      if (getUserResponse.status === "Success") {
+        setUserObject(getUserResponse.response[0]);
 
-        if (role[0].role === 1) {
+        if (getUserResponse.response[0].role === 1) {
           navigate("/privateWorker/private-home-worker");
-        } else if (role[0].role === 2) {
+        } else if (getUserResponse.response[0].role === 2) {
           navigate("/privateManager/private-home-manager");
-        } else {
-          console.log("impossible" + role);
+          setValidation("");
         }
-      } catch (err) {
-        console.log(err);
+      } else {
+        setValidation(getUserResponse.response);
       }
-      setValidation("");
     } catch (err) {
       setValidation("Email or password incorrect");
     }

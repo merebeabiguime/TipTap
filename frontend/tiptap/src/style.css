@@ -50,9 +50,34 @@ form {
     background-color: #b286046a !important;
   }
 }
-.col-button {
-  margin-left: 25px;
-  margin-right: 25px;
+
+.popup-button-gray {
+  background-color: rgba(217, 217, 217, 0.26) !important;
+  color: #757575 !important;
+  font-family: "Satoshi Variable", sans-serif !important;
+  width: 100% !important;
+  height: 41px !important;
+  font-size: 20px !important;
+  line-height: 27px !important;
+  font-weight: 500 !important;
+  border-radius: 20px !important;
+  margin-bottom: 12px;
+  border: 0 !important;
+}
+
+.popup-button-gray:focus {
+  background-color: white !important;
+  color: #fbbc04 !important;
+  font-family: "Satoshi Variable", sans-serif !important;
+  width: 100% !important;
+  height: 41px !important;
+  border: 1px solid !important;
+  border-color: #fbbc04 !important;
+  font-size: 20px !important;
+  border-radius: 20px !important;
+  line-height: 27px !important;
+  font-weight: 500 !important;
+  margin-bottom: 12px;
 }
 
 .customButton4 {
@@ -79,7 +104,7 @@ form {
   height: 60px !important;
   width: 100% !important;
   border-radius: 10px !important;
-  box-shadow: 1px 3px 5px 0px rgba(0, 0, 0, 0.5) !important;
+  box-shadow: 0px 2px 11px 0px rgba(0, 0, 0, 0.25) !important;
 }
 
 .customButton2 {
@@ -165,15 +190,63 @@ form {
 }
 
 .circular-image-3 {
-  width: 70px; /* Ajustez la taille de l'image comme vous le souhaitez */
-  height: 70px; /* Ajustez la taille de l'image comme vous le souhaitez */
-  border-radius: 10px; /* Cela rendra les coins de l'image arrondis */
-  object-fit: cover; /* Ajuste l'image pour remplir le carré */
+  width: 70px !important; /* Ajustez la taille de l'image comme vous le souhaitez */
+  height: 70px !important; /* Ajustez la taille de l'image comme vous le souhaitez */
+  border-radius: 28px !important; /* Cela rendra les coins de l'image arrondis */
+  object-fit: cover !important; /* Ajuste l'image pour remplir le carré */
   box-shadow: 1px 2px 4px 0px rgba(0, 0, 0, 0.5) !important;
 }
 
 .previous-button {
-  position: absolute;
   top: 50px;
   margin-bottom: 25px;
+  margin-top: 25px !important;
+}
+
+.popup {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: white;
+  border-radius: 40px 40px 0 0;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  transform: translate(0, 100%);
+  transition: transform 0.3s;
+  height: 310px;
+}
+
+.popup.show {
+  transform: translate(0, 0);
+}
+
+/* Arrière-plan grisé */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 999;
+  display: none;
+}
+
+.overlay.show {
+  display: block;
+}
+
+.first-margin {
+  margin-top: 70px !important;
+  margin-bottom: 25px !important;
+}
+.margin-18 {
+  margin-bottom: 18px !important;
+}
+.margin-20 {
+  margin-bottom: 20px !important;
+}
+.margin-46 {
+  margin-bottom: 46px !important;
 }

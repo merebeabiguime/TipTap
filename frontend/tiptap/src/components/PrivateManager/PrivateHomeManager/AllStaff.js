@@ -1,60 +1,113 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { Button } from "react-bootstrap";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import { getAllStaff } from "../../../fetches/FetchStaff";
+import { getUser } from "../../../fetches/FetchUsers";
 import DeleteButton from "../../../images/delete_staff_button.png";
 import EditButton from "../../../images/edit_staff_button.png";
+import Filter from "../../../images/filter_icon.png";
+import NoStar from "../../../images/no_star_icon.png";
 import Stars from "../../../images/stars.png";
+import Test from "../../../images/testeee.png";
 
 export default function AllStaff() {
   const [staffList, setStaffList] = useState([{}]);
 
-  const asyncFn = async () => {
+  const [isPopupVisible, setPopupVisible] = useState(false);
+
+  const [clicked, setClicked] = useState(false);
+
+  const togglePopup = () => {
+    setPopupVisible(!isPopupVisible);
+  };
+
+  const updateStaffList = async () => {
     const newStaffList = [];
     try {
-      const response = await axios.get(`http://localhost:8081/staff/`);
+      const getStaffResponse = await getAllStaff();
 
-      for (var i = 0; i < response.data.length; i++) {
-        const response1 = await axios.get(
-          `http://localhost:8081/user/${response.data[i].ID_user}`
-        );
-        let roleName = "";
-        console.log("i" + i);
-        console.log("id firsname :" + response1.data[0].firstName);
+      if (getStaffResponse.status === "Success") {
+        for (var i = 0; i < getStaffResponse.response.length; i++) {
+          const getUserResponse = await getUser(
+            getStaffResponse.response[i].ID_user
+          );
+          if (getUserResponse.status === "Success") {
+            let roleName = "";
+            console.log("i" + i);
+            console.log(
+              "id firsname :" + getStaffResponse.response[0].firstName
+            );
 
-        if (response.data[i].role === 1) {
-          roleName = "Chef";
-        } else if (response.data[i].role === 2) {
-          roleName = "Waiter";
-        } else if (response.data[i].role === 3) {
-          roleName = "Cleaner";
+            if (getStaffResponse.response[i].role === 1) {
+              roleName = "Chef";
+            } else if (getStaffResponse.response[i].role === 2) {
+              roleName = "Waiter";
+            } else if (getStaffResponse.response[i].role === 3) {
+              roleName = "Cleaner";
+            }
+            newStaffList.push({
+              role: roleName,
+              stars: getStaffResponse.response[i].stars,
+              firstName: getUserResponse.response[0].firstName,
+              lastName: getUserResponse.response[0].lastName,
+              pictureUrl: getUserResponse.response[0].pictureUrl,
+            });
+          }
         }
-        newStaffList.push({
-          role: roleName,
-          stars: response.data[i].stars,
-          firstName: response1.data[0].firstName,
-          lastName: response1.data[0].lastName,
-          pictureUrl: response1.data[0].pictureUrl,
-        });
+        setStaffList(newStaffList);
+        setStaffListFilter(newStaffList);
       }
-      setStaffList(newStaffList);
     } catch (err) {
       console.log(err);
     }
   };
 
   useEffect(() => {
-    asyncFn();
+    updateStaffList();
   }, []);
+
+  const [roleFilter, setRoleFilter] = useState("");
+  const [staffListFilter, setStaffListFilter] = useState([{}]);
+
+  function updateStaffListFilter() {
+    if (roleFilter === "") {
+      setStaffListFilter(staffList);
+    } else {
+      const newStaffList = staffList.filter(
+        (staff) => staff.role === roleFilter
+      );
+      setStaffListFilter(newStaffList);
+    }
+  }
+
+  useEffect(() => {
+    updateStaffListFilter();
+  }, [roleFilter]);
 
   return (
     <div>
       <Row>
-        <Col className="d-flex justify-content-center col-m-25" sm={12}>
-          <h2 className="col-m-25">All Staff </h2>
+        <Col className="col-12 d-flex justify-content-center align-items-center first-margin  ">
+          <h2 className=" ">All Staff</h2>
+          <img
+            className="  "
+            src={Test}
+            style={{ position: "absolute", right: 0 }}
+          />
+        </Col>
+
+        <Col className="d-flex justify-content-end margin-18" sm={12}>
+          <Button
+            onClick={togglePopup}
+            style={{ backgroundColor: "transparent", border: "0" }}
+          >
+            {" "}
+            <img src={Filter} />
+          </Button>
         </Col>
         <Col className="">
-          {staffList.map((staff, index) => (
+          {staffListFilter.map((staff, index) => (
             <Row key={index} className="d-flex justify-content-center mx-auto">
               <Col className="col-3 d-flex justify-content-center align-items-center">
                 <img
@@ -102,6 +155,20 @@ export default function AllStaff() {
                             />
                           );
                         }
+                        for (
+                          let starIndex1 = 0;
+                          starIndex1 < 5 - staff.stars;
+                          starIndex1++
+                        ) {
+                          starImages.push(
+                            <img
+                              key={starIndex1}
+                              src={NoStar}
+                              alt="Nostar"
+                              className=""
+                            />
+                          );
+                        }
                         return starImages;
                       })()}
                     </Col>
@@ -115,6 +182,55 @@ export default function AllStaff() {
             </Row>
           ))}
         </Col>
+        <div className={`popup ${isPopupVisible ? "show" : ""}`}>
+          <h1 className="justify-content-center d-flex col-m-25">
+            Select Role
+          </h1>
+          <Button
+            onClick={() => {
+              setRoleFilter("Waiter");
+              setClicked(!clicked);
+            }}
+            type="submit"
+            className="popup-button-gray"
+          >
+            Waiter's
+          </Button>
+          <Button
+            onClick={() => {
+              setRoleFilter("Cleaner");
+              setClicked(!clicked);
+            }}
+            type="submit"
+            className="popup-button-gray"
+          >
+            Cleaner's
+          </Button>
+          <Button
+            onClick={() => {
+              setRoleFilter("Chef");
+              setClicked(!clicked);
+            }}
+            type="submit"
+            className="popup-button-gray"
+          >
+            Chef's
+          </Button>
+          <Button
+            onClick={() => {
+              setRoleFilter("");
+              setClicked(!clicked);
+            }}
+            type="submit"
+            className="popup-button-gray"
+          >
+            All
+          </Button>
+        </div>
+        <div
+          className={`overlay ${isPopupVisible ? "show" : ""}`}
+          onClick={togglePopup}
+        ></div>
       </Row>
     </div>
   );

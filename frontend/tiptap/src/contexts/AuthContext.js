@@ -20,6 +20,9 @@ export const UserContext = createContext();
 export function UserContextProvider(props) {
   const [userRole, setUserRole] = useState(0);
   const staffObject = useRef({});
+  const [userObject, setUserObject] = useState({});
+  const [percentage, setPercentage] = useState(null);
+  const [data, setData] = useState({});
 
   function selectRole(userRole) {
     setUserRole(userRole);
@@ -45,6 +48,8 @@ export function UserContextProvider(props) {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setCurrentUser(currentUser);
       setLoadingData(false);
+      setUserObject({});
+      console.log("AUTH DETRUIT");
     });
     return unsubscribe;
   }, []);
@@ -60,6 +65,12 @@ export function UserContextProvider(props) {
         forgotPassword,
         resetPassword,
         staffObject,
+        userObject,
+        setUserObject,
+        percentage,
+        setPercentage,
+        data,
+        setData,
       }}
     >
       {!loadingData && props.children}
@@ -77,6 +88,12 @@ export function useUserContext() {
     forgotPassword,
     resetPassword,
     staffObject,
+    userObject,
+    setUserObject,
+    percentage,
+    setPercentage,
+    data,
+    setData,
   } = useContext(UserContext);
 
   return {
@@ -88,5 +105,11 @@ export function useUserContext() {
     forgotPassword,
     resetPassword,
     staffObject,
+    userObject,
+    setUserObject,
+    percentage,
+    setPercentage,
+    data,
+    setData,
   };
 }
