@@ -21,46 +21,62 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    const result = await db.getUser(id);
-    result != 0
-      ? res.send(result)
-      : res.send("Impossible de charger cet utilisateur");
+    const result = await db.getUserFromUID(id);
+    if (result == 0) {
+      res.send({ status: "Error", response: "Utilisateur Introuvable" });
+    } else {
+      res.send({ status: "Success", response: result });
+    }
   } catch (err) {
-    console.log(err);
+    res.send({ status: "Error", response: "Une erreur s'est produite" });
+  }
+});
+
+router.get("/id/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const result = await db.getUser(id);
+    if (result == 0) {
+      res.send({ status: "Error", response: "Utilisateur Introuvable" });
+    } else {
+      res.send({ status: "Success", response: result });
+    }
+  } catch (err) {
+    res.send({ status: "Error", response: "Une erreur s'est produite" });
   }
 });
 
 router.get("/role/:id", async (req, res) => {
-  const id = req.params.id;
   try {
+    const id = req.params.id;
     const result = await db.getRole(id);
-    if (result !== 0) {
-      res.send(result);
+    if (result == 0) {
+      res.send({
+        status: "Error",
+        response: "Impossible de charger cet utilisateur",
+      });
     } else {
-      res.status(400).send("Impossible de charger cet utilisateur");
+      res.send({ status: "Success", response: result });
     }
   } catch (err) {
-    console.log(err);
+    res.send({ status: "Error", response: "Une erreur s'est produite" });
   }
 });
 
 router.post("/addUser", async (req, res) => {
-  // Récupérez les données de la demande POST
-  const userObject = req.body; // Assurez-vous que les données POST sont correctement formatées
   try {
-    // Appelez la fonction pour ajouter un utilisateur
+    const userObject = req.body;
     const result = await db.addUser(userObject);
-
-    if (result === 1) {
-      res.status(201).send("Utilisateur ajouté avec succès.");
+    if (result == 0) {
+      res.send({
+        status: "Error",
+        response: "Impossible d'ajouter l'utilisateur",
+      });
     } else {
-      res.status(400).send("Impossible d'ajouter l'utilisateur.");
+      res.send({ status: "Success", response: result });
     }
   } catch (err) {
-    console.log(err);
-    throw new Error(
-      "Une erreur s'est produite lors de l'ajout de l'utilisateur."
-    );
+    res.send({ status: "Error", response: "Une erreur s'est produite" });
   }
 });
 

@@ -6,15 +6,24 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   const result = await db.getAllStaff();
-  result != 0 ? res.send(result) : res.send("Impossible de charger le staff");
+  if (result === 0) {
+    res.send({ status: "Error", response: "Impossible de charger le staff" });
+  } else {
+    res.send({ status: "Success", response: result });
+  }
 });
 
 /***************************************** GET SPECIFIC ***************************************************** */
 
-router.get("/:id", async (req, res) => {
+router.get("/search/:id", async (req, res) => {
   const id = req.params.id;
   const result = await db.getStaff(id);
-  result != 0 ? res.send(result) : res.send("Impossible de charger ce staff");
+
+  if (result === 0) {
+    res.send({ status: "Error", response: "Impossible de charger ce staff" });
+  } else {
+    res.send({ status: "Success", response: result });
+  }
 });
 
 router.get("/email/:email", async (req, res) => {
@@ -22,14 +31,27 @@ router.get("/email/:email", async (req, res) => {
     const email = req.params.email;
     const result = await db.isEmailOfWorker(email);
     if (result === 0) {
-      res.send("Email Invalide");
+      res.send({ status: "Error", response: "Email Invalide" });
     } else if (result === 2) {
-      res.send("Staff déjà existant");
+      res.send({ status: "Error", response: "Staff déjà existant" });
     } else {
-      res.send(result);
+      res.send({ status: "Success", response: result });
     }
   } catch (err) {
-    throw new Error("Une erreur s'est produite lors de l'ajout du staff.");
+    res.send({ status: "Error", response: "Une erreur s'est produite" });
+  }
+});
+
+router.get("/list", async (req, res) => {
+  try {
+    const result = await db.getStaffList();
+    if (result === 0) {
+      res.send({ status: "Error", response: "Impossible de charger le staff" });
+    } else {
+      res.send({ status: "Success", response: result });
+    }
+  } catch (err) {
+    res.send({ status: "Error", response: "Une erreur s'est produite" });
   }
 });
 
@@ -41,13 +63,12 @@ router.post("/addStaff", async (req, res) => {
     const result = await db.addStaff(staffObject);
 
     if (result === 1) {
-      res.status(201).send("Staff ajouté avec succès.");
+      res.send({ status: "Success", response: result });
     } else {
-      res.status(400).send("Impossible d'ajouter le staff.");
+      res.send({ status: "Error", response: "Impossible d'ajouter le taff'" });
     }
   } catch (err) {
-    console.log(err);
-    throw new Error("Une erreur s'est produite lors de l'ajout du staff.");
+    res.send({ status: "Error", response: "Une erreur s'est produite" });
   }
 });
 

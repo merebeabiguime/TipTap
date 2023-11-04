@@ -1,67 +1,45 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Button } from "react-bootstrap";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import iconWaiter from "../../../images/icon_waiter.png";
+import { getAllStaff } from "../../../fetches/FetchStaff";
+import { getUser } from "../../../fetches/FetchUsers";
 import DeleteButton from "../../../images/delete_staff_button.png";
 import EditButton from "../../../images/edit_staff_button.png";
-import axios from "axios";
-
-import { useUserContext } from "../../../contexts/AuthContext";
-import PreviousPageButton from "../../PreviousPageButton";
-import { Button } from "react-bootstrap";
+import Filter from "../../../images/filter_icon.png";
+import NoStar from "../../../images/no_star_icon.png";
+import Stars from "../../../images/stars.png";
+import Test from "../../../images/testeee.png";
+import SelectRolePopup from "./SelectRolePopup";
+import { useStaffContext } from "../../../contexts/fetches-contexts/StaffContext";
 
 export default function AllStaff() {
-  const [staffList, setStaffList] = useState([{}]);
-
-  useEffect(() => {
-    const asyncFn = async () => {
-      const newStaffList = [];
-      try {
-        const response = await axios.get(`http://localhost:8081/staff/`);
-
-        for (var i = 0; i < response.data.length; i++) {
-          try {
-            const response1 = await axios.get(
-              `http://localhost:8081/user/${response.data[i].ID_user}`
-            );
-            let roleName = "";
-            console.log("i" + i);
-            console.log("id firsname :" + response1.data[0].firstName);
-
-            if (response.data[i].role === 1) {
-              roleName = "Chef";
-            } else if (response.data[i].role === 2) {
-              roleName = "Waiter";
-            } else if (response.data[i].role === 3) {
-              roleName = "Cleaner";
-            }
-            newStaffList.push({
-              role: roleName,
-              stars: response.data[i].stars,
-              firstName: response1.data[0].firstName,
-              lastName: response1.data[0].lastName,
-              pictureUrl: response1.data[0].pictureUrl,
-            });
-          } catch (error) {
-            console.log(error);
-          }
-          setStaffList(newStaffList);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    asyncFn();
-  }, []);
+  const { staffListFilter, isPopupVisible, setIsPopupVisible } =
+    useStaffContext();
 
   return (
     <div>
       <Row>
-        <Col className="d-flex justify-content-center col-m-25" sm={12}>
-          <h2 className="col-m-25">All Staff </h2>
+        <Col className="col-12 d-flex justify-content-center align-items-center first-margin  ">
+          <h2 className=" ">All Staff</h2>
+          <img
+            className="  "
+            src={Test}
+            style={{ position: "absolute", right: 0 }}
+          />
+        </Col>
+
+        <Col className="d-flex justify-content-end margin-18" sm={12}>
+          <Button
+            onClick={() => setIsPopupVisible(!isPopupVisible)}
+            style={{ backgroundColor: "transparent", border: "0" }}
+          >
+            {" "}
+            <img src={Filter} />
+          </Button>
         </Col>
         <Col className="">
-          {staffList.map((staff, index) => (
+          {staffListFilter.map((staff, index) => (
             <Row key={index} className="d-flex justify-content-center mx-auto">
               <Col className="col-3 d-flex justify-content-center align-items-center">
                 <img
@@ -93,7 +71,38 @@ export default function AllStaff() {
                       </span>
                     </Col>
                     <Col className="col-12">
-                      <span>Test</span>
+                      {(() => {
+                        const starImages = [];
+                        for (
+                          let starIndex = 0;
+                          starIndex < staff.stars;
+                          starIndex++
+                        ) {
+                          starImages.push(
+                            <img
+                              key={starIndex}
+                              src={Stars}
+                              alt="star"
+                              className=""
+                            />
+                          );
+                        }
+                        for (
+                          let starIndex1 = 0;
+                          starIndex1 < 5 - staff.stars;
+                          starIndex1++
+                        ) {
+                          starImages.push(
+                            <img
+                              key={starIndex1}
+                              src={NoStar}
+                              alt="Nostar"
+                              className=""
+                            />
+                          );
+                        }
+                        return starImages;
+                      })()}
                     </Col>
                   </Col>
                   <Col className="col-2">
@@ -105,6 +114,7 @@ export default function AllStaff() {
             </Row>
           ))}
         </Col>
+        <SelectRolePopup />
       </Row>
     </div>
   );

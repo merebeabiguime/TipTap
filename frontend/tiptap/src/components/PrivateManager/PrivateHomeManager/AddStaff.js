@@ -1,16 +1,17 @@
-import "../../../style.css";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import UserIcon from "../../../images/signup_user_icon.png";
 import vector3 from "../../../images/Vector 3.png";
 import vector4 from "../../../images/Vector 4.png";
+import UserIcon from "../../../images/signup_user_icon.png";
+import "../../../style.css";
 
-import { Button, InputGroup, Form } from "react-bootstrap";
-import { useUserContext } from "../../../contexts/AuthContext";
-import { useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import PreviousPageButton from "../../PreviousPageButton";
 import axios from "axios";
+import { useRef, useState } from "react";
+import { Button, Form, InputGroup } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { useUserContext } from "../../../contexts/AuthContext";
+import PreviousPageButton from "../../../features/PreviousPageButton";
+import { isEmailValid } from "../../../fetches/FetchStaff";
 function AddStaff() {
   const { staffObject } = useUserContext();
   const inputs = useRef("");
@@ -27,18 +28,14 @@ function AddStaff() {
     e.preventDefault();
 
     try {
-      const response = await axios.get(
-        `http://localhost:8081/staff/email/${inputs.current.value}`
-      );
-      const role = response.data; // Extrait la valeur du rôle depuis la réponse
-      console.log(inputs.current.value);
-      console.log(role);
-      if (role != "Staff déjà existant" && role != "Email Invalide") {
+      //Is the email attached to this accoung one of a worker ?
+      const getValidStaffResponse = isEmailValid(inputs.current.value);
+      if (getValidStaffResponse.status == "Success") {
         staffObject.current = {
-          firstName: role[0].firstName,
-          lastName: role[0].lastName,
-          ID_USER: role[0].ID,
-          pictureUrl: role[0].pictureUrl,
+          firstName: getValidStaffResponse.response[0].firstName,
+          lastName: getValidStaffResponse.response[0].lastName,
+          ID_USER: getValidStaffResponse.response[0].ID,
+          pictureUrl: getValidStaffResponse.response[0].pictureUrl,
           stars: 5,
           role: 0,
         };
@@ -46,10 +43,10 @@ function AddStaff() {
           "/privateManager/private-home-manager/add-staff/select-staff-role"
         );
       } else {
-        setValidation(role);
+        setValidation(getValidStaffResponse.response);
       }
     } catch (err) {
-      console.log(err);
+      setValidation("Une erreur est survenue");
     }
   };
   return (

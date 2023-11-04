@@ -1,15 +1,15 @@
-import "../style.css";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import UploadImage from "../images/upload_image_signup.png";
-import UserIcon from "../images/signup_user_icon.png";
 import vector3 from "../images/Vector 3.png";
 import vector4 from "../images/Vector 4.png";
+import UserIcon from "../images/signup_user_icon.png";
+import UploadImage from "../images/upload_image_signup.png";
+import "../style.css";
 
-import { Button, InputGroup, Form } from "react-bootstrap";
-import { useUserContext } from "../contexts/AuthContext";
 import { useRef, useState } from "react";
+import { Button, Form, InputGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { useUserContext } from "../contexts/AuthContext";
 function ForgotPassword() {
   const { forgotPassword } = useUserContext();
   const [validation, setValidation] = useState("");
