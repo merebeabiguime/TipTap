@@ -31,12 +31,16 @@ function App() {
               path="/privateManager/private-home-manager"
               element={<PrivateHomeManager />}
             />
-            <StaffContextProvider>
-              <Route
-                path="/privateManager/private-home-manager/all-staff"
-                element={<AllStaff />}
-              />
-            </StaffContextProvider>
+            <Route
+              path="/privateManager/private-home-manager/all-staff"
+              element={
+                <>
+                  <StaffContextProvider>
+                    <AllStaff />
+                  </StaffContextProvider>
+                </>
+              }
+            />
             <Route
               path="/privateManager/private-home-manager/add-staff"
               element={<AddStaff />}
