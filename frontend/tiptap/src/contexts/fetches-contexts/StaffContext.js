@@ -10,6 +10,7 @@ export function StaffContextProvider(props) {
   const [staffListFilter, setStaffListFilter] = useState([{}]);
   const [staffList, setStaffList] = useState([{}]);
   const [loadingData, setLoadingData] = useState(true);
+  const [isPopupVisible, setIsPopupVisible] = useState(true);
 
   const staffQuery = useQuery({
     queryKey: ["staff"],
@@ -31,6 +32,8 @@ export function StaffContextProvider(props) {
         setStaffListFilter,
         staffList,
         setStaffList,
+        setIsPopupVisible,
+        isPopupVisible,
       }}
     >
       {!loadingData && props.children}
@@ -46,6 +49,8 @@ export function useStaffContext() {
     staffList,
     setStaffList,
     staffQuery,
+    isPopupVisible,
+    setIsPopupVisible,
   } = useContext(StaffContext);
 
   return {
@@ -55,5 +60,7 @@ export function useStaffContext() {
     staffList,
     setStaffList,
     staffQuery,
+    isPopupVisible,
+    setIsPopupVisible,
   };
 }

@@ -14,14 +14,8 @@ import SelectRolePopup from "./SelectRolePopup";
 import { useStaffContext } from "../../../contexts/fetches-contexts/StaffContext";
 
 export default function AllStaff() {
-  const [isPopupVisible, setPopupVisible] = useState(false);
-
-  const { staffListFilter, setStaffList, setStaffListFilter } =
+  const { staffListFilter, isPopupVisible, setIsPopupVisible } =
     useStaffContext();
-
-  const togglePopup = () => {
-    setPopupVisible(!isPopupVisible);
-  };
 
   return (
     <div>
@@ -37,7 +31,7 @@ export default function AllStaff() {
 
         <Col className="d-flex justify-content-end margin-18" sm={12}>
           <Button
-            onClick={togglePopup}
+            onClick={() => setIsPopupVisible(!isPopupVisible)}
             style={{ backgroundColor: "transparent", border: "0" }}
           >
             {" "}

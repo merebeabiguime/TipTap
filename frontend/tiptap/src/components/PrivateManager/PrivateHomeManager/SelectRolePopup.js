@@ -1,14 +1,10 @@
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
-import { useUserContext } from "../../../contexts/AuthContext";
+import { useStaffContext } from "../../../contexts/fetches-contexts/StaffContext";
 
 export default function SelectRolePopup() {
-  const [isPopupVisible, setPopupVisible] = useState(false);
-  const { setStaffListFilter, staffList } = useUserContext();
-
-  const togglePopup = () => {
-    setPopupVisible(!isPopupVisible);
-  };
+  const { setStaffListFilter, staffList, isPopupVisible, setIsPopupVisible } =
+    useStaffContext();
 
   const handleRoleFilterChange = (newRoleFilter) => {
     if (newRoleFilter === "") {
@@ -62,7 +58,7 @@ export default function SelectRolePopup() {
       </div>
       <div
         className={`overlay ${isPopupVisible ? "show" : ""}`}
-        onClick={togglePopup}
+        onClick={() => setIsPopupVisible(!isPopupVisible)}
       ></div>
     </div>
   );
