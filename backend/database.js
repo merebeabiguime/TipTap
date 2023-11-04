@@ -211,6 +211,29 @@ export async function staffExists(email) {
   return rows.length === 0 ? 0 : rows;
 }
 
+export async function getStaffList() {
+  const allStaff = await getAllStaff();
+  const staffList = [];
+  const roleMap = ["Chef", "Waiter", "Cleaner"];
+  if (allStaff != 0) {
+    for (let i = 0; i < allStaff.length; i++) {
+      const users = await getUser(allStaff[i].ID);
+      if (users != 0) {
+        staffList.push({
+          role: roleMap[allStaff[i].role] || "Unknown",
+          stars: allStaff[i].stars,
+          firstName: users[0].firstName,
+          lastName: users[0].lastName,
+          pictureUrl: users[0].pictureUrl,
+        });
+      }
+    }
+  } else {
+    return allStaff;
+  }
+  return staffList;
+}
+
 // Supprimer un membre du personnel
 export async function deleteStaff(id) {
   try {

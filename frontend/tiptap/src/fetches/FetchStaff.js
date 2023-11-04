@@ -22,3 +22,9 @@ export async function addStaff(jsonData) {
 
   return response.data;
 }
+
+export async function getStaffList() {
+  const response = await axios.get("http://localhost:8081/staff/list");
+
+  return response.data;
+}
