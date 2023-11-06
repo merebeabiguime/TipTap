@@ -182,7 +182,7 @@ export async function getStaffList() {
   const roleMap = ["Chef", "Waiter", "Cleaner"];
   if (allStaff != 0) {
     for (let i = 0; i < allStaff.length; i++) {
-      const users = await getUser(allStaff[i].ID);
+      const users = await getUser(allStaff[i].ID_user);
       if (users != 0) {
         staffList.push({
           role: roleMap[allStaff[i].role] || "Unknown",

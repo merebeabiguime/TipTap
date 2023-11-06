@@ -9,20 +9,16 @@ export function StaffContextProvider(props) {
   const staffObject = useRef({});
   const [staffListFilter, setStaffListFilter] = useState([{}]);
   const [staffList, setStaffList] = useState([{}]);
-  const [loadingData, setLoadingData] = useState(true);
-  const [isPopupVisible, setIsPopupVisible] = useState(true);
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
 
-  const staffQuery = useQuery({
+  const { isLoading } = useQuery({
     queryKey: ["staff"],
     queryFn: async () => await getStaffList(),
+    onSuccess: (data) => {
+      setStaffList(data.response);
+      setStaffListFilter(data.response);
+    },
   });
-
-  if (!staffQuery.isLoading && loadingData == true) {
-    console.log("aaaa", staffQuery.data.response);
-    setStaffList(staffQuery.data.response);
-    setStaffListFilter(staffQuery.data.response);
-    setLoadingData(false);
-  }
 
   return (
     <StaffContext.Provider
@@ -36,7 +32,7 @@ export function StaffContextProvider(props) {
         isPopupVisible,
       }}
     >
-      {!loadingData && props.children}
+      {!isLoading && props.children}
     </StaffContext.Provider>
   );
 }

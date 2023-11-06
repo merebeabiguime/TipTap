@@ -14,17 +14,16 @@ import {
   confirmPasswordReset,
 } from "firebase/auth";
 import { auth } from "../firebase.js";
+import { QueryCache } from "react-query";
 
 export const UserContext = createContext();
 
 export function UserContextProvider(props) {
   const [userRole, setUserRole] = useState(0);
-  const staffObject = useRef({});
   const [userObject, setUserObject] = useState({});
+  const userObjectRole = useRef(0);
   const [percentage, setPercentage] = useState(null);
   const [data, setData] = useState({});
-  const [staffListFilter, setStaffListFilter] = useState([{}]);
-  const [staffList, setStaffList] = useState([{}]);
 
   function selectRole(userRole) {
     setUserRole(userRole);
@@ -50,8 +49,6 @@ export function UserContextProvider(props) {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setCurrentUser(currentUser);
       setLoadingData(false);
-      setUserObject({});
-      console.log("AUTH DETRUIT");
     });
     return unsubscribe;
   }, []);
@@ -66,17 +63,13 @@ export function UserContextProvider(props) {
         currentUser,
         forgotPassword,
         resetPassword,
-        staffObject,
         userObject,
         setUserObject,
         percentage,
         setPercentage,
         data,
         setData,
-        staffListFilter,
-        setStaffListFilter,
-        staffList,
-        setStaffList,
+        userObjectRole,
       }}
     >
       {!loadingData && props.children}
@@ -93,17 +86,13 @@ export function useUserContext() {
     currentUser,
     forgotPassword,
     resetPassword,
-    staffObject,
     userObject,
     setUserObject,
     percentage,
     setPercentage,
     data,
     setData,
-    staffListFilter,
-    setStaffListFilter,
-    staffList,
-    setStaffList,
+    userObjectRole,
   } = useContext(UserContext);
 
   return {
@@ -114,16 +103,12 @@ export function useUserContext() {
     currentUser,
     forgotPassword,
     resetPassword,
-    staffObject,
     userObject,
     setUserObject,
     percentage,
     setPercentage,
     data,
     setData,
-    staffListFilter,
-    setStaffListFilter,
-    staffList,
-    setStaffList,
+    userObjectRole,
   };
 }
