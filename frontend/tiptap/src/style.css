@@ -250,3 +250,28 @@ form {
 .margin-46 {
   margin-bottom: 46px !important;
 }
+
+.customName {
+  font-family: "Satoshi Variable", sans-serif !important;
+  font-size: 20px !important;
+  color: rgba(251, 188, 4, 1) !important;
+  font-weight: 700 !important;
+  line-height: 27px;
+  margin-top: 17px;
+  margin-bottom: 50px;
+}
+.customTitle1 {
+  font-family: "Satoshi Variable", sans-serif !important;
+  font-size: 24px !important;
+  color: black !important;
+  font-weight: 700 !important;
+  line-height: 32.4px;
+}
+
+h4 {
+  font-family: "Satoshi Variable", sans-serif !important;
+  font-size: 36px !important;
+  color: black !important;
+  font-weight: 700 !important;
+  line-height: 48.6px;
+}

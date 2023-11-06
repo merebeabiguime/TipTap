@@ -12,10 +12,12 @@ import Stars from "../../../images/stars.png";
 import Test from "../../../images/testeee.png";
 import SelectRolePopup from "./SelectRolePopup";
 import { useStaffContext } from "../../../contexts/fetches-contexts/StaffContext";
+import { useUserContext } from "../../../contexts/AuthContext";
 
 export default function AllStaff() {
   const { staffListFilter, isPopupVisible, setIsPopupVisible } =
     useStaffContext();
+  const { userObject } = useUserContext();
 
   return (
     <div>
@@ -24,7 +26,7 @@ export default function AllStaff() {
           <h2 className=" ">All Staff</h2>
           <img
             className="  "
-            src={Test}
+            src={userObject.pictureUrl}
             style={{ position: "absolute", right: 0 }}
           />
         </Col>

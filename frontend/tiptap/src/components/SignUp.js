@@ -58,13 +58,7 @@ function SignUp() {
         const getUserRoleResponse = await getUserRole(credentials.user.uid);
 
         if (getUserRoleResponse.status === "Success") {
-          if (getUserRoleResponse.response[0].role === 1) {
-            navigate("/privateWorker/private-home-worker");
-          } else if (getUserRoleResponse.response[0].role === 2) {
-            navigate("/privateManager/private-home-manager");
-          } else {
-            setValidation("Une erreur est survenue");
-          }
+          navigate("/signIn");
           setValidation("");
           formRef.current.reset();
         } else {

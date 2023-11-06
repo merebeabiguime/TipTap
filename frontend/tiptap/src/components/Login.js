@@ -8,6 +8,7 @@ import google from "../images/signin_with_google.png";
 import PasswordIcon from "../images/signup_password_icon.png";
 import UserIcon from "../images/signup_user_icon.png";
 import "../style.css";
+import { useQuery } from "react-query";
 
 import { useRef, useState } from "react";
 import { Button, Form, InputGroup } from "react-bootstrap";
@@ -16,10 +17,31 @@ import { useUserContext } from "../contexts/AuthContext";
 import PreviousPageButton from "../features/PreviousPageButton";
 import { getUserFromUID } from "../fetches/FetchUsers";
 function Login() {
-  const { signIn, currentUser, setUserObject } = useUserContext();
+  const { signIn, setUserObject, userObjectRole } = useUserContext();
   const inputs = useRef([]);
   const [validation, setValidation] = useState("");
+  const [credentials, setCredentials] = useState(null);
   const navigate = useNavigate();
+  const signedIn = useRef(false);
+
+  const userQuery = useQuery({
+    queryKey: ["userObject"],
+    queryFn: async () => await getUserFromUID(credentials.user.uid),
+    enabled: signedIn.current,
+    onSuccess: (data) => {
+      setUserObject(data.response[0]);
+      if (data.response[0].role === 1) {
+        userObjectRole.current = 1;
+        navigate("/privateWorker/private-home-worker");
+      } else if (data.response[0].role === 2) {
+        userObjectRole.current = 2;
+        navigate("/privateManager/private-home-manager");
+        setValidation("");
+      } else {
+        setValidation(data.response);
+      }
+    },
+  });
 
   const addInput = (el) => {
     if (el && !inputs.current.includes(el)) {
@@ -33,30 +55,17 @@ function Login() {
     e.preventDefault();
 
     try {
-      const credentials = await signIn(
+      const cred = await signIn(
         inputs.current[0].value,
         inputs.current[1].value
       );
-
-      //Searching user in mysql db with same UID as in Firebase db
-      const getUserResponse = await getUserFromUID(credentials.user.uid);
-
-      if (getUserResponse.status === "Success") {
-        setUserObject(getUserResponse.response[0]);
-
-        if (getUserResponse.response[0].role === 1) {
-          navigate("/privateWorker/private-home-worker");
-        } else if (getUserResponse.response[0].role === 2) {
-          navigate("/privateManager/private-home-manager");
-          setValidation("");
-        }
-      } else {
-        setValidation(getUserResponse.response);
-      }
+      setCredentials(cred);
+      signedIn.current = true;
     } catch (err) {
       setValidation("Email or password incorrect");
     }
   };
+
   return (
     <div>
       <Row>

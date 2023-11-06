@@ -14,6 +14,7 @@ import ResetPassword from "./ResetPassword";
 import SelectRole from "./SelectRole";
 import SignUp from "./SignUp";
 import { StaffContextProvider } from "../contexts/fetches-contexts/StaffContext";
+import WorkerQrCode from "./PrivateManager/PrivateHomeManager/WorkerQrCode";
 
 function App() {
   return (
@@ -26,20 +27,28 @@ function App() {
           <Route path="/signIn" Component={Login}></Route>
           <Route path="/forgotpassword" Component={ForgotPassword}></Route>
           <Route path="/resetpassword" Component={ResetPassword}></Route>
-          <Route path="/privateManager" element={<PrivateManager />}>
+          <Route
+            path="/privateManager"
+            element={
+              <>
+                <StaffContextProvider>
+                  <PrivateManager />
+                </StaffContextProvider>
+              </>
+            }
+          >
             <Route
               path="/privateManager/private-home-manager"
               element={<PrivateHomeManager />}
             />
             <Route
+              path="/privateManager/private-home-manager/worker-qrcode/:userId"
+              element={<WorkerQrCode />}
+            />
+
+            <Route
               path="/privateManager/private-home-manager/all-staff"
-              element={
-                <>
-                  <StaffContextProvider>
-                    <AllStaff />
-                  </StaffContextProvider>
-                </>
-              }
+              element={<AllStaff />}
             />
             <Route
               path="/privateManager/private-home-manager/add-staff"
