@@ -6,9 +6,12 @@ export default function PrivateManager() {
 
   if (!currentUser) {
     return <Navigate to="/homepage"></Navigate>;
+  } else {
+    <p>{currentUser}</p>;
   }
   return (
     <div>
+      <p>{currentUser.email}</p>
       <Outlet />
     </div>
   );
