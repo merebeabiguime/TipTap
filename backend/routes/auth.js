@@ -1,19 +1,20 @@
 import express from "express";
 import * as db from "../database.js";
 import jsonwebtoken from "jsonwebtoken";
-import { config } from "dotenv";
-config();
+import dotenv from "dotenv";
+dotenv.config();
 
 const router = express.Router();
 
 router.post("/login", async (req, res) => {
   try {
-    const UID = req.body;
+    const UID = req.body[0].UID;
     const userFound = await db.getUserFromUID(UID);
     if (userFound === 0)
       return res.send({ status: "Error", response: "Utilisateur Introuvable" });
+    console.log("aaa");
     //Creat JWT
-    accessToken = jsonwebtoken.sign(
+    const accessToken = jsonwebtoken.sign(
       {
         firstName: userFound[0].firstName,
         lastName: userFound[0].lastName,
@@ -23,7 +24,8 @@ router.post("/login", async (req, res) => {
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: "900s" }
     );
-    refreshToken = jsonwebtoken.sign(
+
+    const refreshToken = jsonwebtoken.sign(
       {
         firstName: userFound[0].firstName,
         lastName: userFound[0].lastName,
@@ -43,7 +45,7 @@ router.post("/login", async (req, res) => {
     if (refreshResponse === 0)
       return res.send({
         status: "Error",
-        response: "Une erreur s'est produite, veuillez reesayer",
+        response: "Impossible de créer le refreshToken",
       });
 
     res.cookie("jwt", refreshToken, {
@@ -52,8 +54,18 @@ router.post("/login", async (req, res) => {
       secure: true,
       maxAge: 60 * 60 * 1000 * 24,
     });
-    res.json({ accessToken });
-    //res.send({ status: "Success", response: userFound });
+    if (userFound[0].role === 1)
+      res.json({
+        status: "Success",
+        response: "/privateWorker/private-home-worker",
+        accessToken: accessToken,
+      });
+    if (userFound[0].role === 2)
+      res.json({
+        status: "Success",
+        response: "/privateManager/private-home-manager",
+        accessToken: accessToken,
+      });
   } catch (err) {
     res.send({ status: "Error", response: "Une erreur s'est produite" });
   }
