@@ -7,7 +7,8 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const cookies = request.cookies;
+    const cookies = req.cookies;
+    console.log(cookies);
 
     if (!cookies?.jsonwebtoken)
       return res.send({
@@ -27,6 +28,14 @@ router.get("/", async (req, res) => {
         response: "Accès interdit",
       });
 
+    const userFound = await db.getUser(refreshTokenFound[0].ID_user);
+
+    if (userFound === 0)
+      return res.send({
+        status: "Error",
+        response: "Utilisateur introuvable",
+      });
+
     jsonwebtoken.verify(
       refreshToken,
       process.env.REFRESH_TOKEN_SECRET,
@@ -36,7 +45,9 @@ router.get("/", async (req, res) => {
             status: "Error",
             response: "Accès interdit",
           });
-        accessToken = jsonwebtoken.sign(
+        console.log("icichahahahah");
+
+        const accessToken = jsonwebtoken.sign(
           {
             firstName: userFound[0].firstName,
             lastName: userFound[0].lastName,
@@ -46,7 +57,10 @@ router.get("/", async (req, res) => {
           process.env.ACCESS_TOKEN_SECRET,
           { expiresIn: "900s" }
         );
-        res.json({ accessToken });
+        res.json({
+          status: "Success",
+          accessToken: accessToken,
+        });
       }
     );
   } catch (err) {

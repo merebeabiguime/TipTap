@@ -1,8 +1,7 @@
-import useAxiosPrivate from "../hooks/useAxiosPrivate";
-const axiosPrivate = useAxiosPrivate();
+import axios from "axios";
 
 export async function addUser(jsonData) {
-  const response = await axiosPrivate.post(
+  const response = await axios.post(
     "http://localhost:8081/user/addUser",
     jsonData
   );
@@ -10,23 +9,19 @@ export async function addUser(jsonData) {
   return response.data;
 }
 export async function getUserRole(uid) {
-  const response = await axiosPrivate.get(
-    `http://localhost:8081/user/role/${uid}`
-  );
+  const response = await axios.get(`http://localhost:8081/user/role/${uid}`);
 
   return response.data;
 }
 
 export async function getUserFromUID(uid) {
-  const response = await axiosPrivate.get(`http://localhost:8081/user/${uid}`);
+  const response = await axios.get(`http://localhost:8081/user/${uid}`);
 
   return response.data;
 }
 
 export async function getUser(id) {
-  const response = await axiosPrivate.get(
-    `http://localhost:8081/user/id/${id}`
-  );
+  const response = await axios.get(`http://localhost:8081/user/id/${id}`);
 
   return response.data;
 }

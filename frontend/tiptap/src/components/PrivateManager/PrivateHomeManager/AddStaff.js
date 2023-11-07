@@ -11,13 +11,14 @@ import { Button, Form, InputGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../../../contexts/AuthContext";
 import PreviousPageButton from "../../../features/PreviousPageButton";
-import { isEmailValid } from "../../../fetches/FetchStaff";
+import { isEmailValid, useFetchStaff } from "../../../fetches/FetchStaff";
 import { useStaffContext } from "../../../contexts/fetches-contexts/StaffContext";
 function AddStaff() {
   const { staffObject } = useStaffContext();
   const inputs = useRef("");
   const [validation, setValidation] = useState("");
   const navigate = useNavigate();
+  const fetchStaff = useFetchStaff();
 
   const addInput = (el) => {
     inputs.current = el;
@@ -30,7 +31,9 @@ function AddStaff() {
 
     try {
       //Is the email attached to this accoung one of a worker ?
-      const getValidStaffResponse = await isEmailValid(inputs.current.value);
+      const getValidStaffResponse = await fetchStaff.isEmailValid(
+        inputs.current.value
+      );
       if (getValidStaffResponse.status == "Success") {
         staffObject.current = {
           firstName: getValidStaffResponse.response[0].firstName,

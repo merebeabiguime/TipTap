@@ -6,7 +6,7 @@ const verifyJWT = (req, res, next) => {
   try {
     const authHeader = req.headers["authorization"];
     if (!authHeader)
-      res.send({
+      return res.send({
         status: "Error",
         response: "Une erreur s'est produite",
         code: 403,
@@ -17,7 +17,7 @@ const verifyJWT = (req, res, next) => {
       process.env.ACCESS_TOKEN_SECRET,
       (err, decoded) => {
         if (err)
-          res.send({
+          return res.send({
             status: "Error",
             response: "Une erreur s'est produite",
           });
@@ -26,7 +26,7 @@ const verifyJWT = (req, res, next) => {
       }
     );
   } catch (error) {
-    res.send({
+    return res.send({
       status: "Error",
       response: "Une erreur s'est produite",
     });
