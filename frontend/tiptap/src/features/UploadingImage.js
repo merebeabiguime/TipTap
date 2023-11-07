@@ -54,10 +54,6 @@ export default function UploadingImage() {
   useEffect(() => {
     file && uploadFile();
   }, [file]);
-
-  useEffect(() => {
-    console.log("data image" + data.img);
-  }, [data]);
   return (
     <Col className=" d-flex justify-content-center  col-m-50" sm={12}>
       <input

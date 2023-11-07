@@ -7,10 +7,19 @@ import vector4 from "../images/Vector 4.png";
 import homepageIcon from "../images/homepage_icon.png";
 import logo from "../images/logo.PNG";
 import "../style.css";
+import QRCode from "react-qr-code";
 
 function HomePage() {
   return (
     <Row>
+      <div
+        style={{
+          height: "auto",
+          margin: "0 auto",
+          maxWidth: 64,
+          width: "100%",
+        }}
+      ></div>
       <Col className="justify-content-end" sm={12}>
         <div>
           <img src={vector3} alt="Vector 3" className="vector" />

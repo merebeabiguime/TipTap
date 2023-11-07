@@ -1,17 +1,21 @@
 import React, {
-  useContext,
-  useState,
-  useEffect,
   createContext,
+  useContext,
+  useEffect,
   useRef,
+  useState,
 } from "react";
 
+import { myAxios } from "../axios/axios";
+
+import { jwtDecode } from "jwt-decode";
+
 import {
-  signInWithEmailAndPassword,
+  confirmPasswordReset,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   sendPasswordResetEmail,
-  confirmPasswordReset,
+  signInWithEmailAndPassword,
 } from "firebase/auth";
 import { auth } from "../firebase.js";
 
@@ -19,12 +23,20 @@ export const UserContext = createContext();
 
 export function UserContextProvider(props) {
   const [userRole, setUserRole] = useState(0);
-  const staffObject = useRef({});
   const [userObject, setUserObject] = useState({});
+  const [accessToken, setAccessToken] = useState(null);
+  const userObjectRole = useRef(0);
   const [percentage, setPercentage] = useState(null);
   const [data, setData] = useState({});
-  const [staffListFilter, setStaffListFilter] = useState([{}]);
-  const [staffList, setStaffList] = useState([{}]);
+
+  async function refresh() {
+    const response = await myAxios.get("http://localhost:8081/refresh", {
+      withCredentials: true,
+    });
+    setAccessToken(response.data.accessToken);
+    console.log("newAccesToken", response.data);
+    return response.data.accessToken;
+  }
 
   function selectRole(userRole) {
     setUserRole(userRole);
@@ -50,10 +62,29 @@ export function UserContextProvider(props) {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setCurrentUser(currentUser);
       setLoadingData(false);
-      setUserObject({});
-      console.log("AUTH DETRUIT");
     });
+
     return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    //Check if there is a JWT Token, if not automatically logout user from Firebase
+    if (accessToken) {
+      console.log("token", jwtDecode(accessToken));
+      setUserObject(jwtDecode(accessToken));
+    }
+  }, [accessToken]);
+
+  const verifyRefreshToken = async () => {
+    try {
+      await refresh();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    !accessToken && verifyRefreshToken();
   }, []);
 
   return (
@@ -66,17 +97,16 @@ export function UserContextProvider(props) {
         currentUser,
         forgotPassword,
         resetPassword,
-        staffObject,
         userObject,
         setUserObject,
         percentage,
         setPercentage,
         data,
         setData,
-        staffListFilter,
-        setStaffListFilter,
-        staffList,
-        setStaffList,
+        userObjectRole,
+        accessToken,
+        setAccessToken,
+        refresh,
       }}
     >
       {!loadingData && props.children}
@@ -93,17 +123,16 @@ export function useUserContext() {
     currentUser,
     forgotPassword,
     resetPassword,
-    staffObject,
     userObject,
     setUserObject,
     percentage,
     setPercentage,
     data,
     setData,
-    staffListFilter,
-    setStaffListFilter,
-    staffList,
-    setStaffList,
+    userObjectRole,
+    accessToken,
+    setAccessToken,
+    refresh,
   } = useContext(UserContext);
 
   return {
@@ -114,16 +143,15 @@ export function useUserContext() {
     currentUser,
     forgotPassword,
     resetPassword,
-    staffObject,
     userObject,
     setUserObject,
     percentage,
     setPercentage,
     data,
     setData,
-    staffListFilter,
-    setStaffListFilter,
-    staffList,
-    setStaffList,
+    userObjectRole,
+    accessToken,
+    setAccessToken,
+    refresh,
   };
 }

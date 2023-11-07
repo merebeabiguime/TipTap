@@ -10,6 +10,10 @@ import { useUserContext } from "../../../contexts/AuthContext";
 function PrivateHomeManager() {
   const { selectRole, currentUser } = useUserContext();
   console.log(currentUser);
+
+  /* useEffect(() => {
+    refresh();
+  }, []);*/
   return (
     <div>
       <Row>

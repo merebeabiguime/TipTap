@@ -182,7 +182,7 @@ export async function getStaffList() {
   const roleMap = ["Chef", "Waiter", "Cleaner"];
   if (allStaff != 0) {
     for (let i = 0; i < allStaff.length; i++) {
-      const users = await getUser(allStaff[i].ID);
+      const users = await getUser(allStaff[i].ID_user);
       if (users != 0) {
         staffList.push({
           role: roleMap[allStaff[i].role] || "Unknown",
@@ -329,4 +329,51 @@ export async function deleteComment(id) {
 export async function getAllComment() {
   const [rows] = await pool.query("SELECT * FROM comment");
   return rows.length === 0 ? 0 : rows;
+}
+
+/************************************** QUERIES DES REFRESHTOKEN **********************************************/
+
+// Ajouter un refreshToken
+export async function addRefreshToken(ID_user, refreshToken) {
+  const [rows] = await pool.query(
+    "INSERT INTO refreshtokens (ID_user, refreshToken) VALUES (?, ?)",
+    [ID_user, refreshToken]
+  );
+
+  // Vérifiez si l'insertion a réussi (aucune exception n'a été levée)
+  if (rows.affectedRows === 1) {
+    return 1; // Retournez 1 pour indiquer que l'insertion a réussi
+  } else {
+    return 0; // Retournez 0 pour indiquer que l'insertion a échoué
+  }
+}
+
+// Obtenir un refreshToken par ID
+export async function getRefreshToken(refreshToken) {
+  const [rows] = await pool.query(
+    "SELECT * FROM refreshtokens WHERE refreshToken=?",
+    [refreshToken]
+  );
+  return rows.length === 0 ? 0 : rows;
+}
+
+//Supprimer un refreshToken
+export async function deleteRefreshToken(token) {
+  const refreshToken = await getRefreshToken(token);
+
+  if (refreshToken === 0) {
+    return 2;
+  }
+
+  const [rows] = await pool.query(
+    "DELETE FROM refreshTokens WHERE refreshToken = ?",
+    [token]
+  );
+
+  // Vérifiez si la suppression a réussi (aucune exception n'a été levée)
+  if (rows.affectedRows === 1) {
+    return 1;
+  } else {
+    return 0;
+  }
 }
