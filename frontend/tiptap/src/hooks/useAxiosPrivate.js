@@ -1,17 +1,14 @@
 import axios from "axios";
-import useRefreshToken from "./useRefreshToken";
-import { useUserContext } from "../contexts/AuthContext";
-import { useEffect } from "react";
 import dayjs from "dayjs";
 import { jwtDecode } from "jwt-decode";
+import { useUserContext } from "../contexts/AuthContext";
 const axiosPrivate = axios.create({
   baseURL: "http://localhost:3000",
   withCredentials: true,
 });
 
 const useAxiosPrivate = () => {
-  const refresh = useRefreshToken();
-  const { accessToken } = useUserContext();
+  const { accessToken, refresh } = useUserContext();
 
   axiosPrivate.interceptors.request.use(async (req) => {
     const user = jwtDecode(accessToken);

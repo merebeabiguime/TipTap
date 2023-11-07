@@ -1,22 +1,23 @@
 import React, {
-  useContext,
-  useState,
-  useEffect,
   createContext,
+  useContext,
+  useEffect,
   useRef,
+  useState,
 } from "react";
+
+import { myAxios } from "../axios/axios";
 
 import { jwtDecode } from "jwt-decode";
 
 import {
-  signInWithEmailAndPassword,
+  confirmPasswordReset,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   sendPasswordResetEmail,
-  confirmPasswordReset,
+  signInWithEmailAndPassword,
 } from "firebase/auth";
 import { auth } from "../firebase.js";
-import { QueryCache } from "react-query";
 
 export const UserContext = createContext();
 
@@ -27,6 +28,15 @@ export function UserContextProvider(props) {
   const userObjectRole = useRef(0);
   const [percentage, setPercentage] = useState(null);
   const [data, setData] = useState({});
+
+  async function refresh() {
+    const response = await myAxios.get("http://localhost:8081/refresh", {
+      withCredentials: true,
+    });
+    setAccessToken(response.data.accessToken);
+    console.log("newAccesToken", response.data);
+    return response.data.accessToken;
+  }
 
   function selectRole(userRole) {
     setUserRole(userRole);
@@ -53,11 +63,6 @@ export function UserContextProvider(props) {
       setCurrentUser(currentUser);
       setLoadingData(false);
     });
-    //Check if there is a JWT Token, if not automatically logout user from Firebase
-    if (accessToken) {
-      console.log("token", jwtDecode(accessToken));
-      setUserObject(jwtDecode(accessToken.data));
-    }
 
     return unsubscribe;
   }, []);
@@ -69,6 +74,18 @@ export function UserContextProvider(props) {
       setUserObject(jwtDecode(accessToken));
     }
   }, [accessToken]);
+
+  const verifyRefreshToken = async () => {
+    try {
+      await refresh();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    !accessToken && verifyRefreshToken();
+  }, []);
 
   return (
     <UserContext.Provider
@@ -89,6 +106,7 @@ export function UserContextProvider(props) {
         userObjectRole,
         accessToken,
         setAccessToken,
+        refresh,
       }}
     >
       {!loadingData && props.children}
@@ -114,6 +132,7 @@ export function useUserContext() {
     userObjectRole,
     accessToken,
     setAccessToken,
+    refresh,
   } = useContext(UserContext);
 
   return {
@@ -133,5 +152,6 @@ export function useUserContext() {
     userObjectRole,
     accessToken,
     setAccessToken,
+    refresh,
   };
 }
