@@ -48,12 +48,14 @@ router.post("/login", async (req, res) => {
         response: "Impossible de créer le refreshToken",
       });
 
-    res.cookie("jwt", refreshToken, {
+    res.cookie("jsonwebtoken", refreshToken, {
       httpOnly: true,
-      sameSite: "None",
-      secure: true,
+      sameSite: "strict",
+      secure: false,
+      path: "/",
       maxAge: 60 * 60 * 1000 * 24,
     });
+
     if (userFound[0].role === 1)
       res.json({
         status: "Success",

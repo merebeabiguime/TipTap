@@ -12,10 +12,11 @@ import PreviousPageButton from "../../../features/PreviousPageButton";
 import { Button } from "react-bootstrap";
 import { json, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { addStaff } from "../../../fetches/FetchStaff";
+import { useFetchStaff } from "../../../fetches/FetchStaff";
 import { useStaffContext } from "../../../contexts/fetches-contexts/StaffContext";
 
 function SelectStaffRole() {
+  const fetchStaff = useFetchStaff();
   const { staffObject } = useStaffContext();
   const [role, setRole] = useState(0);
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ function SelectStaffRole() {
       },
     ];
     try {
-      const addStaffResponse = await addStaff(jsonData);
+      const addStaffResponse = await fetchStaff.addStaff(jsonData);
       if (addStaffResponse.status === "Success") {
         navigate("/privateManager/private-home-manager");
       } else {

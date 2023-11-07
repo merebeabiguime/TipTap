@@ -1,48 +1,32 @@
 import axios from "axios";
 import useRefreshToken from "./useRefreshToken";
 import { useUserContext } from "../contexts/AuthContext";
-const BASE_URL = "http://localhost:3000";
+import { useEffect } from "react";
+import dayjs from "dayjs";
+import { jwtDecode } from "jwt-decode";
+const axiosPrivate = axios.create({
+  baseURL: "http://localhost:3000",
+  withCredentials: true,
+});
 
 const useAxiosPrivate = () => {
-  const axiosPrivate = axios.create({
-    baseURL: BASE_URL,
-    headers: { "Content-Type": "application/json" },
-    withCredentials: true,
-  });
-
   const refresh = useRefreshToken();
   const { accessToken } = useUserContext();
 
-  useEffect(() => {
-    const requestIntercept = axiosPrivate.interceptors.request.use(
-      (config) => {
-        if (!config.headers["Authorization"]) {
-          config.headers["Authorization"] = `Bearer ${accessToken}`;
-        }
-        return config;
-      },
-      (error) => Promise.reject(error)
-    );
+  axiosPrivate.interceptors.request.use(async (req) => {
+    const user = jwtDecode(accessToken);
+    const isExpired = dayjs.unix(user.exp).diff(dayjs()) < 1;
 
-    const responseIntercept = axiosPrivate.interceptors.response.use(
-      (response) => response,
-      async (error) => {
-        const prevRequest = error?.config;
-        if (error?.response?.data?.code === 403 && !prevRequest?.sent) {
-          prevRequest.sent = true;
-          const newAccessToken = await refresh();
-          prevRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
-          return axiosPrivate(prevRequest);
-        }
-        return Promise.reject(error);
-      }
-    );
+    console.log("expiration", isExpired);
 
-    return () => {
-      axiosPrivate.interceptors.request.eject(requestIntercept);
-      axiosPrivate.interceptors.response.eject(responseIntercept);
-    };
-  }, [accessToken, refresh]);
+    if (!isExpired) return req;
+
+    refresh();
+
+    console.log("ici");
+
+    return req;
+  });
 
   return axiosPrivate;
 };

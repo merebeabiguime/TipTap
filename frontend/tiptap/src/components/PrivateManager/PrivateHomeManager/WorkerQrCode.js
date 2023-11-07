@@ -6,10 +6,11 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { getUser } from "../../../fetches/FetchUsers";
 import { useStaffContext } from "../../../contexts/fetches-contexts/StaffContext";
 import { useUserContext } from "../../../contexts/AuthContext";
-import { isEmailValid } from "../../../fetches/FetchStaff";
+import { isEmailValid, useFetchStaff } from "../../../fetches/FetchStaff";
 import { Col, Row } from "react-bootstrap";
 
 export default function WorkerQrCode() {
+  const fetchStaff = useFetchStaff();
   const navigate = useNavigate();
   const [validation, setValidation] = useState("");
   const { staffObject } = useStaffContext();
@@ -23,7 +24,7 @@ export default function WorkerQrCode() {
         const getUserReponse = await getUser(userId);
 
         if (getUserReponse.status == "Success") {
-          const getValidStaffResponse = await isEmailValid(
+          const getValidStaffResponse = await fetchStaff.isEmailValid(
             getUserReponse.response[0].email
           );
           //Check if this email is not already used in staff

@@ -5,13 +5,15 @@ import authRoutes from "./routes/auth.js";
 import refreshRoutes from "./routes/refreshToken.js";
 import lougoutRoutes from "./routes/logout.js";
 import verifyJWT from "./routes/verifyJWT.js";
+import credentials from "./config/credentials.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import corsOptions from "./config/corsOptions.js";
 
 const app = express();
 const port = 8081;
-
-app.use(cors());
+app.use(credentials);
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 

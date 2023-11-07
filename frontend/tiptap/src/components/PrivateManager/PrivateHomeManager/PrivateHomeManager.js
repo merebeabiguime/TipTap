@@ -6,10 +6,17 @@ import "../../../style.css";
 
 import { Link } from "react-router-dom";
 import { useUserContext } from "../../../contexts/AuthContext";
+import useRefreshToken from "../../../hooks/useRefreshToken";
+import { useEffect } from "react";
 
 function PrivateHomeManager() {
   const { selectRole, currentUser } = useUserContext();
   console.log(currentUser);
+  const refresh = useRefreshToken();
+
+  /* useEffect(() => {
+    refresh();
+  }, []);*/
   return (
     <div>
       <Row>

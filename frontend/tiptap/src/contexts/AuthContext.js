@@ -6,6 +6,8 @@ import React, {
   useRef,
 } from "react";
 
+import { jwtDecode } from "jwt-decode";
+
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -21,14 +23,10 @@ export const UserContext = createContext();
 export function UserContextProvider(props) {
   const [userRole, setUserRole] = useState(0);
   const [userObject, setUserObject] = useState({});
-  const accessToken = useRef(null);
+  const [accessToken, setAccessToken] = useState(null);
   const userObjectRole = useRef(0);
   const [percentage, setPercentage] = useState(null);
   const [data, setData] = useState({});
-
-  function setAccessToken(newAccessToken) {
-    accessToken.current = newAccessToken;
-  }
 
   function selectRole(userRole) {
     setUserRole(userRole);
@@ -55,8 +53,22 @@ export function UserContextProvider(props) {
       setCurrentUser(currentUser);
       setLoadingData(false);
     });
+    //Check if there is a JWT Token, if not automatically logout user from Firebase
+    if (accessToken) {
+      console.log("token", jwtDecode(accessToken));
+      setUserObject(jwtDecode(accessToken.data));
+    }
+
     return unsubscribe;
   }, []);
+
+  useEffect(() => {
+    //Check if there is a JWT Token, if not automatically logout user from Firebase
+    if (accessToken) {
+      console.log("token", jwtDecode(accessToken));
+      setUserObject(jwtDecode(accessToken));
+    }
+  }, [accessToken]);
 
   return (
     <UserContext.Provider
