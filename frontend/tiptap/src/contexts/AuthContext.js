@@ -21,9 +21,14 @@ export const UserContext = createContext();
 export function UserContextProvider(props) {
   const [userRole, setUserRole] = useState(0);
   const [userObject, setUserObject] = useState({});
+  const accessToken = useRef(null);
   const userObjectRole = useRef(0);
   const [percentage, setPercentage] = useState(null);
   const [data, setData] = useState({});
+
+  function setAccessToken(newAccessToken) {
+    accessToken.current = newAccessToken;
+  }
 
   function selectRole(userRole) {
     setUserRole(userRole);
@@ -70,6 +75,8 @@ export function UserContextProvider(props) {
         data,
         setData,
         userObjectRole,
+        accessToken,
+        setAccessToken,
       }}
     >
       {!loadingData && props.children}
@@ -93,6 +100,8 @@ export function useUserContext() {
     data,
     setData,
     userObjectRole,
+    accessToken,
+    setAccessToken,
   } = useContext(UserContext);
 
   return {
@@ -110,5 +119,7 @@ export function useUserContext() {
     data,
     setData,
     userObjectRole,
+    accessToken,
+    setAccessToken,
   };
 }

@@ -1,7 +1,9 @@
 import axios from "axios";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
+const axiosPrivate = useAxiosPrivate();
 
 export async function isEmailValid(email) {
-  const response = await axios.get(
+  const response = await axiosPrivate.get(
     `http://localhost:8081/staff/email/${email}`
   );
 
@@ -9,13 +11,13 @@ export async function isEmailValid(email) {
 }
 
 export async function getAllStaff() {
-  const response = await axios.get(`http://localhost:8081/staff/`);
+  const response = await axiosPrivate.get(`http://localhost:8081/staff/`);
 
   return response.data;
 }
 
 export async function addStaff(jsonData) {
-  const response = await axios.post(
+  const response = await axiosPrivate.post(
     "http://localhost:8081/staff/addStaff",
     jsonData
   );
@@ -24,7 +26,7 @@ export async function addStaff(jsonData) {
 }
 
 export async function getStaffList() {
-  const response = await axios.get("http://localhost:8081/staff/list");
+  const response = await axiosPrivate.get("http://localhost:8081/staff/list");
 
   return response.data;
 }

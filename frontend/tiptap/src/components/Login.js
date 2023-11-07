@@ -16,8 +16,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { useUserContext } from "../contexts/AuthContext";
 import PreviousPageButton from "../features/PreviousPageButton";
 import { getUserFromUID } from "../fetches/FetchUsers";
+import { login } from "../fetches/FetchAuth";
 function Login() {
-  const { signIn, setUserObject, userObjectRole } = useUserContext();
+  const { signIn, setAccessToken } = useUserContext();
   const inputs = useRef([]);
   const [validation, setValidation] = useState("");
   const [credentials, setCredentials] = useState(null);
@@ -26,17 +27,12 @@ function Login() {
 
   const userQuery = useQuery({
     queryKey: ["userObject"],
-    queryFn: async () => await getUserFromUID(credentials.user.uid),
+    queryFn: async () => await login([{ UID: credentials.user.uid }]),
     enabled: signedIn.current,
     onSuccess: (data) => {
-      setUserObject(data.response[0]);
-      if (data.response[0].role === 1) {
-        userObjectRole.current = 1;
-        navigate("/privateWorker/private-home-worker");
-      } else if (data.response[0].role === 2) {
-        userObjectRole.current = 2;
-        navigate("/privateManager/private-home-manager");
-        setValidation("");
+      setAccessToken(data.accessToken);
+      if (data.status === "Success") {
+        navigate(data.response);
       } else {
         setValidation(data.response);
       }
@@ -55,6 +51,7 @@ function Login() {
     e.preventDefault();
 
     try {
+      //Try to sign in in firebase
       const cred = await signIn(
         inputs.current[0].value,
         inputs.current[1].value
