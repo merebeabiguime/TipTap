@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
     if (!cookies?.jsonwebtoken)
       return res.send({
         status: "Error",
-        response: "Une erreur s'est produite",
+        response: "Vous n'êtes pas encore authentifié",
       });
 
     const refreshToken = cookies.jsonwebtoken;
