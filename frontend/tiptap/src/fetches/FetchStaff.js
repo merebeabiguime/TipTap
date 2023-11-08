@@ -1,6 +1,5 @@
-import axios from "axios";
-import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import { useUserContext } from "../contexts/AuthContext";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 export function useFetchStaff() {
   const { accessToken } = useUserContext();

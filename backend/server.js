@@ -4,6 +4,7 @@ import staffRoutes from "./routes/staff.js";
 import authRoutes from "./routes/auth.js";
 import refreshRoutes from "./routes/refreshToken.js";
 import lougoutRoutes from "./routes/logout.js";
+import qrCodeRoutes from "./routes/qrCode.js";
 import verifyJWT from "./routes/verifyJWT.js";
 import credentials from "./config/credentials.js";
 import cookieParser from "cookie-parser";
@@ -26,6 +27,7 @@ app.use(verifyJWT);
 
 app.use("/user", userRoutes);
 app.use("/staff", staffRoutes);
+app.use("/qrcode", qrCodeRoutes);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

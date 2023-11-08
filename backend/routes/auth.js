@@ -73,4 +73,21 @@ router.post("/login", async (req, res) => {
   }
 });
 
+router.post("/register", async (req, res) => {
+  try {
+    const userObject = req.body;
+    const result = await db.addUser(userObject);
+    if (result == 0) {
+      res.send({
+        status: "Error",
+        response: "Impossible d'ajouter l'utilisateur",
+      });
+    } else {
+      res.send({ status: "Success", response: result });
+    }
+  } catch (err) {
+    res.send({ status: "Error", response: "Une erreur s'est produite" });
+  }
+});
+
 export default router;

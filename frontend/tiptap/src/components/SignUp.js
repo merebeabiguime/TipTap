@@ -8,25 +8,43 @@ import "../style.css";
 
 import { useRef, useState } from "react";
 import { Button, Form, InputGroup } from "react-bootstrap";
+import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../contexts/AuthContext";
-import { addUser, getUserRole } from "../fetches/FetchUsers";
 import PreviousPageButton from "../features/PreviousPageButton";
 import UploadingImage from "../features/UploadingImage";
+import { useFetchAuth } from "../fetches/FetchAuth";
 
 function SignUp() {
   const { userRole, signUp, data, percentage } = useUserContext();
   const inputs = useRef([]);
   const [validation, setValidation] = useState("");
   const navigate = useNavigate();
+  const fetchAuth = useFetchAuth();
+  const addUserEnabled = useRef(false);
+  const jsonData = useRef([]);
+  const formRef = useRef();
+
+  const userQuery = useQuery({
+    queryKey: ["addUser"],
+    queryFn: async () => await fetchAuth.register(jsonData),
+    onSuccess: (data) => {
+      if (data.status === "Success") {
+        navigate("/signIn");
+        setValidation("");
+        formRef.current.reset();
+      } else {
+        setValidation(data.response);
+      }
+    },
+    enabled: addUserEnabled,
+  });
 
   const addInput = (el) => {
     if (el && !inputs.current.includes(el)) {
       inputs.current.push(el);
     }
   };
-
-  const formRef = useRef();
 
   async function tryToSignUp() {
     //Signing up in Firebase
@@ -36,37 +54,20 @@ function SignUp() {
         inputs.current[4].value
       );
       //Creating temporary variable to store input data
-      const jsonData = [
-        {
-          firstName: inputs.current[0].value,
-          lastName: inputs.current[1].value,
-          email: inputs.current[2].value,
-          phone: inputs.current[3].value,
-          password: "password",
-          role: userRole,
-          pictureUrl: data.img ? data.img : "default.png",
-          ID_restaurant: 0,
-          UID: credentials.user.uid,
-        },
-      ];
+      jsonData.current.push({
+        firstName: inputs.current[0].value,
+        lastName: inputs.current[1].value,
+        email: inputs.current[2].value,
+        phone: inputs.current[3].value,
+        password: "password",
+        role: userRole,
+        pictureUrl: data.img ? data.img : "default.png",
+        ID_restaurant: 0,
+        UID: credentials.user.uid,
+      });
 
-      //Trying to add user in mysql backend server
-      const addUserResponse = await addUser(jsonData);
-
-      if (addUserResponse.status === "Success") {
-        //Getting role to know on which page we should send the user to
-        const getUserRoleResponse = await getUserRole(credentials.user.uid);
-
-        if (getUserRoleResponse.status === "Success") {
-          navigate("/signIn");
-          setValidation("");
-          formRef.current.reset();
-        } else {
-          setValidation(getUserRoleResponse.response);
-        }
-      } else {
-        setValidation(addUserResponse.response);
-      }
+      //Enabling userQuery
+      addUserEnabled = true;
     } catch (err) {
       if (err.code === "auth/invalid/email") {
         setValidation("Email format invalid");
