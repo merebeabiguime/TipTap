@@ -12,15 +12,18 @@ export default function WorkerQrCode() {
   const [validation, setValidation] = useState("");
   let { userId } = useParams();
 
+  console.log("dedannnnnnnnnnnns");
+
   const qrCodeQuery = qrCodeQuery({
     queryKey: ["qrCode"],
     queryFn: async () => await fetchQRCode.getUser(userId),
     onSuccess: (data) => {
       if (data.status == "Success") {
         //ADD COOLDOWN BEFOFRE GOING TO NEXT PAGE
-        navigate(
-          "/privateManager/private-home-manager/add-staff/select-staff-role"
-        );
+        //navigate(
+        //  "/privateManager/private-home-manager/add-staff/select-staff-role"
+        //);
+        console.log("success");
       } else {
         setValidation(data.response);
         //navigate("/privateManager/private-home-manager/");

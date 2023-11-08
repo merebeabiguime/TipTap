@@ -11,14 +11,18 @@ export function StaffContextProvider(props) {
   const [staffList, setStaffList] = useState([{}]);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const fetchStaff = useFetchStaff();
+  const staffQuery = useRef(true);
 
   const { isLoading } = useQuery({
     queryKey: ["staff"],
     queryFn: async () => await fetchStaff.getStaffList(),
+    enabled: staffQuery.current,
+    staleTime: 60 * 1000 * 15,
     onSuccess: (data) => {
       console.log("Staff COntext : ", data);
       setStaffList(data.response);
       setStaffListFilter(data.response);
+      staffQuery.current = false;
     },
   });
 
