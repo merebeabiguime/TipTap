@@ -3,9 +3,10 @@ import QRCode from "react-qr-code";
 import { useUserContext } from "../../../contexts/AuthContext";
 import { Button, Col, Row } from "react-bootstrap";
 import PreviousPageButton from "../../../features/PreviousPageButton";
+import { Link } from "react-router-dom";
 
 export default function PrivateHomeWorker() {
-  const { userObject } = useUserContext();
+  const { userObject, signOutMy } = useUserContext();
   return (
     <div>
       <Row>
@@ -59,6 +60,16 @@ export default function PrivateHomeWorker() {
           >
             Share this QR Code
           </Button>
+        </Col>
+
+        <Col className="d-flex justify-content-center" sm={12}>
+          <Link
+            to="/homepage"
+            style={{ textDecoration: "none", color: "inherit" }}
+            onClick={signOutMy()}
+          >
+            <p>Logout</p>
+          </Link>
         </Col>
       </Row>
     </div>

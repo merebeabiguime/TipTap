@@ -58,7 +58,7 @@ export function UserContextProvider(props) {
         console.log("success");
       } else {
         console.log("ici", data);
-        //signOutFirebase();
+        signOutFirebase();
       }
       enableRefreshQuery.current = false;
     },
