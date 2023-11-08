@@ -8,9 +8,17 @@ export function useFetchAuth() {
 
   const register = async (jsonData) => {
     const response = await axios.post(
-      "http://localhost:8081/user/register",
+      "http://localhost:8081/auth/register",
       jsonData
     );
+
+    return response.data;
+  };
+
+  const logout = async () => {
+    const response = await axios.delete("http://localhost:8081/logout/", {
+      withCredentials: true,
+    });
 
     return response.data;
   };
@@ -18,5 +26,6 @@ export function useFetchAuth() {
   return {
     login,
     register,
+    logout,
   };
 }

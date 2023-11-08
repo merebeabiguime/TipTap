@@ -28,7 +28,7 @@ export default function PrivateHomeWorker() {
           <QRCode
             size={256}
             style={{ height: "auto", maxWidth: "50%", width: "50%" }}
-            value={`/privateManager/private-home-manager/worker-qrcode/${userObject.ID}`}
+            value={`http://localhost:3000/privateManager/private-home-manager/worker-qrcode/userId=${userObject.ID}`}
             viewBox={`0 0 256 256`}
           />
         </Col>

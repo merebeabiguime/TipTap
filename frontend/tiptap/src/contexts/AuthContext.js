@@ -16,8 +16,11 @@ import {
   onAuthStateChanged,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
+  signOut,
 } from "firebase/auth";
 import { auth } from "../firebase.js";
+import { useFetchAuth } from "../fetches/FetchAuth.js";
+import { useQuery } from "react-query";
 
 export const UserContext = createContext();
 
@@ -28,14 +31,42 @@ export function UserContextProvider(props) {
   const userObjectRole = useRef(0);
   const [percentage, setPercentage] = useState(null);
   const [data, setData] = useState({});
+  const logoutMy = useRef(false);
+  const enableRefreshQuery = useRef(false);
+  const fetchAuth = useFetchAuth();
+
+  const logoutQuery = useQuery({
+    queryKey: ["logoutQuery"],
+    queryFn: async () => await fetchAuth.logout(),
+    enabled: logoutMy.current,
+    onSuccess: () => {
+      logoutMy.current = false;
+    },
+  });
+
+  const refreshQuery = useQuery({
+    queryKey: ["refreshQuery"],
+    queryFn: async () =>
+      await await myAxios.get("http://localhost:8081/refresh", {
+        withCredentials: true,
+      }),
+    enabled: enableRefreshQuery.current,
+    onSuccess: (data) => {
+      if (data.status === "Success") {
+        setAccessToken(data.accessToken);
+      } else {
+        signOutFirebase();
+      }
+      enableRefreshQuery.current = false;
+    },
+  });
+
+  async function signOutMy() {
+    logoutMy.current = true;
+  }
 
   async function refresh() {
-    const response = await myAxios.get("http://localhost:8081/refresh", {
-      withCredentials: true,
-    });
-    setAccessToken(response.data.accessToken);
-    console.log("newAccesToken", response.data);
-    return response.data.accessToken;
+    enableRefreshQuery.current = true;
   }
 
   function selectRole(userRole) {
@@ -54,6 +85,10 @@ export function UserContextProvider(props) {
   }
   function resetPassword(oobCode, newPassword) {
     return confirmPasswordReset(auth, oobCode, newPassword);
+  }
+
+  function signOutFirebase() {
+    return signOut(auth);
   }
 
   const [currentUser, setCurrentUser] = useState();
@@ -77,7 +112,7 @@ export function UserContextProvider(props) {
 
   const verifyRefreshToken = async () => {
     try {
-      await refresh();
+      refresh();
     } catch (err) {
       console.error(err);
     }
@@ -107,6 +142,9 @@ export function UserContextProvider(props) {
         accessToken,
         setAccessToken,
         refresh,
+        logoutQuery,
+        signOutMy,
+        signOutFirebase,
       }}
     >
       {!loadingData && props.children}
@@ -133,6 +171,9 @@ export function useUserContext() {
     accessToken,
     setAccessToken,
     refresh,
+    logoutQuery,
+    signOutMy,
+    signOutFirebase,
   } = useContext(UserContext);
 
   return {
@@ -153,5 +194,8 @@ export function useUserContext() {
     accessToken,
     setAccessToken,
     refresh,
+    logoutQuery,
+    signOutMy,
+    signOutFirebase,
   };
 }

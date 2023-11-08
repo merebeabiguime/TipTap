@@ -37,7 +37,7 @@ function SignUp() {
         setValidation(data.response);
       }
     },
-    enabled: addUserEnabled,
+    enabled: addUserEnabled.current,
   });
 
   const addInput = (el) => {
@@ -67,7 +67,7 @@ function SignUp() {
       });
 
       //Enabling userQuery
-      addUserEnabled = true;
+      addUserEnabled.current = true;
     } catch (err) {
       if (err.code === "auth/invalid/email") {
         setValidation("Email format invalid");

@@ -14,6 +14,7 @@ router.get("/", async (req, res) => {
       return res.send({
         status: "Error",
         response: "Vous n'êtes pas encore authentifié",
+        code: "401",
       });
 
     const refreshToken = cookies.jsonwebtoken;
@@ -45,7 +46,6 @@ router.get("/", async (req, res) => {
             status: "Error",
             response: "Accès interdit",
           });
-        console.log("icichahahahah");
 
         const accessToken = jsonwebtoken.sign(
           {
