@@ -20,8 +20,6 @@ const useAxiosPrivate = () => {
 
     refresh();
 
-    console.log("ici");
-
     return req;
   });
 

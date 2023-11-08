@@ -21,6 +21,7 @@ import {
 import { auth } from "../firebase.js";
 import { useFetchAuth } from "../fetches/FetchAuth.js";
 import { useQuery } from "react-query";
+import { Spinner } from "react-bootstrap";
 
 export const UserContext = createContext();
 
@@ -47,15 +48,17 @@ export function UserContextProvider(props) {
   const refreshQuery = useQuery({
     queryKey: ["refreshQuery"],
     queryFn: async () =>
-      await await myAxios.get("http://localhost:8081/refresh", {
+      await myAxios.get("http://localhost:8081/refresh", {
         withCredentials: true,
       }),
     enabled: enableRefreshQuery.current,
     onSuccess: (data) => {
-      if (data.status === "Success") {
-        setAccessToken(data.accessToken);
+      if (data.data.status === "Success") {
+        setAccessToken(data.data.accessToken);
+        console.log("success");
       } else {
-        signOutFirebase();
+        console.log("ici", data);
+        //signOutFirebase();
       }
       enableRefreshQuery.current = false;
     },
@@ -110,16 +113,8 @@ export function UserContextProvider(props) {
     }
   }, [accessToken]);
 
-  const verifyRefreshToken = async () => {
-    try {
-      refresh();
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   useEffect(() => {
-    !accessToken && verifyRefreshToken();
+    !accessToken && refresh();
   }, []);
 
   return (
@@ -147,7 +142,11 @@ export function UserContextProvider(props) {
         signOutFirebase,
       }}
     >
-      {!loadingData && props.children}
+      {!loadingData && !refreshQuery.isLoading ? (
+        props.children
+      ) : (
+        <Spinner animation="border" />
+      )}
     </UserContext.Provider>
   );
 }
