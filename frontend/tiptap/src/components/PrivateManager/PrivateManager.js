@@ -2,16 +2,18 @@ import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { useUserContext } from "../../contexts/AuthContext";
 export default function PrivateManager() {
-  const { currentUser } = useUserContext();
+  const { currentUser, signOutMy, logoutQuery } = useUserContext();
 
   if (!currentUser) {
-    return <Navigate to="/homepage"></Navigate>;
-  } else {
-    <p>{currentUser}</p>;
+    //If Firebase Token has expired logout from mysql token
+    signOutMy();
+
+    if (!logoutQuery.isLoading) {
+      return <Navigate to="/signIn"></Navigate>;
+    }
   }
   return (
     <div>
-      <p>{currentUser.email}</p>
       <Outlet />
     </div>
   );

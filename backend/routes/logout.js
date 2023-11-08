@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.delete("/", async (req, res) => {
   try {
-    const cookies = request.cookies;
+    const cookies = req.cookies;
 
     if (!cookies?.jsonwebtoken)
       return res.send({

@@ -4,8 +4,10 @@ import "../../../style.css";
 import { useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
+import { useFetchQRCode } from "../../../fetches/FetchQRCode";
 
 export default function WorkerQrCode() {
+  const fetchQRCode = useFetchQRCode();
   const navigate = useNavigate();
   const [validation, setValidation] = useState("");
   let { userId } = useParams();
@@ -21,7 +23,7 @@ export default function WorkerQrCode() {
         );
       } else {
         setValidation(data.response);
-        navigate("/privateManager/private-home-manager/");
+        //navigate("/privateManager/private-home-manager/");
       }
     },
   });

@@ -20,6 +20,7 @@ router.post("/login", async (req, res) => {
         lastName: userFound[0].lastName,
         pictureUrl: userFound[0].pictureUrl,
         role: userFound[0].role,
+        ID: userFound[0].ID,
       },
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: "900s" }
