@@ -16,19 +16,20 @@ import { Link, useNavigate } from "react-router-dom";
 import { useUserContext } from "../contexts/AuthContext";
 import PreviousPageButton from "../features/PreviousPageButton";
 import { getUserFromUID } from "../fetches/FetchUsers";
-import { login, useLogin } from "../fetches/FetchAuth";
+import { useFetchAuth } from "../fetches/FetchAuth";
+
 function Login() {
+  const fetchAuth = useFetchAuth();
   const { signIn, setAccessToken } = useUserContext();
   const inputs = useRef([]);
   const [validation, setValidation] = useState("");
   const [credentials, setCredentials] = useState(null);
   const navigate = useNavigate();
   const signedIn = useRef(false);
-  const login = useLogin();
 
   const userQuery = useQuery({
     queryKey: ["userObject"],
-    queryFn: async () => await login([{ UID: credentials.user.uid }]),
+    queryFn: async () => await fetchAuth.login([{ UID: credentials.user.uid }]),
     enabled: signedIn.current,
     onSuccess: (data) => {
       setAccessToken(data.accessToken);

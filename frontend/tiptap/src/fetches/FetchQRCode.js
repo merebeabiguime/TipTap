@@ -1,13 +1,13 @@
 import { useUserContext } from "../contexts/AuthContext";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
-export function useFetchUsers() {
+export function useFetchQRCode() {
   const { accessToken } = useUserContext();
   const axiosPrivate = useAxiosPrivate();
 
   const getUser = async (id) => {
     const response = await axiosPrivate.get(
-      `http://localhost:8081/user/id/${id}`,
+      `http://localhost:8081/qrcode/${id}`,
       {
         headers: { Authorization: "Bearer " + accessToken },
       }
@@ -17,8 +17,6 @@ export function useFetchUsers() {
   };
 
   return {
-    getUserRole,
-    getUserFromUID,
     getUser,
   };
 }
