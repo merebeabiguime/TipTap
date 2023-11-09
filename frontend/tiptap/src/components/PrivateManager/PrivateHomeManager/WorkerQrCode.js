@@ -5,28 +5,34 @@ import { useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { useFetchQRCode } from "../../../fetches/FetchQRCode";
+import { useQuery } from "react-query";
 
 export default function WorkerQrCode() {
   const fetchQRCode = useFetchQRCode();
   const navigate = useNavigate();
   const [validation, setValidation] = useState("");
   let { userId } = useParams();
+  const userIdValue = userId.split("=")[1];
 
   console.log("dedannnnnnnnnnnns");
 
-  const qrCodeQuery = qrCodeQuery({
+  const qrCodeQuery = useQuery({
     queryKey: ["qrCode"],
-    queryFn: async () => await fetchQRCode.getUser(userId),
+    queryFn: async () => await fetchQRCode.getUser(userIdValue),
     onSuccess: (data) => {
       if (data.status == "Success") {
         //ADD COOLDOWN BEFOFRE GOING TO NEXT PAGE
-        //navigate(
-        //  "/privateManager/private-home-manager/add-staff/select-staff-role"
-        //);
-        console.log("success");
+        setTimeout(() => {
+          navigate(
+            "/privateManager/private-home-manager/add-staff/select-staff-role"
+          );
+        }, 2000);
+        console.log("AHAHHAHA");
       } else {
         setValidation(data.response);
-        //navigate("/privateManager/private-home-manager/");
+        setTimeout(() => {
+          navigate("/privateManager/private-home-manager/");
+        }, 2000);
       }
     },
   });

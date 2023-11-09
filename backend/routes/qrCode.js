@@ -14,14 +14,12 @@ router.get("/:id", async (req, res) => {
     if (getUserResponse == 0)
       return res.send({ status: "Error", response: "Utilisateur Introuvable" });
 
-    const emailResponse = await db.isEmailOfWorker(
-      getUserResponse.data[0].email
-    );
+    const emailResponse = await db.isEmailOfWorker(getUserResponse[0].email);
 
     if (emailResponse === 0)
       return res.send({
         status: "Error",
-        response: "Une erreur s'est produite",
+        response: "Veuillez fournir une adresse email valide d'employé.",
       });
     if (emailResponse === 2)
       return res.send({ status: "Error", response: "Staff déjà existant" });

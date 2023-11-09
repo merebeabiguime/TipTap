@@ -45,7 +45,12 @@ function HomePage() {
       </Col>
       <Link to="/signIn" style={{ textDecoration: "none", color: "inherit" }}>
         <Col className="d-flex justify-content-center col-button " sm={12}>
-          <Button className="customButton1">Log In</Button>
+          <Button
+            style={{ marginLeft: "35px", marginRight: "35px" }}
+            className="customButton1"
+          >
+            Log In
+          </Button>
         </Col>
       </Link>
       <Link
@@ -56,7 +61,12 @@ function HomePage() {
           className="d-flex justify-content-center col-m-25 col-button "
           sm={12}
         >
-          <Button className="customButton2">Sign Up</Button>
+          <Button
+            style={{ marginLeft: "35px", marginRight: "35px" }}
+            className="customButton2"
+          >
+            Sign Up
+          </Button>
         </Col>
       </Link>
     </Row>
