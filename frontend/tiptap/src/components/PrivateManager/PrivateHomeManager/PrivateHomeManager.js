@@ -6,14 +6,15 @@ import "../../../style.css";
 
 import { Link } from "react-router-dom";
 import { useUserContext } from "../../../contexts/AuthContext";
+import { Container, Stack } from "react-bootstrap";
 
 function PrivateHomeManager() {
   const { selectRole, currentUser } = useUserContext();
   console.log(currentUser);
 
   return (
-    <div>
-      <Row>
+    <Container>
+      <Stack>
         <Col
           className="d-flex justify-content-center  col-m-200
         "
@@ -55,8 +56,8 @@ function PrivateHomeManager() {
             </div>
           </Col>
         </Link>
-      </Row>
-    </div>
+      </Stack>
+    </Container>
   );
 }
 

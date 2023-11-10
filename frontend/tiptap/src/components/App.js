@@ -18,56 +18,54 @@ import WorkerQrCode from "./PrivateManager/PrivateHomeManager/WorkerQrCode";
 
 function App() {
   return (
-    <Container>
-      <Router>
-        <Routes>
-          <Route path="/homepage" Component={HomePage}></Route>
-          <Route path="/selectRole" Component={SelectRole}></Route>
-          <Route path="/signup" Component={SignUp}></Route>
-          <Route path="/signIn" Component={Login}></Route>
-          <Route path="/forgotpassword" Component={ForgotPassword}></Route>
-          <Route path="/resetpassword" Component={ResetPassword}></Route>
+    <Router>
+      <Routes>
+        <Route path="/homepage" Component={HomePage}></Route>
+        <Route path="/selectRole" Component={SelectRole}></Route>
+        <Route path="/signup" Component={SignUp}></Route>
+        <Route path="/signIn" Component={Login}></Route>
+        <Route path="/forgotpassword" Component={ForgotPassword}></Route>
+        <Route path="/resetpassword" Component={ResetPassword}></Route>
+        <Route
+          path="/privateManager"
+          element={
+            <>
+              <StaffContextProvider>
+                <PrivateManager />
+              </StaffContextProvider>
+            </>
+          }
+        >
           <Route
-            path="/privateManager"
-            element={
-              <>
-                <StaffContextProvider>
-                  <PrivateManager />
-                </StaffContextProvider>
-              </>
-            }
-          >
-            <Route
-              path="/privateManager/private-home-manager"
-              element={<PrivateHomeManager />}
-            />
-            <Route
-              path="/privateManager/private-home-manager/worker-qrcode/:userId"
-              element={<WorkerQrCode />}
-            />
+            path="/privateManager/private-home-manager"
+            element={<PrivateHomeManager />}
+          />
+          <Route
+            path="/privateManager/private-home-manager/worker-qrcode/:userId"
+            element={<WorkerQrCode />}
+          />
 
-            <Route
-              path="/privateManager/private-home-manager/all-staff"
-              element={<AllStaff />}
-            />
-            <Route
-              path="/privateManager/private-home-manager/add-staff"
-              element={<AddStaff />}
-            />
-            <Route
-              path="/privateManager/private-home-manager/add-staff/select-staff-role"
-              element={<SelectStaffRole />}
-            />
-          </Route>
-          <Route path="/privateWorker" element={<PrivateWorker />}>
-            <Route
-              path="/privateWorker/private-home-worker"
-              element={<PrivateHomeWorker />}
-            />
-          </Route>
-        </Routes>
-      </Router>
-    </Container>
+          <Route
+            path="/privateManager/private-home-manager/all-staff"
+            element={<AllStaff />}
+          />
+          <Route
+            path="/privateManager/private-home-manager/add-staff"
+            element={<AddStaff />}
+          />
+          <Route
+            path="/privateManager/private-home-manager/add-staff/select-staff-role"
+            element={<SelectStaffRole />}
+          />
+        </Route>
+        <Route path="/privateWorker" element={<PrivateWorker />}>
+          <Route
+            path="/privateWorker/private-home-worker"
+            element={<PrivateHomeWorker />}
+          />
+        </Route>
+      </Routes>
+    </Router>
   );
 }
 

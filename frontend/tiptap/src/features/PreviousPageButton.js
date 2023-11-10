@@ -11,7 +11,7 @@ export default function PreviousPageButton() {
   };
 
   return (
-    <div>
+    <div className="previous-button">
       <button className="btn " onClick={handleGoBack}>
         <img src={previousIcon} alt="Custom Icon" className="mr-2" />
       </button>

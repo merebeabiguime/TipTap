@@ -9,7 +9,7 @@ import iconCleaner from "../../../images/icon_cleaner.png";
 import axios from "axios";
 
 import PreviousPageButton from "../../../features/PreviousPageButton";
-import { Button } from "react-bootstrap";
+import { Button, Container, Stack } from "react-bootstrap";
 import { json, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useFetchStaff } from "../../../fetches/FetchStaff";
@@ -46,50 +46,46 @@ function SelectStaffRole() {
   }
 
   return (
-    <div>
-      <Row>
-        <Col className="previous-button" sm={12}>
+    <Container>
+      <Stack>
+        <div className="vector-container">
           <PreviousPageButton />
-        </Col>
-        <Col className="justify-content-end" sm={12}>
-          <div>
-            <img src={vector3} alt="Vector 3" className="vector" />
-          </div>
-          <div>
-            <img src={vector4} alt="Vector 4" className="vector" />
-          </div>
-        </Col>
-        <Col className="d-flex justify-content-center  col-m-200" sm={12}>
-          <h1 className="col-m-25">Select Role </h1>
-        </Col>
-        <Col className="d-flex justify-content-center  col-m-50" sm={12}>
-          <p>
+          <img src={vector3} alt="Vector 3" className="vector" />
+          <img src={vector4} alt="Vector 4" className="vector" />
+        </div>
+        <div className="" style={{ marginRight: "38px", marginLeft: "38px" }}>
+          <h1 className="h1-mt-33">Select Role </h1>
+          <p className="p-mt-15">
             Enter the staff that are working in the hotel like chef,cleaner,
             waiter
           </p>
-        </Col>
+        </div>
 
-        <Col className=" d-flex justify-content-center mb-3" sm={12}>
+        <div className=" d-flex justify-content-center mb-3 mt-3" sm={12}>
           <img
             src={staffObject.current.pictureUrl}
             alt="Upload"
-            className=" circular-image-2"
+            className=" profile-picture-2"
           />
-        </Col>
-        <Col
-          className=" d-flex justify-content-center text-center col-m-50"
-          sm={12}
-        >
-          <h2>
+        </div>
+        <div className=" d-flex justify-content-center text-center col-m-50">
+          <h5>
             {`${staffObject.current.firstName} ${staffObject.current.lastName}`}
-          </h2>
-        </Col>
-        <Col className="">
-          <h1>Select Role</h1>
-          <Row className=" d-flex  text-center">
+          </h5>
+        </div>
+        <div className="">
+          <h6 style={{ marginLeft: "38px" }}>Select Role</h6>
+          <Row
+            className=" mx-auto"
+            style={{ paddingLeft: "38px", paddingRight: "38px" }}
+          >
             <Button
-              className="customButton5 col-button  col-auto"
-              style={{ backgroundColor: "transparent", border: "0" }}
+              className="button_role_addStaff col-5"
+              style={{
+                backgroundColor: "transparent",
+                border: "0",
+                marginRight: "38px",
+              }}
               onClick={() => {
                 setRole(1);
               }}
@@ -104,7 +100,7 @@ function SelectStaffRole() {
               </Col>
             </Button>
             <Button
-              className="customButton5 col-button  col-auto"
+              className="button_role_addStaff col-5"
               style={{ backgroundColor: "transparent", border: "0" }}
               onClick={() => {
                 setRole(2);
@@ -120,7 +116,7 @@ function SelectStaffRole() {
               </Col>
             </Button>
             <Button
-              className="customButton5 col-button  col-auto"
+              className="button_role_addStaff col-5 mt-4"
               style={{ backgroundColor: "transparent", border: "0" }}
               onClick={() => {
                 setRole(3);
@@ -136,9 +132,9 @@ function SelectStaffRole() {
               </Col>
             </Button>
           </Row>
-        </Col>
+        </div>
 
-        <Col className="d-flex justify-content-center  col-m-25" sm={12}>
+        <div className="d-flex justify-content-center mt-4">
           <Button
             onClick={() => submitStaffObject()}
             className="customButton1"
@@ -146,9 +142,9 @@ function SelectStaffRole() {
           >
             Add Staff
           </Button>
-        </Col>
-      </Row>
-    </div>
+        </div>
+      </Stack>
+    </Container>
   );
 }
 
