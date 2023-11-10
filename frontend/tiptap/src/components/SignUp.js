@@ -7,7 +7,7 @@ import UserIcon from "../images/signup_user_icon.png";
 import "../style.css";
 
 import { useRef, useState } from "react";
-import { Button, Form, InputGroup } from "react-bootstrap";
+import { Button, Container, Form, InputGroup, Stack } from "react-bootstrap";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../contexts/AuthContext";
@@ -94,22 +94,18 @@ function SignUp() {
     tryToSignUp();
   };
   return (
-    <div>
-      <Row>
-        <Col className="previous-button" sm={12}>
-          <PreviousPageButton />
-        </Col>
-        <Col className="d-flex justify-content-center  " sm={12}>
-          <h1 className="col-m-25">Create Account </h1>
-        </Col>
-        <Col className="d-flex justify-content-center  col-m-50" sm={12}>
-          <p>
+    <Container>
+      <Stack>
+        <PreviousPageButton />
+        <div className="" style={{ marginRight: "38px", marginLeft: "38px" }}>
+          <h1 className="h1-mt-33">Create Account</h1>
+          <p className="p-mt-15">
             Join the community with just a few taps. Enter the following
             information {userRole}
           </p>
-        </Col>
+        </div>
         <UploadingImage />
-        <Col className=" d-flex justify-content-center" sm={12}>
+        <div className=" d-flex justify-content-center mt-4">
           <Form onSubmit={handleForm} ref={formRef}>
             <InputGroup>
               <img className="iconForm" src={UserIcon} alt="User" />
@@ -166,19 +162,17 @@ function SignUp() {
               />
             </InputGroup>
             <p className="text-danger mt-1">{validation}</p>
-            <Col className="d-flex justify-content-center  col-m-25" sm={12}>
-              <Button
-                disabled={percentage !== null && percentage < 100}
-                type="submit"
-                className="customButton1"
-              >
-                Sign Up
-              </Button>
-            </Col>
+            <Button
+              disabled={percentage !== null && percentage < 100}
+              type="submit"
+              className="customButton1"
+            >
+              Sign Up
+            </Button>
           </Form>
-        </Col>
-      </Row>
-    </div>
+        </div>
+      </Stack>
+    </Container>
   );
 }
 

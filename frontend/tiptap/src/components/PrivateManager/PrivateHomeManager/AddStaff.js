@@ -3,11 +3,12 @@ import Row from "react-bootstrap/Row";
 import vector3 from "../../../images/Vector 3.png";
 import vector4 from "../../../images/Vector 4.png";
 import UserIcon from "../../../images/signup_user_icon.png";
+import MailIcon from "../../../images/signup_mail_icon.png";
 import "../../../style.css";
 
 import axios from "axios";
 import { useRef, useState } from "react";
-import { Button, Form, InputGroup } from "react-bootstrap";
+import { Button, Container, Form, InputGroup, Stack } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../../../contexts/AuthContext";
 import PreviousPageButton from "../../../features/PreviousPageButton";
@@ -54,32 +55,24 @@ function AddStaff() {
     }
   };
   return (
-    <div>
-      <Row>
-        <Col className="previous-button" sm={12}>
+    <Container>
+      <Stack>
+        <div className="vector-container">
           <PreviousPageButton />
-        </Col>
-        <Col className="justify-content-end" sm={12}>
-          <div>
-            <img src={vector3} alt="Vector 3" className="vector" />
-          </div>
-          <div>
-            <img src={vector4} alt="Vector 4" className="vector" />
-          </div>
-        </Col>
-        <Col className="d-flex justify-content-center  col-m-200" sm={12}>
-          <h1 className="col-m-25">Add Staff </h1>
-        </Col>
-        <Col className="d-flex justify-content-center  col-m-50" sm={12}>
-          <p>
+          <img src={vector3} alt="Vector 3" className="vector" />
+          <img src={vector4} alt="Vector 4" className="vector" />
+        </div>
+        <div className="" style={{ marginRight: "38px", marginLeft: "38px" }}>
+          <h1 className="h1-mt-33">Add Staff </h1>
+          <p className="p-mt-15">
             Enter the staff that are working in the hotel like chef,cleaner,
             waiter
           </p>
-        </Col>
-        <Col className=" d-flex justify-content-center" sm={12}>
+        </div>
+        <Col className=" d-flex justify-content-center form-mt-89">
           <Form onSubmit={handleForm} ref={formRef}>
             <InputGroup>
-              <img className="iconForm" src={UserIcon} alt="User" />
+              <img className="iconForm" src={MailIcon} alt="User" />
               <Form.Control
                 ref={addInput}
                 type="text"
@@ -97,8 +90,8 @@ function AddStaff() {
             </Col>
           </Form>
         </Col>
-      </Row>
-    </div>
+      </Stack>
+    </Container>
   );
 }
 

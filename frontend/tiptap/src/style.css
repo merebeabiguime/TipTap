@@ -14,6 +14,8 @@ h1 {
   font-family: "Satoshi Black", sans-serif !important;
   font-size: 28px !important;
   color: #492b29 !important;
+  font-weight: 900;
+  line-height: 37.8px;
 }
 
 h3 {
@@ -23,16 +25,13 @@ h3 {
 }
 
 h2 {
-  font-family: "Satoshi Black", sans-serif !important;
-  font-size: 22px !important;
+  font-family: "Satoshi Variable", sans-serif !important;
+  font-size: 28px !important;
   color: black !important;
+  font-weight: 700;
+  line-height: 37.8px;
 }
 
-p {
-  font-family: "Satoshi Variable", sans-serif !important;
-  width: 80% !important;
-  font-size: 16px !important;
-}
 form {
   width: 100% !important;
   margin-right: 25px !important;
@@ -46,6 +45,7 @@ form {
   width: 100% !important;
   height: 65px !important;
   border: 0 !important;
+  box-shadow: 0px 4px 11px 0px rgba(0, 0, 0, 0.25) !important;
   &:disabled {
     background-color: #b286046a !important;
   }
@@ -83,7 +83,6 @@ form {
 .customButton4 {
   margin-top: 25px !important;
   margin-bottom: 25px !important;
-  width: 100% !important;
   height: 130px;
   border-radius: 10px !important;
   box-shadow: 1px 3px 5px 0px rgba(0, 0, 0, 0.5) !important;
@@ -94,15 +93,6 @@ form {
   font-size: 10px !important;
   font-weight: 500 !important;
   line-height: 13.5px !important;
-}
-
-.customButton5 {
-  margin-top: 25px !important;
-  margin-bottom: 25px !important;
-  height: 119px !important;
-  width: 35% !important;
-  border-radius: 10px !important;
-  box-shadow: 1px 3px 5px 0px rgba(0, 0, 0, 0.5) !important;
 }
 
 .customButton6 {
@@ -121,6 +111,7 @@ form {
   border-color: #fbbc04 !important;
   background-color: white !important;
   color: black !important;
+  box-shadow: 0px 4px 11px 0px rgba(0, 0, 0, 0.25) !important;
 }
 
 .customForm {
@@ -152,34 +143,6 @@ form {
   margin-bottom: 25px !important;
 }
 
-.vector {
-  position: absolute !important;
-  top: 0 !important;
-  right: 0 !important;
-}
-
-/* Style des lignes */
-.line-divider {
-  display: flex;
-  align-items: center;
-}
-
-.line-divider::before {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(to right, transparent, #757575, #757575);
-  margin: 0 10px; /* Ajustez la marge pour contrôler la distance entre les lignes */
-}
-
-.line-divider::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(to right, #757575, #757575, transparent);
-  margin: 0 10px; /* Ajustez la marge pour contrôler la distance entre les lignes */
-}
-
 .circular-image {
   width: 90px; /* Ajustez la taille de l'image comme vous le souhaitez */
   height: 90px;
@@ -202,12 +165,6 @@ form {
   border-radius: 28px !important; /* Cela rendra les coins de l'image arrondis */
   object-fit: cover !important; /* Ajuste l'image pour remplir le carré */
   box-shadow: 1px 2px 4px 0px rgba(0, 0, 0, 0.5) !important;
-}
-
-.previous-button {
-  top: 50px;
-  margin-bottom: 25px;
-  margin-top: 25px !important;
 }
 
 .popup {
@@ -281,4 +238,137 @@ h4 {
   color: black !important;
   font-weight: 700 !important;
   line-height: 48.6px;
+}
+
+/**********************************/
+.logo {
+  width: 135px;
+  height: 57px;
+  margin-top: 152px;
+}
+.image_selectRole {
+  margin-top: 42px;
+  width: 244px;
+  height: 157px;
+}
+/***** Margins *****/
+.h1-mt-15 {
+  margin-top: 15px;
+}
+.h1-mt-33 {
+  margin-top: 33px;
+}
+.button-mt-40 {
+  margin-top: 40px;
+}
+
+.container {
+  margin-bottom: 58px;
+}
+.p-mt-28 {
+  margin-top: 28px;
+}
+.p-mt-15 {
+  margin-top: 15px;
+}
+
+.form-mt-74 {
+  margin-top: 74px;
+}
+
+.input-mt-15 {
+  margin-top: 15px;
+}
+
+.form-mt-89 {
+  margin-top: 89px;
+}
+/****** Others *********/
+.vector-container {
+  position: relative;
+}
+.vector {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+p {
+  font-family: "Satoshi Variable", sans-serif !important;
+  font-size: 16px;
+  line-height: 21.6px;
+  font-weight: 300;
+  color: black;
+  text-align: justify;
+}
+h5 {
+  font-family: "Satoshi Variable", sans-serif !important;
+  font-size: 22px;
+  line-height: 29.7px;
+  font-weight: 700;
+  color: black;
+}
+h6 {
+  font-family: "Satoshi Variable", sans-serif !important;
+  font-size: 24px;
+  line-height: 32.4px;
+  font-weight: 700;
+  color: black;
+}
+.previous-button {
+  margin-top: 65px !important;
+  margin-left: 20px;
+}
+
+/***** Line divider ******/
+.line-divider {
+  display: flex;
+  align-items: center;
+  margin-top: 29px;
+}
+
+.line-divider::before {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #757575, #757575);
+  margin: 0 10px; /* Ajustez la marge pour contrôler la distance entre les lignes */
+}
+
+.line-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, #757575, #757575, transparent);
+  margin: 0 10px; /* Ajustez la marge pour contrôler la distance entre les lignes */
+}
+
+/***** Change fonts ****/
+.p-bold {
+  color: rgba(117, 117, 117, 1);
+
+  font-weight: bold;
+}
+
+/**** Profile picture ****/
+.profile-picure {
+  width: 55px !important; /* Ajustez la taille de l'image comme vous le souhaitez */
+  height: 45px !important; /* Ajustez la taille de l'image comme vous le souhaitez */
+  border-radius: 0px 25px 0px 25px !important; /* Cela rendra les coins de l'image arrondis */
+  object-fit: cover !important; /* Ajuste l'image pour remplir le carré */
+  border: solid 2px;
+  border-color: rgba(255, 255, 255, 1);
+
+  box-shadow: 0px 4px 10px 3px rgba(0, 0, 0, 0.25);
+}
+.profile-picture-2 {
+  width: 90px; /* Ajustez la taille de l'image comme vous le souhaitez */
+  height: 90px; /* Ajustez la taille de l'image comme vous le souhaitez */
+  border-radius: 28px; /* Cela rendra les coins de l'image arrondis */
+}
+
+/*****Custom Button*****/
+.button_role_addStaff {
+  height: 119px !important;
+  border-radius: 10px !important;
+  box-shadow: 1px 3px 5px 0px rgba(0, 0, 0, 0.5) !important;
 }

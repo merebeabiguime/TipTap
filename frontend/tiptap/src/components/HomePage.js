@@ -1,4 +1,4 @@
-import { Button } from "react-bootstrap";
+import { Button, Container, Stack } from "react-bootstrap";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { Link } from "react-router-dom";
@@ -11,65 +11,55 @@ import QRCode from "react-qr-code";
 
 function HomePage() {
   return (
-    <Row>
-      <div
-        style={{
-          height: "auto",
-          margin: "0 auto",
-          maxWidth: 64,
-          width: "100%",
-        }}
-      ></div>
-      <Col className="justify-content-end" sm={12}>
-        <div>
+    <Container className="gx-0 fluid ">
+      <Stack>
+        <div className="vector-container">
           <img src={vector3} alt="Vector 3" className="vector" />
-        </div>
-        <div>
           <img src={vector4} alt="Vector 4" className="vector" />
         </div>
-      </Col>
-      <Col className=" d-flex justify-content-center" sm={12}>
-        <img className="col-m-200" src={logo} alt="logo" />
-      </Col>
-      <Col className=" d-flex justify-content-center col-m-50">
-        <img src={homepageIcon} alt="logo" />
-      </Col>
-      <Col className="d-flex justify-content-center col-m-50" sm={12}>
-        <h1 className="text-center">How would you like to register? </h1>
-      </Col>
-      <Col className="d-flex justify-content-center col-m-50" sm={12}>
-        <p>
-          Jorem ipsum dolor sit amet, consectetur adipiscing elit. Nconubia
-          nostra, per inceptos himenaeos. Nconubia nostra, per{" "}
-        </p>
-      </Col>
-      <Link to="/signIn" style={{ textDecoration: "none", color: "inherit" }}>
-        <Col className="d-flex justify-content-center col-button " sm={12}>
-          <Button
-            style={{ marginLeft: "35px", marginRight: "35px" }}
-            className="customButton1"
-          >
-            Log In
-          </Button>
-        </Col>
-      </Link>
-      <Link
-        to="/selectRole"
-        style={{ textDecoration: "none", color: "inherit" }}
-      >
-        <Col
-          className="d-flex justify-content-center col-m-25 col-button "
-          sm={12}
+        <div className=" mx-auto">
+          <img className="logo" src={logo} alt="logo" />
+        </div>
+        <div className="mx-auto">
+          <img src={homepageIcon} className="image_selectRole" alt="icon" />
+        </div>
+        <div
+          className="text-center"
+          style={{ marginRight: "65px", marginLeft: "65px" }}
         >
-          <Button
-            style={{ marginLeft: "35px", marginRight: "35px" }}
-            className="customButton2"
-          >
-            Sign Up
-          </Button>
-        </Col>
-      </Link>
-    </Row>
+          <h1 className="h1-mt-15">How would you like to register? </h1>
+        </div>
+        <div className="" style={{ marginRight: "33px", marginLeft: "33px" }}>
+          <p className="p-mt-28">
+            Jorem ipsum dolor sit amet, consectetur adipiscing elit. Nconubia
+            nostra, per inceptos himenaeos. Nconubia nostra, per{" "}
+          </p>
+        </div>
+        <Link to="/signIn" style={{ textDecoration: "none", color: "inherit" }}>
+          <div className="d-flex justify-content-center col-button button-mt-40">
+            <Button
+              style={{ marginLeft: "35px", marginRight: "35px" }}
+              className="customButton1"
+            >
+              Log In
+            </Button>
+          </div>
+        </Link>
+        <Link
+          to="/selectRole"
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          <div className="d-flex justify-content-center col-m-25 col-button ">
+            <Button
+              style={{ marginLeft: "35px", marginRight: "35px" }}
+              className="customButton2"
+            >
+              Sign Up
+            </Button>
+          </div>
+        </Link>
+      </Stack>
+    </Container>
   );
 }
 
