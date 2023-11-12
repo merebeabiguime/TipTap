@@ -1,68 +1,41 @@
 import React from "react";
 import "../../../style.css";
 
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { getUser } from "../../../fetches/FetchUsers";
-import { useStaffContext } from "../../../contexts/fetches-contexts/StaffContext";
-import { useUserContext } from "../../../contexts/AuthContext";
-import { isEmailValid, useFetchStaff } from "../../../fetches/FetchStaff";
+import { useState } from "react";
 import { Col, Row } from "react-bootstrap";
+import { useNavigate, useParams } from "react-router-dom";
+import { useFetchQRCode } from "../../../fetches/FetchQRCode";
+import { useQuery } from "react-query";
 
 export default function WorkerQrCode() {
-  const fetchStaff = useFetchStaff();
+  const fetchQRCode = useFetchQRCode();
   const navigate = useNavigate();
   const [validation, setValidation] = useState("");
-  const { staffObject } = useStaffContext();
-  const { userObject } = useUserContext();
   let { userId } = useParams();
+  const userIdValue = userId.split("=")[1];
 
-  async function getWorker() {
-    //If the user is connected as a manager
-    if (userObject.role == 2) {
-      try {
-        const getUserReponse = await getUser(userId);
+  console.log("dedannnnnnnnnnnns");
 
-        if (getUserReponse.status == "Success") {
-          const getValidStaffResponse = await fetchStaff.isEmailValid(
-            getUserReponse.response[0].email
+  const qrCodeQuery = useQuery({
+    queryKey: ["qrCode"],
+    queryFn: async () => await fetchQRCode.getUser(userIdValue),
+    onSuccess: (data) => {
+      if (data.status == "Success") {
+        //ADD COOLDOWN BEFOFRE GOING TO NEXT PAGE
+        setTimeout(() => {
+          navigate(
+            "/privateManager/private-home-manager/add-staff/select-staff-role"
           );
-          //Check if this email is not already used in staff
-          if (getValidStaffResponse.status == "Success") {
-            staffObject.current = {
-              firstName: getUserReponse.response[0].firstName,
-              lastName: getUserReponse.response[0].lastName,
-              ID_USER: getUserReponse.response[0].ID,
-              pictureUrl: getUserReponse.response[0].pictureUrl,
-              stars: 5,
-              role: 0,
-            };
-            //ADD COOLDOWN BEFOFRE GOING TO NEXT PAGE
-            navigate(
-              "/privateManager/private-home-manager/add-staff/select-staff-role"
-            );
-          } else {
-            setValidation(getValidStaffResponse.response);
-            navigate("/privateManager/private-home-manager/");
-          }
-        } else {
-          setValidation(getUserReponse.response);
+        }, 2000);
+        console.log("AHAHHAHA");
+      } else {
+        setValidation(data.response);
+        setTimeout(() => {
           navigate("/privateManager/private-home-manager/");
-        }
-      } catch (err) {
-        setValidation("Une erreur est survenue");
-        navigate("/privateManager/private-home-manager/");
+        }, 2000);
       }
-    } else {
-      setValidation("Vous n'êtes pas connecté en tant que manager");
-      navigate("/homepage");
-    }
-  }
-
-  useEffect(() => {
-    getWorker();
-  }, []);
-
+    },
+  });
   return (
     <div>
       <Row>

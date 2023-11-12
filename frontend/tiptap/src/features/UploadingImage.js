@@ -55,7 +55,7 @@ export default function UploadingImage() {
     file && uploadFile();
   }, [file]);
   return (
-    <Col className=" d-flex justify-content-center  col-m-50" sm={12}>
+    <div className=" d-flex justify-content-center mt-4">
       <input
         type="file"
         className="form-control"
@@ -70,6 +70,6 @@ export default function UploadingImage() {
           <img src={UploadImage} alt="Upload" className="mr-2" />
         </label>
       )}
-    </Col>
+    </div>
   );
 }

@@ -20,6 +20,7 @@ router.post("/login", async (req, res) => {
         lastName: userFound[0].lastName,
         pictureUrl: userFound[0].pictureUrl,
         role: userFound[0].role,
+        ID: userFound[0].ID,
       },
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: "900s" }
@@ -68,6 +69,23 @@ router.post("/login", async (req, res) => {
         response: "/privateManager/private-home-manager",
         accessToken: accessToken,
       });
+  } catch (err) {
+    res.send({ status: "Error", response: "Une erreur s'est produite" });
+  }
+});
+
+router.post("/register", async (req, res) => {
+  try {
+    const userObject = req.body;
+    const result = await db.addUser(userObject);
+    if (result == 0) {
+      res.send({
+        status: "Error",
+        response: "Impossible d'ajouter l'utilisateur",
+      });
+    } else {
+      res.send({ status: "Success", response: result });
+    }
   } catch (err) {
     res.send({ status: "Error", response: "Une erreur s'est produite" });
   }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
+import { Button, Container, Stack } from "react-bootstrap";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { getAllStaff } from "../../../fetches/FetchStaff";
@@ -20,18 +20,18 @@ export default function AllStaff() {
   const { userObject } = useUserContext();
 
   return (
-    <div>
-      <Row>
-        <Col className="col-12 d-flex justify-content-center align-items-center first-margin  ">
+    <Container>
+      <Stack>
+        <div className="col-12 d-flex justify-content-center align-items-center first-margin  ">
           <h2 className=" ">All Staff</h2>
           <img
-            className="  "
+            className=" profile-picure"
             src={userObject.pictureUrl}
-            style={{ position: "absolute", right: 0 }}
+            style={{ position: "absolute", right: "15px" }}
           />
-        </Col>
+        </div>
 
-        <Col className="d-flex justify-content-end margin-18" sm={12}>
+        <div className="d-flex justify-content-end mt-2">
           <Button
             onClick={() => setIsPopupVisible(!isPopupVisible)}
             style={{ backgroundColor: "transparent", border: "0" }}
@@ -39,11 +39,11 @@ export default function AllStaff() {
             {" "}
             <img src={Filter} />
           </Button>
-        </Col>
-        <Col className="">
+        </div>
+        <div className="">
           {staffListFilter.map((staff, index) => (
-            <Row key={index} className="d-flex justify-content-center mx-auto">
-              <Col className="col-3 d-flex justify-content-center align-items-center">
+            <Row key={index} className="d-flex justify-content-center mx-auto ">
+              <Col className="col-3  d-flex align-items-center">
                 <img
                   src={staff.pictureUrl}
                   alt="logo"
@@ -57,7 +57,9 @@ export default function AllStaff() {
                       <span
                         style={{
                           fontSize: "16px",
-                          fontFamily: "Satoshi Black",
+                          fontFamily: "Satoshi Variable",
+                          fontWeight: "500",
+                          lineHeight: "21.6px",
                         }}
                       >
                         {staff.firstName} {staff.lastName}
@@ -115,9 +117,9 @@ export default function AllStaff() {
               </Col>
             </Row>
           ))}
-        </Col>
+        </div>
         <SelectRolePopup />
-      </Row>
-    </div>
+      </Stack>
+    </Container>
   );
 }

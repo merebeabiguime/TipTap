@@ -11,24 +11,25 @@ import "../style.css";
 import { useQuery } from "react-query";
 
 import { useRef, useState } from "react";
-import { Button, Form, InputGroup } from "react-bootstrap";
+import { Button, Container, Form, InputGroup, Stack } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserContext } from "../contexts/AuthContext";
 import PreviousPageButton from "../features/PreviousPageButton";
 import { getUserFromUID } from "../fetches/FetchUsers";
-import { login, useLogin } from "../fetches/FetchAuth";
+import { useFetchAuth } from "../fetches/FetchAuth";
+
 function Login() {
+  const fetchAuth = useFetchAuth();
   const { signIn, setAccessToken } = useUserContext();
   const inputs = useRef([]);
   const [validation, setValidation] = useState("");
   const [credentials, setCredentials] = useState(null);
   const navigate = useNavigate();
   const signedIn = useRef(false);
-  const login = useLogin();
 
   const userQuery = useQuery({
     queryKey: ["userObject"],
-    queryFn: async () => await login([{ UID: credentials.user.uid }]),
+    queryFn: async () => await fetchAuth.login([{ UID: credentials.user.uid }]),
     enabled: signedIn.current,
     onSuccess: (data) => {
       setAccessToken(data.accessToken);
@@ -38,6 +39,7 @@ function Login() {
       } else {
         setValidation(data.response);
       }
+      signedIn.current = false;
     },
   });
 
@@ -66,26 +68,21 @@ function Login() {
   };
 
   return (
-    <div>
-      <Row>
-        <Col className="previous-button" sm={12}>
+    <Container className="gx-0 fluid ">
+      <Stack>
+        <div className="vector-container">
           <PreviousPageButton />
-        </Col>
-        <Col className="justify-content-end" sm={12}>
-          <div>
-            <img src={vector3} alt="Vector 3" className="vector" />
-          </div>
-          <div>
-            <img src={vector4} alt="Vector 4" className="vector" />
-          </div>
-        </Col>
-        <Col className="d-flex justify-content-center  col-m-200" sm={12}>
-          <h1 className="col-m-25">Log In </h1>
-        </Col>
-        <Col className="d-flex justify-content-center  col-m-50" sm={12}>
-          <p>Sign In with user ID & password provided by the management</p>
-        </Col>
-        <Col className=" d-flex justify-content-center" sm={12}>
+          <img src={vector3} alt="Vector 3" className="vector" />
+          <img src={vector4} alt="Vector 4" className="vector" />
+        </div>
+        <div className="" style={{ marginRight: "38px", marginLeft: "38px" }}>
+          <h1 className="h1-mt-33">Log In</h1>
+          <p className="p-mt-15">
+            Sign In with user ID & password provided by the management
+          </p>
+        </div>
+
+        <div className=" d-flex justify-content-center form-mt-74" sm={12}>
           <Form onSubmit={handleForm} ref={formRef}>
             <InputGroup>
               <img className="iconForm" src={UserIcon} alt="User" />
@@ -107,30 +104,28 @@ function Login() {
             </InputGroup>
 
             <p className="text-danger mt-1">{validation}</p>
-            <Col sm={12}>
+            <div>
               <Link
                 to="/forgotpassword"
                 style={{ textDecoration: "none", color: "inherit" }}
               >
-                <p className="d-flex justify-content-end mx-auto">
+                <p className="p-bold d-flex justify-content-end">
                   Forgot password ?
                 </p>
               </Link>
-            </Col>
+            </div>
 
-            <Col className="d-flex justify-content-center  col-m-25" sm={12}>
+            <div className="">
               <Button type="submit" className="customButton1">
                 Sign In
               </Button>
-            </Col>
+            </div>
           </Form>
-        </Col>
-        <Col className="d-flex justify-content-center  " sm={12}>
-          <p className="d-flex justify-content-center line-divider ">
-            Or continue with
-          </p>
-        </Col>
-        <Col className="d-flex justify-content-center col-m-25" sm={12}>
+        </div>
+        <div className="  ">
+          <p className=" line-divider ">Or continue with</p>
+        </div>
+        <div className="d-flex justify-content-center mt-4">
           <div>
             <img src={facebook} alt="facebook" />
           </div>
@@ -140,24 +135,23 @@ function Login() {
           <div>
             <img src={apple} alt="apple" />
           </div>
-        </Col>
-        <Col className="d-flex justify-content-center mx-auto " sm={12}>
+        </div>
+        <div className="mt-4">
           <p
             style={{ fontWeight: "bold" }}
             className="d-flex justify-content-center"
           >
-            Not a member ?{" "}
+            Not a member ?
             <Link
               to="/signup"
               style={{ color: "#E09C4A", textDecoration: "none" }}
             >
-              {" "}
               Register Now
             </Link>
           </p>
-        </Col>
-      </Row>
-    </div>
+        </div>
+      </Stack>
+    </Container>
   );
 }
 
