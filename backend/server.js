@@ -1,6 +1,7 @@
 import express from "express";
 import userRoutes from "./routes/user.js";
 import staffRoutes from "./routes/staff.js";
+import restaurantRoutes from "./routes/restaurant.js";
 import authRoutes from "./routes/auth.js";
 import refreshRoutes from "./routes/refreshToken.js";
 import lougoutRoutes from "./routes/logout.js";
@@ -18,15 +19,19 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
+app.use("/restaurant", restaurantRoutes);
+
 app.use("/auth", authRoutes);
 
 app.use("/refresh", refreshRoutes);
 app.use("/logout", lougoutRoutes);
 
+app.use("/staff", staffRoutes);
+
 app.use(verifyJWT);
 
 app.use("/user", userRoutes);
-app.use("/staff", staffRoutes);
+
 app.use("/qrcode", qrCodeRoutes);
 
 app.listen(port, () => {
