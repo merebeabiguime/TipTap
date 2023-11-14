@@ -30,7 +30,7 @@ export default function StaffCaroussel() {
   return (
     <div>
       {isImagesVisible ? (
-        <div className="mx-auto mb-4">
+        <div className="mx-auto mb-4 d-flex justify-content-center align-items-center">
           <img
             style={{ width: "31%", height: "11%" }}
             src={IconChef}

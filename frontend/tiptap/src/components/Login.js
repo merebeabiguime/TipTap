@@ -10,7 +10,7 @@ import UserIcon from "../images/signup_user_icon.png";
 import "../style.css";
 import { useQuery } from "react-query";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button, Container, Form, InputGroup, Stack } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserContext } from "../contexts/AuthContext";
@@ -20,28 +20,19 @@ import { useFetchAuth } from "../fetches/FetchAuth";
 
 function Login() {
   const fetchAuth = useFetchAuth();
-  const { signIn, setAccessToken } = useUserContext();
+  const {
+    signIn,
+    setAccessToken,
+    googleQuery,
+    signInWithGoogle,
+    loginMutation,
+    loginMutationId,
+    navigateTo,
+  } = useUserContext();
   const inputs = useRef([]);
   const [validation, setValidation] = useState("");
   const [credentials, setCredentials] = useState(null);
   const navigate = useNavigate();
-  const signedIn = useRef(false);
-
-  const userQuery = useQuery({
-    queryKey: ["userObject"],
-    queryFn: async () => await fetchAuth.login([{ UID: credentials.user.uid }]),
-    enabled: signedIn.current,
-    onSuccess: (data) => {
-      setAccessToken(data.accessToken);
-      console.log("firstAccesToken", data.accessToken);
-      if (data.status === "Success") {
-        navigate(data.response);
-      } else {
-        setValidation(data.response);
-      }
-      signedIn.current = false;
-    },
-  });
 
   const addInput = (el) => {
     if (el && !inputs.current.includes(el)) {
@@ -61,11 +52,17 @@ function Login() {
         inputs.current[1].value
       );
       setCredentials(cred);
-      signedIn.current = true;
+      loginMutation.current = credentials.user.uid;
+      loginMutation.mutate();
     } catch (err) {
       setValidation("Email or password incorrect");
     }
   };
+
+  useEffect(() => {
+    console.log("ca a bougé");
+    navigate(navigateTo);
+  }, [navigateTo]);
 
   return (
     <Container className="gx-0 fluid ">
@@ -130,7 +127,7 @@ function Login() {
             <img src={facebook} alt="facebook" />
           </div>
           <div>
-            <img src={google} alt="google" />
+            <img onClick={() => signInWithGoogle()} src={google} alt="google" />
           </div>
           <div>
             <img src={apple} alt="apple" />
