@@ -83,6 +83,10 @@ export async function getUserFromUID(id) {
   const [rows] = await pool.query("SELECT * FROM user WHERE UID=?", [id]);
   return rows.length === 0 ? 0 : rows;
 }
+export async function getUserFromEmail(email) {
+  const [rows] = await pool.query("SELECT * FROM user WHERE email=?", [email]);
+  return rows.length === 0 ? 0 : rows;
+}
 
 // Obtenir le Role d'un utilisateur(1= worker ; 2 = manager)
 export async function getRole(uid) {

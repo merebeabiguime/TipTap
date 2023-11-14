@@ -6,8 +6,54 @@ dotenv.config();
 
 const router = express.Router();
 
+router.post("/other", async (req, res) => {
+  try {
+    const userObject = req.body;
+
+    const userFound = await db.getUserFromEmail(userObject.email);
+
+    if (userFound === 0) {
+      const displayName = userObject.displayName;
+      const nameParts = displayName.split(" ");
+      const firstName = nameParts[0];
+      const lastName = nameParts.slice(1).join(" ");
+
+      const userToSignup = {
+        firstName: firstName,
+        lastName: lastName,
+        email: userObject.email,
+        phone: "None",
+        password: "password",
+        role: 1,
+        pictureUrl: userObject.photoURL,
+        ID_restaurant: 0,
+        UID: userObject.uid,
+      };
+
+      const signInUser = await db.addUser([userToSignup]);
+
+      if (signInUser === 0) {
+        return res.send({
+          status: "Error",
+          response: "Unable to add the user.",
+        });
+      }
+    }
+    res.send({
+      status: "Success",
+      response: "Google auth successfull",
+    });
+  } catch (err) {
+    res.send({
+      status: "Error",
+      response: "An error occurred during Google authentication.",
+    });
+  }
+});
+
 router.post("/login", async (req, res) => {
   try {
+    console.log("req.body", req.body);
     const UID = req.body[0].UID;
     const userFound = await db.getUserFromUID(UID);
     if (userFound === 0)

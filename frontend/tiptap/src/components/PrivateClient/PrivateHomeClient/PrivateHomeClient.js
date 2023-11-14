@@ -70,7 +70,7 @@ function PrivateHomeClient() {
   };
 
   return (
-    <Container className="gx-0 fluid ">
+    <Container className="gx-0 fluid">
       <Stack>
         <div className=" mx-auto">
           <img key="star1" className="logo" src={logo} alt="logo" />
