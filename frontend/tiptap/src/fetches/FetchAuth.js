@@ -2,7 +2,19 @@ import axios from "axios";
 
 export function useFetchAuth() {
   const login = async (UID) => {
-    const response = await axios.post("http://localhost:8081/auth/login", UID);
+    console.log("uid", UID);
+    const response = await axios.post("http://localhost:8081/auth/login", [
+      { UID: UID },
+    ]);
+    return response.data;
+  };
+
+  const otherAuth = async (userObject) => {
+    console.log("dans google");
+    const response = await axios.post(
+      "http://localhost:8081/auth/other",
+      userObject
+    );
     return response.data;
   };
 
@@ -27,5 +39,6 @@ export function useFetchAuth() {
     login,
     register,
     logout,
+    otherAuth,
   };
 }
