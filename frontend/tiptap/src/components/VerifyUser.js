@@ -1,42 +1,35 @@
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
-import vector3 from "../images/Vector 3.png";
-import vector4 from "../images/Vector 4.png";
-import apple from "../images/signin_with_apple.png";
-import facebook from "../images/signin_with_facebook.png";
-import google from "../images/signin_with_google.png";
-import PasswordIcon from "../images/signup_password_icon.png";
-import UserIcon from "../images/signup_user_icon.png";
-import "../style.css";
-import { useQuery } from "react-query";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import "../style.css";
 
 import { useEffect, useRef, useState } from "react";
-import { Button, Container, Form, InputGroup, Stack } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Container, Form, Stack } from "react-bootstrap";
+import { useMutation } from "react-query";
+import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../contexts/AuthContext";
 import PreviousPageButton from "../features/PreviousPageButton";
-import { getUserFromUID } from "../fetches/FetchUsers";
-import { useFetchAuth } from "../fetches/FetchAuth";
+import { useFetchUsers } from "../fetches/FetchUsers";
 import { auth } from "../firebase";
 
 function VerifyUser() {
-  const fetchAuth = useFetchAuth();
-  const {
-    signIn,
-    setAccessToken,
-    googleQuery,
-    signInWith,
-    loginMutation,
-    loginMutationId,
-    navigateTo,
-    setNavigateCallback,
-    userObject,
-  } = useUserContext();
+  const { navigateTo, userObject, signOutMy, signOutFirebase } =
+    useUserContext();
   const inputs = useRef([]);
-  const [validation, setValidation] = useState("");
-  const [credentials, setCredentials] = useState(null);
   const navigate = useNavigate();
+  const fetchUser = useFetchUsers();
+
+  const verifyUserMutation = useMutation({
+    mutationFn: async () => await fetchUser.verify(userObject.UID),
+    onSuccess: (data) => {
+      console.log("verifyMutationCorrect", data);
+      if (data.status === "Success") {
+        signOutFirebase();
+        navigate("/homepage");
+        console.log("success");
+      } else {
+        console.log("unsucessfull", data);
+      }
+    },
+  });
 
   const [otp, setOtp] = useState(["", "", "", ""]);
   const [realOtp, setRealOtp] = useState(null);
@@ -76,6 +69,7 @@ function VerifyUser() {
         try {
           const data = await validateOtp(enteredOtp);
           console.log("data", data);
+          verifyUserMutation.mutate();
           //Si ca arrive ici alors on est connecté
         } catch (error) {
           //Si ça arrive ici alors le code n'est pas bon
@@ -95,16 +89,6 @@ function VerifyUser() {
     const result = await realOtp.confirm(enteredOtp);
     return result;
   };
-
-  useEffect(() => {
-    // Code to run on component mount or when 'otp' state changes
-    console.log("OTP state changed:", otp);
-  }, [otp]);
-
-  useEffect(() => {
-    console.log("ca a bougé");
-    navigate(navigateTo);
-  }, [navigateTo]);
 
   return (
     <Container className="gx-0 fluid ">

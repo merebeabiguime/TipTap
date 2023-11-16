@@ -67,6 +67,7 @@ router.get("/role/:id", async (req, res) => {
 router.post("/verify", async (req, res) => {
   try {
     const userUID = req.body[0].UID;
+    console.log("uiddd", req.body);
 
     const userVerified = await db.verifyUser(userUID);
 

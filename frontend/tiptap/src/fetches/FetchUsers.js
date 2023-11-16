@@ -17,6 +17,7 @@ export function useFetchUsers() {
   };
 
   const verify = async (UID) => {
+    console.log("uiddd", UID);
     const response = await axiosPrivate.post(
       `http://localhost:8081/user/verify`,
       [{ UID: UID }],

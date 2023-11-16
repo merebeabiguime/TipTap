@@ -46,7 +46,6 @@ export function UserContextProvider(props) {
   const facebookProvider = new FacebookAuthProvider();
   let loginMutationId = useRef(null);
   const [navigateTo, setNavigateTo] = useState("");
-  const fetchUser = useFetchUsers();
 
   const logoutMutation = useMutation({
     mutationFn: async () => await fetchAuth.logout(),
@@ -84,18 +83,6 @@ export function UserContextProvider(props) {
       } else {
         console.log("unsucessfull", data);
         setNavigateTo(data.response);
-      }
-    },
-  });
-
-  const verifyUserMutation = useMutation({
-    mutationFn: async () => await fetchUser.verify(userObject.UID),
-    onSuccess: (data) => {
-      console.log("verifyMutationCorrect");
-      if (data.status === "Success") {
-        signOutMy();
-      } else {
-        console.log("unsucessfull", data);
       }
     },
   });

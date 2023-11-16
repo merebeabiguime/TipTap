@@ -28,7 +28,8 @@ router.post("/other", async (req, res) => {
         pictureUrl: userObject.photoURL,
         ID_restaurant: 0,
         UID: userObject.uid,
-        verified: 1,
+        verified: userObject.verified,
+        phone: userObject.phone,
       };
 
       const signInUser = await db.addUser([userToSignup]);
@@ -69,6 +70,8 @@ router.post("/login", async (req, res) => {
         role: userFound[0].role,
         ID: userFound[0].ID,
         verified: userFound[0].verified,
+        UID: userFound[0].UID,
+        phone: userFound[0].phone,
       },
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: "900s" }
@@ -80,7 +83,10 @@ router.post("/login", async (req, res) => {
         lastName: userFound[0].lastName,
         pictureUrl: userFound[0].pictureUrl,
         role: userFound[0].role,
+        ID: userFound[0].ID,
         verified: userFound[0].verified,
+        UID: userFound[0].UID,
+        phone: userFound[0].phone,
       },
       process.env.REFRESH_TOKEN_SECRET,
       { expiresIn: "1d" }
