@@ -64,4 +64,28 @@ router.get("/role/:id", async (req, res) => {
   }
 });
 
+router.post("/verify", async (req, res) => {
+  try {
+    const userUID = req.body[0].UID;
+
+    const userVerified = await db.verifyUser(userUID);
+
+    if (userVerified === 0)
+      return res.send({
+        status: "Error",
+        response: "Unable to verify this user.",
+      });
+
+    return res.send({
+      status: "Success",
+      response: "L'utilisateur a été vérifié avec succès",
+    });
+  } catch (err) {
+    res.send({
+      status: "Error",
+      response: "Une erreur s'est produtie",
+    });
+  }
+});
+
 export default router;

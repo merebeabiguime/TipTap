@@ -482,3 +482,26 @@ h6 {
   transform: scale(1.2);
   transition: transform 0.3s ease-in-out;
 }
+
+/************* OTP ****************/
+
+.otp-input {
+  width: 60px;
+  height: 50px;
+  border: 1px solid rgba(117, 117, 117, 1);
+  border-radius: 25px !important;
+  margin: 16px;
+  text-align: center; /* Alignez le texte au centre */
+  font-weight: 400;
+  font-size: 21px;
+  line-height: 28.35px;
+  color: rgba(117, 117, 117, 1);
+}
+.otp-input::placeholder {
+  text-align: center;
+  align-items: center;
+  font-weight: 400;
+  font-size: 21px;
+  line-height: 28.35px;
+  color: rgba(117, 117, 117, 1);
+}

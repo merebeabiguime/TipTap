@@ -7,6 +7,7 @@ import icon from "../images/select_role_icon.png";
 import "../style.css";
 
 import customerIcon from "../images/customer_icon.png";
+import managerIcon from "../images/manager_icon.png";
 
 import { Container, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -70,13 +71,13 @@ function SelectRole() {
           >
             <Row className="border border-gray customButton4 align-items-center">
               <Col className="col-6  mx-auto text-center">
-                <img src={customerIcon} alt="logo" />
+                <img src={managerIcon} alt="logo" />
               </Col>
               <Col className="  col-6 mx-auto align-items-center">
-                <h1 className="">Customer</h1>
+                <h1 className="">Manager</h1>
                 <p className="customButton4-p">
-                  Show your appreciation for good service by leaving a small
-                  amount
+                  Managing the hotel overall operation adding staff, check staff
+                  performance
                 </p>
               </Col>
             </Row>

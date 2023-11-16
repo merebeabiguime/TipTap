@@ -6,7 +6,7 @@ import PhoneIcon from "../images/signup_phone_icon.png";
 import UserIcon from "../images/signup_user_icon.png";
 import "../style.css";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button, Container, Form, InputGroup, Stack } from "react-bootstrap";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
@@ -64,6 +64,7 @@ function SignUp() {
         pictureUrl: data.img ? data.img : "default.png",
         ID_restaurant: 0,
         UID: credentials.user.uid,
+        verified: 0,
       });
 
       //Enabling userQuery
@@ -93,6 +94,12 @@ function SignUp() {
 
     tryToSignUp();
   };
+  useEffect(() => {
+    // This effect will be called when the userRole changes
+    if (userRole === 0) {
+      navigate("/selectRole");
+    }
+  }, [userRole]);
   return (
     <Container>
       <Stack>

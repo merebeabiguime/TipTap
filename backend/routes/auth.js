@@ -28,6 +28,7 @@ router.post("/other", async (req, res) => {
         pictureUrl: userObject.photoURL,
         ID_restaurant: 0,
         UID: userObject.uid,
+        verified: 1,
       };
 
       const signInUser = await db.addUser([userToSignup]);
@@ -67,6 +68,7 @@ router.post("/login", async (req, res) => {
         pictureUrl: userFound[0].pictureUrl,
         role: userFound[0].role,
         ID: userFound[0].ID,
+        verified: userFound[0].verified,
       },
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: "900s" }
@@ -78,6 +80,7 @@ router.post("/login", async (req, res) => {
         lastName: userFound[0].lastName,
         pictureUrl: userFound[0].pictureUrl,
         role: userFound[0].role,
+        verified: userFound[0].verified,
       },
       process.env.REFRESH_TOKEN_SECRET,
       { expiresIn: "1d" }
@@ -122,7 +125,8 @@ router.post("/login", async (req, res) => {
 
 router.post("/register", async (req, res) => {
   try {
-    const userObject = req.body;
+    const userObject = req.body.current;
+    console.log("uobj", userObject);
     const result = await db.addUser(userObject);
     if (result == 0) {
       res.send({
@@ -133,7 +137,11 @@ router.post("/register", async (req, res) => {
       res.send({ status: "Success", response: result });
     }
   } catch (err) {
-    res.send({ status: "Error", response: "Une erreur s'est produite" });
+    res.send({
+      status: "Error",
+      response: "Une erreur s'est produite lors de l'inscription",
+    });
+    //console.log(err);
   }
 });
 

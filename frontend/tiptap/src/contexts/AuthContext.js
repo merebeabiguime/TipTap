@@ -19,11 +19,14 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
+  FacebookAuthProvider,
+  RecaptchaVerifier,
 } from "firebase/auth";
 import { auth } from "../firebase.js";
 import { useFetchAuth } from "../fetches/FetchAuth.js";
 import { useMutation, useQuery } from "react-query";
 import { Spinner } from "react-bootstrap";
+import { useFetchUsers } from "../fetches/FetchUsers.js";
 
 export const UserContext = createContext();
 
@@ -40,16 +43,13 @@ export function UserContextProvider(props) {
   const enableGoogleAuth = useRef(false);
   const fetchAuth = useFetchAuth();
   const googleProvider = new GoogleAuthProvider();
-  const loginMutationId = useRef(null);
+  const facebookProvider = new FacebookAuthProvider();
+  let loginMutationId = useRef(null);
   const [navigateTo, setNavigateTo] = useState("");
+  const fetchUser = useFetchUsers();
 
-  const logoutQuery = useQuery({
-    queryKey: ["logoutQuery"],
-    queryFn: async () => await fetchAuth.logout(),
-    enabled: logoutMy.current,
-    onSuccess: () => {
-      logoutMy.current = false;
-    },
+  const logoutMutation = useMutation({
+    mutationFn: async () => await fetchAuth.logout(),
   });
 
   const refreshQuery = useQuery({
@@ -79,6 +79,7 @@ export function UserContextProvider(props) {
       if (data.status === "Success") {
         setAccessToken(data.accessToken);
         setNavigateTo(data.response);
+        console.log(data);
         console.log("successfull", data);
       } else {
         console.log("unsucessfull", data);
@@ -87,7 +88,19 @@ export function UserContextProvider(props) {
     },
   });
 
-  const googleMutation = useMutation({
+  const verifyUserMutation = useMutation({
+    mutationFn: async () => await fetchUser.verify(userObject.UID),
+    onSuccess: (data) => {
+      console.log("verifyMutationCorrect");
+      if (data.status === "Success") {
+        signOutMy();
+      } else {
+        console.log("unsucessfull", data);
+      }
+    },
+  });
+
+  const otherAuthMutation = useMutation({
     mutationFn: async () => await fetchAuth.otherAuth(googleUser.current[0]),
     onSuccess: (data) => {
       console.log("merebe", data);
@@ -101,8 +114,15 @@ export function UserContextProvider(props) {
     },
   });
 
+  function setNavigateCallback(callback, id) {
+    console.log("id", id);
+    loginMutationId.current = id;
+    loginMutation.mutate();
+    callback(navigateTo);
+  }
+
   async function signOutMy() {
-    logoutMy.current = true;
+    logoutMutation.mutate();
   }
 
   async function refresh() {
@@ -131,33 +151,26 @@ export function UserContextProvider(props) {
     return signOut(auth);
   }
 
-  async function signInWithGoogle() {
-    try {
-      const result = await signInWithPopup(auth, googleProvider);
-      // This gives you a Google Access Token. You can use it to access the Google API.
-      const googleCredential = GoogleAuthProvider.credentialFromResult(result);
-      const googleToken = googleCredential.accessToken;
-      // The signed-in user info.
-      googleUser.current.push(result.user);
-      console.log("google user", googleUser.current[0].auth);
-      console.log(result.user);
-      console.log("pas d'erreur");
-      // Try to connect in Node.js db
-      googleMutation.mutate();
+  async function signInWith(authProvider) {
+    let provider = null;
+    if (authProvider == "google") {
+      provider = googleProvider;
+    } else if (authProvider == "facebook") {
+      provider = facebookProvider;
+    } else if (authProvider == "apple") {
+      //provider = facebookProvider;
+      provider = googleProvider;
+    }
 
-      // Execute googleQuery here or set a flag to enable it in the useEffect
-      // depending on your use case
-      // enableGoogleAuth.current = true;
+    try {
+      const result = await signInWithPopup(auth, provider);
+      googleUser.current.push(result.user);
+      otherAuthMutation.mutate();
     } catch (error) {
       // Handle Errors here.
       const errorCode = error.code;
       const errorMessage = error.message;
-      // The email of the user's account used.
-      // const email = error.customData.email;
-      // The AuthCredential type that was used.
-      const credential = GoogleAuthProvider.credentialFromError(error);
       console.log("erreur", errorCode, errorMessage);
-      // ...
     }
   }
 
@@ -204,12 +217,14 @@ export function UserContextProvider(props) {
         accessToken,
         setAccessToken,
         refresh,
-        logoutQuery,
+        logoutMutation,
         signOutMy,
         signOutFirebase,
-        signInWithGoogle,
+        signInWith,
         loginMutationId,
         navigateTo,
+        setNavigateCallback,
+        auth,
       }}
     >
       {!loadingData && !refreshQuery.isLoading ? (
@@ -240,12 +255,14 @@ export function useUserContext() {
     accessToken,
     setAccessToken,
     refresh,
-    logoutQuery,
+    logoutMutation,
     signOutMy,
     signOutFirebase,
-    signInWithGoogle,
+    signInWith,
     loginMutationId,
     navigateTo,
+    setNavigateCallback,
+    auth,
   } = useContext(UserContext);
 
   return {
@@ -266,11 +283,13 @@ export function useUserContext() {
     accessToken,
     setAccessToken,
     refresh,
-    logoutQuery,
+    logoutMutation,
     signOutMy,
     signOutFirebase,
-    signInWithGoogle,
+    signInWith,
     loginMutationId,
     navigateTo,
+    setNavigateCallback,
+    auth,
   };
 }

@@ -23,6 +23,7 @@ export function useFetchAuth() {
       "http://localhost:8081/auth/register",
       jsonData
     );
+    console.log("jsonData", jsonData);
 
     return response.data;
   };

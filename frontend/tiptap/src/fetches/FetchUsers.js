@@ -16,7 +16,20 @@ export function useFetchUsers() {
     return response.data;
   };
 
+  const verify = async (UID) => {
+    const response = await axiosPrivate.post(
+      `http://localhost:8081/user/verify`,
+      [{ UID: UID }],
+      {
+        headers: { Authorization: "Bearer " + accessToken },
+      }
+    );
+
+    return response.data;
+  };
+
   return {
     getUser,
+    verify,
   };
 }
