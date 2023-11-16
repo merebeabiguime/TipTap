@@ -34,14 +34,14 @@ function VerifyUser() {
   const [otp, setOtp] = useState(["", "", "", ""]);
   const [realOtp, setRealOtp] = useState(null);
 
-  const phoneNumber = "+330761585659";
+  const phoneNumber = userObject.phone;
 
   const generateRecaptcha = async () => {
     try {
       const recaptcha = new RecaptchaVerifier("recaptcha", {}, auth);
       const confirmation = await signInWithPhoneNumber(
         auth,
-        "+330761585659",
+        phoneNumber,
         recaptcha
       );
       console.log("conf", confirmation);
@@ -105,7 +105,7 @@ function VerifyUser() {
         <div className="" style={{ marginRight: "38px", marginLeft: "38px" }}>
           <h1 className="h1-mt-33 text-center">Enter OTP</h1>
           <p className="mx-auto text-center">
-            We sent your 4 digit code to {`${userObject.phone}`}
+            We sent your 4 digit code to {phoneNumber}
             This code will epxire in <span style={{ color: "red" }}>00:30</span>
           </p>
         </div>
