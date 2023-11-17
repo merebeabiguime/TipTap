@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 import { RWebShare } from "react-web-share";
 import { saveAs } from "file-saver";
 import html2canvas from "html2canvas";
+import SaveIcon from "../../../images/save_to_gallery_icon.png";
+import shareIcon from "../../../images/share_icon.png";
 
 export default function PrivateHomeWorker() {
   const { userObject, signOutMy } = useUserContext();
@@ -86,6 +88,7 @@ export default function PrivateHomeWorker() {
             onClick={saveToGallery}
             style={{ marginBottom: "15px" }}
           >
+            <img src={SaveIcon} style={{ marginRight: "24px" }} />
             Save to Gallery
           </Button>
           <RWebShare
@@ -96,16 +99,13 @@ export default function PrivateHomeWorker() {
             }}
             onClick={() => console.log("shared successfully!")}
           >
-            <Button
-              type="submit"
-              className="customButton2"
-              style={{ marginBottom: "89px" }}
-            >
-              Share this QR Code
+            <Button type="submit" className="customButton2">
+              <img src={shareIcon} style={{ marginRight: "24px" }} />
+              Share QR Code
             </Button>
           </RWebShare>
         </div>
-        <div className="d-flex justify-content-center" sm={12}>
+        <div className="d-flex justify-content-center mt-4">
           <Link
             to="/homepage"
             style={{ textDecoration: "none", color: "inherit" }}
