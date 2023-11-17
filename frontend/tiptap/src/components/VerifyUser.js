@@ -16,6 +16,28 @@ function VerifyUser() {
   const inputs = useRef([]);
   const navigate = useNavigate();
   const fetchUser = useFetchUsers();
+  const [timer, setTimer] = useState(30); // Use a number instead of string for the timer
+  const [validation, setValidation] = useState("");
+  const otpCodeExpired = useRef(false);
+  const recaptchaVar = useRef(null);
+
+  useEffect(() => {
+    if (timer === 0) {
+      otpCodeExpired.current = true;
+      setValidation(
+        "Votre code a expiré. Veuillez revalider le captcha pour en générer un nouveau."
+      );
+    }
+    if (timer <= 0) {
+      setTimer(0);
+    }
+  }, [timer]);
+
+  const resetTimer = () => {
+    otpCodeExpired.current = false;
+    setTimer(30);
+    setValidation("");
+  };
 
   const verifyUserMutation = useMutation({
     mutationFn: async () => await fetchUser.verify(userObject.UID),
@@ -31,21 +53,36 @@ function VerifyUser() {
     },
   });
 
-  const [otp, setOtp] = useState(["", "", "", ""]);
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [realOtp, setRealOtp] = useState(null);
 
   const phoneNumber = userObject.phone;
 
+  const sendOtp = async (recaptcha) => {
+    const confirmation = await signInWithPhoneNumber(
+      auth,
+      phoneNumber,
+      recaptcha
+    );
+    if (confirmation) {
+      const interval = setInterval(() => {
+        setTimer((prevTimer) => prevTimer - 1);
+      }, 1000);
+    }
+    setRealOtp(confirmation);
+  };
+
   const generateRecaptcha = async () => {
     try {
-      const recaptcha = new RecaptchaVerifier("recaptcha", {}, auth);
-      const confirmation = await signInWithPhoneNumber(
-        auth,
-        phoneNumber,
-        recaptcha
+      const recaptcha = new RecaptchaVerifier(
+        "recaptcha",
+        {},
+
+        auth
       );
-      console.log("conf", confirmation);
-      setRealOtp(confirmation);
+
+      recaptchaVar.current = recaptcha;
+      sendOtp(recaptcha);
     } catch (error) {
       console.error(error);
     }
@@ -66,14 +103,20 @@ function VerifyUser() {
       if (newOtp.every((digit) => digit !== "")) {
         const enteredOtp = newOtp.join("");
         // Call your validation function here
-        try {
-          const data = await validateOtp(enteredOtp);
-          console.log("data", data);
-          verifyUserMutation.mutate();
-          //Si ca arrive ici alors on est connecté
-        } catch (error) {
-          //Si ça arrive ici alors le code n'est pas bon
-          console.log("code invalide");
+        if (otpCodeExpired.current === false) {
+          try {
+            const data = await validateOtp(enteredOtp);
+            console.log("data", data);
+            verifyUserMutation.mutate();
+            //Si ca arrive ici alors on est connecté
+          } catch (error) {
+            //Si ça arrive ici alors le code n'est pas bon
+            setValidation("Code invalide.");
+          }
+        } else {
+          setValidation(
+            "Ce code n'est plus valide. Veuillez revalider le captcha."
+          );
         }
       } else if (value !== "") {
         // Move focus to the next input if a digit is entered
@@ -105,11 +148,13 @@ function VerifyUser() {
         <div className="" style={{ marginRight: "38px", marginLeft: "38px" }}>
           <h1 className="h1-mt-33 text-center">Enter OTP</h1>
           <p className="mx-auto text-center">
-            We sent your 4 digit code to {phoneNumber}
-            This code will epxire in <span style={{ color: "red" }}>00:30</span>
+            We sent your 4 digit code to{" "}
+            {`${phoneNumber}.
+             This code will epxire in`}{" "}
+            <span style={{ color: "red" }}>{`00:${timer}`}</span>
           </p>
         </div>
-        <div className="input-field mx-auto">
+        <div className="input-field mx-auto border">
           <Stack direction="horizontal">
             {otp.map((digit, index) => (
               <Form.Control
@@ -124,7 +169,10 @@ function VerifyUser() {
             ))}
           </Stack>
         </div>
-        <div id="recaptcha"></div>
+        <div className="mx-auto text-center m-4">
+          <p className="text-danger">{validation}</p>
+        </div>
+        <div id="recaptcha" className="mx-auto m-4"></div>
       </Stack>
     </Container>
   );

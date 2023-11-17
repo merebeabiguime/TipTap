@@ -26,7 +26,6 @@ import { auth } from "../firebase.js";
 import { useFetchAuth } from "../fetches/FetchAuth.js";
 import { useMutation, useQuery } from "react-query";
 import { Spinner } from "react-bootstrap";
-import { useFetchUsers } from "../fetches/FetchUsers.js";
 
 export const UserContext = createContext();
 
@@ -59,13 +58,18 @@ export function UserContextProvider(props) {
       }),
     enabled: enableRefreshQuery.current,
     onSuccess: (data) => {
+      console.log("refresh success");
       if (data.data.status === "Success") {
         //On est connecté redirect vers la response(c'est forcément un worker)
         setAccessToken(data.data.accessToken);
+        console.log("le decodé ", jwtDecode(data.data.accessToken));
+        setUserObject(jwtDecode(data.data.accessToken));
+        console.log("on a mis le acces token");
         console.log(data);
       } else {
         //On logout de google et on affiche un message d'erreur
         console.log(data);
+        console.log("erreur dans le refresh");
       }
       enableRefreshQuery.current = false;
     },
