@@ -8,10 +8,9 @@ import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../contexts/AuthContext";
 import PreviousPageButton from "../features/PreviousPageButton";
 import { useFetchUsers } from "../fetches/FetchUsers";
-import { auth } from "../firebase";
 
 function VerifyUser() {
-  const { navigateTo, userObject, signOutMy, signOutFirebase } =
+  const { navigateTo, userObject, signOutMy, signOutFirebase, auth } =
     useUserContext();
   const inputs = useRef([]);
   const navigate = useNavigate();
@@ -20,6 +19,7 @@ function VerifyUser() {
   const [validation, setValidation] = useState("");
   const otpCodeExpired = useRef(false);
   const recaptchaVar = useRef(null);
+  const [animationActive, setAnimationActive] = useState(false);
 
   useEffect(() => {
     if (timer === 0) {
@@ -42,13 +42,11 @@ function VerifyUser() {
   const verifyUserMutation = useMutation({
     mutationFn: async () => await fetchUser.verify(userObject.UID),
     onSuccess: (data) => {
-      console.log("verifyMutationCorrect", data);
       if (data.status === "Success") {
         signOutFirebase();
         navigate("/homepage");
-        console.log("success");
       } else {
-        console.log("unsucessfull", data);
+        //Message d'erreur
       }
     },
   });
@@ -59,30 +57,41 @@ function VerifyUser() {
   const phoneNumber = userObject.phone;
 
   const sendOtp = async (recaptcha) => {
-    const confirmation = await signInWithPhoneNumber(
-      auth,
-      phoneNumber,
-      recaptcha
-    );
-    if (confirmation) {
-      const interval = setInterval(() => {
-        setTimer((prevTimer) => prevTimer - 1);
-      }, 1000);
+    try {
+      const confirmation = await signInWithPhoneNumber(
+        auth,
+        phoneNumber,
+        recaptcha
+      );
+      if (confirmation) {
+        const interval = setInterval(() => {
+          setTimer((prevTimer) => prevTimer - 1);
+        }, 1000);
+        setRealOtp(confirmation);
+      }
+    } catch (error) {
+      //Too many requests => Go to 404 error
+      console.error(error);
     }
-    setRealOtp(confirmation);
   };
 
   const generateRecaptcha = async () => {
     try {
       const recaptcha = new RecaptchaVerifier(
         "recaptcha",
-        {},
+        {
+          callback: () => {
+            if (timer <= 0) {
+              resetTimer();
+            } else {
+              sendOtp(recaptcha);
+            }
+          },
+        },
 
         auth
       );
-
-      recaptchaVar.current = recaptcha;
-      sendOtp(recaptcha);
+      recaptcha.render();
     } catch (error) {
       console.error(error);
     }
@@ -105,17 +114,17 @@ function VerifyUser() {
         // Call your validation function here
         if (otpCodeExpired.current === false) {
           try {
+            //OTP VERIFIED
+            setAnimationActive(true);
             const data = await validateOtp(enteredOtp);
-            console.log("data", data);
             verifyUserMutation.mutate();
-            //Si ca arrive ici alors on est connecté
           } catch (error) {
             //Si ça arrive ici alors le code n'est pas bon
             setValidation("Code invalide.");
           }
         } else {
           setValidation(
-            "Ce code n'est plus valide. Veuillez revalider le captcha."
+            "Ce code n'est plus valide. Veuillez revalider le captcha ou recharger la page."
           );
         }
       } else if (value !== "") {
@@ -154,12 +163,14 @@ function VerifyUser() {
             <span style={{ color: "red" }}>{`00:${timer}`}</span>
           </p>
         </div>
-        <div className="input-field mx-auto border">
+        <div className="input-field mx-auto">
           <Stack direction="horizontal">
             {otp.map((digit, index) => (
               <Form.Control
                 key={index}
-                className="otp-input"
+                className={`otp-input ${
+                  animationActive ? "otp-input-success" : ""
+                }`}
                 type="number"
                 placeholder="*"
                 value={digit}

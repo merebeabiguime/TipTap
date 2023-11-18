@@ -9,8 +9,7 @@ import { useUserContext } from "../../../contexts/AuthContext";
 import { Container, Stack } from "react-bootstrap";
 
 function PrivateHomeManager() {
-  const { selectRole, currentUser } = useUserContext();
-  console.log(currentUser);
+  const { selectRole, currentUser, signOutMy } = useUserContext();
 
   return (
     <Container>
@@ -55,6 +54,14 @@ function PrivateHomeManager() {
               <h1 className="mb-0">Add Staff</h1>
             </div>
           </Col>
+        </Link>
+        <Link
+          to="/homepage"
+          className="mx-auto text-center"
+          style={{ textDecoration: "none", color: "inherit" }}
+          onClick={signOutMy}
+        >
+          <p>Logout</p>
         </Link>
       </Stack>
     </Container>

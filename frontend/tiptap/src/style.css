@@ -491,14 +491,14 @@ h6 {
 /************* OTP ****************/
 
 .otp-input {
-  width: 30px;
+  width: 35px;
   height: 25px;
   border: 1px solid rgba(117, 117, 117, 1);
   border-radius: 25px !important;
-  margin: 16px;
+  margin: 8px;
   text-align: center; /* Alignez le texte au centre */
   font-weight: 400;
-  font-size: 21px;
+  font-size: 12px;
   line-height: 28.35px;
   color: rgba(117, 117, 117, 1);
 }
@@ -506,7 +506,34 @@ h6 {
   text-align: center;
   align-items: center;
   font-weight: 400;
-  font-size: 21px;
+  font-size: 12px;
   line-height: 28.35px;
   color: rgba(117, 117, 117, 1);
+}
+
+/* Add animation styles for the success state */
+.otp-input-success {
+  border-color: green; /* Change border color to green when animation is active */
+  animation: otp-success-animation 2s; /* Use your desired animation properties */
+}
+
+@keyframes otp-success-animation {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/******** Center Div *********/
+
+.centered-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Set to 100% of the viewport height */
 }

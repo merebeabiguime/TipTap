@@ -24,7 +24,7 @@ import {
 } from "firebase/auth";
 import { auth } from "../firebase.js";
 import { useFetchAuth } from "../fetches/FetchAuth.js";
-import { useMutation, useQuery } from "react-query";
+import { useIsFetching, useMutation, useQuery } from "react-query";
 import { Spinner } from "react-bootstrap";
 
 export const UserContext = createContext();
@@ -36,6 +36,7 @@ export function UserContextProvider(props) {
   const userObjectRole = useRef(0);
   const [percentage, setPercentage] = useState(null);
   const [data, setData] = useState({});
+  const [message, setMessage] = useState("");
   const googleUser = useRef([]);
   const logoutMy = useRef(false);
   const enableRefreshQuery = useRef(false);
@@ -45,31 +46,59 @@ export function UserContextProvider(props) {
   const facebookProvider = new FacebookAuthProvider();
   let loginMutationId = useRef(null);
   const [navigateTo, setNavigateTo] = useState("");
+  const isFetching = useIsFetching();
+  const userIdValueQR = useRef(null);
+  const staffAuthObject = useRef({});
+
+  const qrCodeMutation = useMutation({
+    mutationFn: async () =>
+      await myAxios.get(
+        `http://localhost:8081/qrcode/${userIdValueQR.current}`,
+        {
+          headers: { Authorization: "Bearer " + accessToken },
+        }
+      ),
+    onSuccess: (data) => {
+      if (data.data.status == "Success") {
+        //ADD COOLDOWN BEFOFRE GOING TO NEXT PAGE
+        setMessage("Success");
+        staffAuthObject.current = data.data.response[0];
+
+        setNavigateTo(
+          "/privateManager/private-home-manager/add-staff/select-staff-role"
+        );
+      } else {
+        //setValidation(data.response);
+        setMessage(data.data.response);
+        setNavigateTo("/privateManager/private-home-manager/");
+      }
+    },
+  });
 
   const logoutMutation = useMutation({
     mutationFn: async () => await fetchAuth.logout(),
   });
 
-  const refreshQuery = useQuery({
-    queryKey: ["refreshQuery"],
-    queryFn: async () =>
+  function qrCodeCall(uId) {
+    userIdValueQR.current = uId;
+    qrCodeMutation.mutate();
+  }
+
+  const refreshMutation = useMutation({
+    mutationFn: async () =>
       await myAxios.get("http://localhost:8081/refresh", {
         withCredentials: true,
       }),
     enabled: enableRefreshQuery.current,
     onSuccess: (data) => {
-      console.log("refresh success");
       if (data.data.status === "Success") {
         //On est connecté redirect vers la response(c'est forcément un worker)
         setAccessToken(data.data.accessToken);
-        console.log("le decodé ", jwtDecode(data.data.accessToken));
         setUserObject(jwtDecode(data.data.accessToken));
-        console.log("on a mis le acces token");
-        console.log(data);
       } else {
         //On logout de google et on affiche un message d'erreur
-        console.log(data);
-        console.log("erreur dans le refresh");
+        //Message d'erreur
+        signOutFirebase();
       }
       enableRefreshQuery.current = false;
     },
@@ -78,14 +107,12 @@ export function UserContextProvider(props) {
   const loginMutation = useMutation({
     mutationFn: async () => await fetchAuth.login(loginMutationId.current),
     onSuccess: (data) => {
-      console.log("login mutation corect");
       if (data.status === "Success") {
         setAccessToken(data.accessToken);
+        setUserObject(jwtDecode(data.accessToken));
         setNavigateTo(data.response);
-        console.log(data);
-        console.log("successfull", data);
       } else {
-        console.log("unsucessfull", data);
+        //Message d'erreur
         setNavigateTo(data.response);
       }
     },
@@ -94,19 +121,18 @@ export function UserContextProvider(props) {
   const otherAuthMutation = useMutation({
     mutationFn: async () => await fetchAuth.otherAuth(googleUser.current[0]),
     onSuccess: (data) => {
-      console.log("merebe", data);
       if (data.status === "Success") {
         setAccessToken(data.accessToken);
-        console.log("success");
 
         loginMutationId.current = googleUser.current[0].uid;
         loginMutation.mutate();
+      } else {
+        //Message d'erreur
       }
     },
   });
 
   function setNavigateCallback(callback, id) {
-    console.log("id", id);
     loginMutationId.current = id;
     loginMutation.mutate();
     callback(navigateTo);
@@ -116,8 +142,8 @@ export function UserContextProvider(props) {
     logoutMutation.mutate();
   }
 
-  async function refresh() {
-    enableRefreshQuery.current = true;
+  function refresh() {
+    refreshMutation.mutate();
   }
 
   function selectRole(userRole) {
@@ -161,7 +187,7 @@ export function UserContextProvider(props) {
       // Handle Errors here.
       const errorCode = error.code;
       const errorMessage = error.message;
-      console.log("erreur", errorCode, errorMessage);
+      //Message d'erreur
     }
   }
 
@@ -177,15 +203,9 @@ export function UserContextProvider(props) {
   }, []);
 
   useEffect(() => {
-    //Check if there is a JWT Token, if not automatically logout user from Firebase
-    if (accessToken) {
-      console.log("token", jwtDecode(accessToken));
-      setUserObject(jwtDecode(accessToken));
+    if (!accessToken) {
+      refresh();
     }
-  }, [accessToken]);
-
-  useEffect(() => {
-    !accessToken && refresh();
   }, []);
 
   return (
@@ -216,12 +236,18 @@ export function UserContextProvider(props) {
         navigateTo,
         setNavigateCallback,
         auth,
+        qrCodeCall,
+        qrCodeMutation,
+        message,
+        staffAuthObject,
       }}
     >
-      {!loadingData && !refreshQuery.isLoading ? (
+      {!loadingData && !isFetching ? (
         props.children
       ) : (
-        <Spinner animation="border" />
+        <div className="centered-div">
+          <Spinner animation="border" />
+        </div>
       )}
     </UserContext.Provider>
   );
@@ -254,6 +280,10 @@ export function useUserContext() {
     navigateTo,
     setNavigateCallback,
     auth,
+    qrCodeCall,
+    qrCodeMutation,
+    message,
+    staffAuthObject,
   } = useContext(UserContext);
 
   return {
@@ -282,5 +312,9 @@ export function useUserContext() {
     navigateTo,
     setNavigateCallback,
     auth,
+    qrCodeCall,
+    qrCodeMutation,
+    message,
+    staffAuthObject,
   };
 }

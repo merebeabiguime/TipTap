@@ -38,10 +38,10 @@ function SelectStaffRole() {
       if (addStaffResponse.status === "Success") {
         navigate("/privateManager/private-home-manager");
       } else {
-        console.log(addStaffResponse.response);
+        //Message d'erreur
       }
     } catch (err) {
-      console.log(err);
+      //Message d'erreur
     }
   }
 

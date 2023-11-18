@@ -14,7 +14,10 @@ export function useFetchStaff() {
   };
 
   const addStaff = async (jsonData) => {
-    const response = await axios.post("http://localhost:8081/staff/addStaff");
+    const response = await axios.post(
+      "http://localhost:8081/staff/addStaff",
+      jsonData
+    );
     return response.data;
   };
 

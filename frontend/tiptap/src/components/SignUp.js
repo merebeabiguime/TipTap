@@ -8,7 +8,7 @@ import "../style.css";
 
 import { useEffect, useRef, useState } from "react";
 import { Button, Container, Form, InputGroup, Stack } from "react-bootstrap";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../contexts/AuthContext";
 import PreviousPageButton from "../features/PreviousPageButton";
@@ -25,9 +25,8 @@ function SignUp() {
   const jsonData = useRef([]);
   const formRef = useRef();
 
-  const userQuery = useQuery({
-    queryKey: ["addUser"],
-    queryFn: async () => await fetchAuth.register(jsonData),
+  const signUpWithMysqlMutation = useMutation({
+    mutationFn: async () => await fetchAuth.register(jsonData),
     onSuccess: (data) => {
       if (data.status === "Success") {
         navigate("/signIn");
@@ -68,13 +67,13 @@ function SignUp() {
       });
 
       //Enabling userQuery
-      addUserEnabled.current = true;
+      signUpWithMysqlMutation.mutate();
     } catch (err) {
       if (err.code === "auth/invalid/email") {
-        setValidation("Email format invalid");
+        setValidation("Format de l'email invalide.");
       }
       if (err.code === "auth/email-already-in-use") {
-        setValidation("Email already used");
+        setValidation("Adresse email déjà utilisée");
       }
     }
   }
@@ -85,10 +84,12 @@ function SignUp() {
     if (
       (inputs.current[4].value.length || inputs.current[5].value.length) < 6
     ) {
-      setValidation("6 characters min");
+      setValidation(
+        "Votre mot de passe doit contenir 6 caractères au minimum."
+      );
       return;
     } else if (inputs.current[4].value != inputs.current[5].value) {
-      setValidation("Passwords dont match");
+      setValidation("Veuillez entrer des mots de passe qui correspondent.");
       return;
     }
 
@@ -105,10 +106,10 @@ function SignUp() {
       <Stack>
         <PreviousPageButton />
         <div className="" style={{ marginRight: "38px", marginLeft: "38px" }}>
-          <h1 className="h1-mt-33">Create Account</h1>
+          <h1 className="h1-mt-33">Créer un compte</h1>
           <p className="p-mt-15">
-            Join the community with just a few taps. Enter the following
-            information {userRole}
+            Rejoignez la communauté en quelques clics seulement. Entrez les
+            informations suivante
           </p>
         </div>
         <UploadingImage />
@@ -174,7 +175,7 @@ function SignUp() {
               type="submit"
               className="customButton1"
             >
-              Sign Up
+              S'inscrire
             </Button>
           </Form>
         </div>

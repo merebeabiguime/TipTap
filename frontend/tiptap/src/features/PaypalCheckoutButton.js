@@ -26,7 +26,7 @@ const PaypalCheckoutButton = (props) => {
 
   if (error) {
     //Display error message
-    alert("Erorr");
+    alert("Une erreur s'est produite");
   }
   return (
     <PayPalButtons

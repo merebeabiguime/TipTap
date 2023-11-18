@@ -97,7 +97,8 @@ export default function PrivateHomeWorker() {
               url: window.location.href, // Change this to the appropriate URL
               title: "Scan this QRCODE",
             }}
-            onClick={() => console.log("shared successfully!")}
+            //Messaage d'erreur/succès dans ce cas
+            /*onClick={() => console.log("shared successfully!")}*/
           >
             <Button type="submit" className="customButton2">
               <img src={shareIcon} style={{ marginRight: "24px" }} />

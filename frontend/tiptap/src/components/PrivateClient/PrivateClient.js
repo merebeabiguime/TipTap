@@ -24,8 +24,6 @@ export default function PrivateClient() {
     enableQuery.current = false;
   }
 
-  console.log("rid", restaurantIdValue);
-
   //Check in db if restaurant exists
   const restaurantQuery = useQuery({
     queryKey: ["restaurant"],
@@ -33,13 +31,11 @@ export default function PrivateClient() {
     enabled: enableQuery.current,
     onSuccess: (data) => {
       if (data.status != "Success") {
-        console.log("essomana", data);
         setValidation(data.response);
         setTimeout(() => {
           navigate("/homepage/");
         }, 3000);
       } else {
-        console.log("merebe", data);
         restaurantIdParams.current = restaurantIdValue;
         navigate(
           `/privateClient/restaurantId=${restaurantIdValue}/private-home-client/`

@@ -10,7 +10,7 @@ import logo from "../../../images/logo.PNG";
 import "../../../style.css";
 import QRCode from "react-qr-code";
 import StaffCaroussel from "./StaffCaroussel";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useStaffContext } from "../../../contexts/fetches-contexts/StaffContext";
 import PaypalCheckoutButton from "../../../features/PaypalCheckoutButton";
 
@@ -22,6 +22,7 @@ function PrivateHomeClient() {
     tipComment,
     rating,
     setRating,
+    getAllStaff,
   } = useStaffContext();
   const [selectedPriceTag, setSelectedPriceTag] = useState(0);
   const [enteredAmount, setEnteredAmount] = useState("");
@@ -68,6 +69,10 @@ function PrivateHomeClient() {
   const handleRatingClick = (clickedRating) => {
     setRating(clickedRating);
   };
+
+  useEffect(() => {
+    getAllStaff();
+  }, []);
 
   return (
     <Container className="gx-0 fluid">

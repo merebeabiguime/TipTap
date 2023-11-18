@@ -55,12 +55,10 @@ function Login() {
       setNavigateCallback(navigate, cred.user.uid);
     } catch (err) {
       setValidation("Email or password incorrect");
-      console.error(err);
     }
   };
 
   useEffect(() => {
-    console.log("ca a bougé");
     navigate(navigateTo);
   }, [navigateTo]);
 

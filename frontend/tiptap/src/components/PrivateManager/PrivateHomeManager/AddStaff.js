@@ -41,6 +41,7 @@ function AddStaff() {
 
   const handleForm = async (e) => {
     e.preventDefault();
+    setValidation("");
 
     try {
       //Is the email attached to this accoung one of a worker ?

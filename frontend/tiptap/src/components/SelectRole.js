@@ -67,7 +67,7 @@ function SelectRole() {
               marginLeft: "30px",
               marginRight: "30px",
             }}
-            onClick={() => selectRole(1)}
+            onClick={() => selectRole(2)}
           >
             <Row className="border border-gray customButton4 align-items-center">
               <Col className="col-6  mx-auto text-center">

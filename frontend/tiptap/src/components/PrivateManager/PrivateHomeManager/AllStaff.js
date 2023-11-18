@@ -13,15 +13,22 @@ import Test from "../../../images/testeee.png";
 import SelectRolePopup from "./SelectRolePopup";
 import { useStaffContext } from "../../../contexts/fetches-contexts/StaffContext";
 import { useUserContext } from "../../../contexts/AuthContext";
+import PreviousPageButton from "../../../features/PreviousPageButton";
 
 export default function AllStaff() {
   const { staffListFilter, isPopupVisible, setIsPopupVisible } =
     useStaffContext();
   const { userObject } = useUserContext();
+  const { getAllStaff } = useStaffContext();
+
+  useEffect(() => {
+    getAllStaff();
+  }, []);
 
   return (
     <Container>
       <Stack>
+        <PreviousPageButton />
         <div className="col-12 d-flex justify-content-center align-items-center first-margin  ">
           <h2 className=" ">All Staff</h2>
           <img

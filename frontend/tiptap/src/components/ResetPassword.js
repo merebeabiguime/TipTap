@@ -33,7 +33,7 @@ function ResetPassword() {
     e.preventDefault();
 
     if (inputs.current[0].value != inputs.current[1].value) {
-      setValidation("Passwords dont match");
+      setValidation("Les mots de passe ne correspondent pas");
       return;
     }
 
@@ -57,10 +57,10 @@ function ResetPassword() {
           </div>
         </Col>
         <Col className="d-flex justify-content-center  col-m-200" sm={12}>
-          <h1 className="col-m-25">Reset Password </h1>
+          <h1 className="col-m-25">Réinitialiser son mot de passe </h1>
         </Col>
         <Col className="d-flex justify-content-center  col-m-50" sm={12}>
-          <p>Here you can reset your password</p>
+          <p>Veuillez entrer un nouveau mot de passe</p>
         </Col>
         <Col className=" d-flex justify-content-center" sm={12}>
           <Form onSubmit={handleForm} ref={formRef}>
@@ -69,7 +69,7 @@ function ResetPassword() {
               <Form.Control
                 ref={addInput}
                 type="password"
-                placeholder="Password"
+                placeholder="Mot de passe"
                 className="customForm"
               />
             </InputGroup>
@@ -78,7 +78,7 @@ function ResetPassword() {
               <Form.Control
                 ref={addInput}
                 type="password"
-                placeholder="Confirm Password"
+                placeholder="Confirmer le Mot de passe"
                 className="customForm"
               />
             </InputGroup>
@@ -86,7 +86,7 @@ function ResetPassword() {
 
             <Col className="d-flex justify-content-center  col-m-25" sm={12}>
               <Button type="submit" className="customButton1">
-                Reset Password
+                Réinitialiser le mot de passe
               </Button>
             </Col>
           </Form>
