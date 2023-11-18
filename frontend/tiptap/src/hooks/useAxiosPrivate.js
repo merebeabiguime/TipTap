@@ -9,12 +9,10 @@ const axiosPrivate = axios.create({
 
 const useAxiosPrivate = () => {
   const { accessToken, refresh } = useUserContext();
-  console.log("dans axios private", accessToken);
 
   axiosPrivate.interceptors.request.use(async (req) => {
     const user = jwtDecode(accessToken);
     const isExpired = dayjs.unix(user.exp).diff(dayjs()) < 1;
-    console.log("isExpired", isExpired);
 
     if (!isExpired) return req;
 

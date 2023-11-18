@@ -437,7 +437,7 @@ h6 {
   font-size: 14px;
   margin-left: 15px;
 }
-.price-button:focus {
+.price-button_focus {
   font-family: "Satoshi Variable", sans-serif !important;
   border: solid 2px !important;
   border-color: rgba(184, 139, 3, 0.75) !important;

@@ -5,7 +5,7 @@ export function useFetchQRCode() {
   const { accessToken } = useUserContext();
 
   const getUser = async (id) => {
-    const response = await myAxios.get(`http://localhost:8081/qrcode/${id}`, {
+    const response = await myAxios.get(`/qrcode/${id}`, {
       headers: { Authorization: "Bearer " + accessToken },
     });
 

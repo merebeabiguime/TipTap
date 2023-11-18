@@ -18,7 +18,6 @@ export default function WorkerQrCode() {
   const [validation, setValidation] = useState("");
   let { userId } = useParams();
   const userIdValue = userId.split("=")[1];
-  console.log(userIdValue);
   const enableQuery = useRef(true);
 
   useEffect(() => {
@@ -26,7 +25,6 @@ export default function WorkerQrCode() {
   }, []);
 
   useEffect(() => {
-    console.log(staffAuthObject.current);
     if (navigateTo !== "") {
       staffObject.current = {
         firstName: staffAuthObject.current.firstName,

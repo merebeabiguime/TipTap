@@ -1,25 +1,42 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Button, Container, Stack } from "react-bootstrap";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import { getAllStaff } from "../../../fetches/FetchStaff";
-import { getUser } from "../../../fetches/FetchUsers";
+import { useUserContext } from "../../../contexts/AuthContext";
+import { useStaffContext } from "../../../contexts/fetches-contexts/StaffContext";
+import PreviousPageButton from "../../../features/PreviousPageButton";
 import DeleteButton from "../../../images/delete_staff_button.png";
 import EditButton from "../../../images/edit_staff_button.png";
 import Filter from "../../../images/filter_icon.png";
 import NoStar from "../../../images/no_star_icon.png";
 import Stars from "../../../images/stars.png";
-import Test from "../../../images/testeee.png";
 import SelectRolePopup from "../../../features/SelectRolePopup";
-import { useStaffContext } from "../../../contexts/fetches-contexts/StaffContext";
-import { useUserContext } from "../../../contexts/AuthContext";
-import PreviousPageButton from "../../../features/PreviousPageButton";
+import { Link, useNavigate } from "react-router-dom";
 
-export default function AllStaff() {
-  const { staffListFilter, isPopupVisible, setIsPopupVisible } =
-    useStaffContext();
+export default function SelectStaff() {
+  const {
+    staffListFilter,
+    isPopupVisible,
+    setIsPopupVisible,
+    setSelectedStaffTip,
+    selectedStaffTip,
+    setStaffListFilter,
+    staffList,
+  } = useStaffContext();
   const { userObject } = useUserContext();
   const { getAllStaff } = useStaffContext();
+  const navigate = useNavigate();
+
+  console.log(selectedStaffTip);
+
+  function handleSelectStaff(staff) {
+    if (selectedStaffTip != null) {
+      setStaffListFilter(staffList);
+      setSelectedStaffTip(null);
+    }
+    setSelectedStaffTip(staff);
+    setStaffListFilter(staffList.filter((stafff) => stafff.ID === staff.ID));
+  }
 
   useEffect(() => {
     getAllStaff();
@@ -29,13 +46,12 @@ export default function AllStaff() {
     <Container>
       <Stack>
         <PreviousPageButton />
-        <div className="col-12 d-flex justify-content-center align-items-center first-margin  ">
-          <h2 className=" ">All Staff</h2>
-          <img
-            className=" profile-picure"
-            src={userObject.pictureUrl}
-            style={{ position: "absolute", right: "15px" }}
-          />
+
+        <div className="" style={{ marginRight: "38px", marginLeft: "38px" }}>
+          <h1 className="h1-mt-33">Etape 1 : Choix de l'employé</h1>
+          <p className="p-mt-15">
+            Veuillez choisir l'employé auquel vous voulez donner un pourboire
+          </p>
         </div>
 
         <div className="d-flex justify-content-end mt-2">
@@ -49,7 +65,11 @@ export default function AllStaff() {
         </div>
         <div className="">
           {staffListFilter.map((staff, index) => (
-            <Row key={index} className="d-flex justify-content-center mx-auto ">
+            <Row
+              key={index}
+              className="d-flex justify-content-center mx-auto "
+              onClick={() => handleSelectStaff(staff)}
+            >
               <Col className="col-3  d-flex align-items-center">
                 <img
                   src={staff.pictureUrl}
@@ -116,14 +136,27 @@ export default function AllStaff() {
                       })()}
                     </Col>
                   </Col>
-                  <Col className="col-2">
-                    <img src={DeleteButton} alt="logo" className="" />
-                    <img src={EditButton} alt="logo" className="" />
-                  </Col>
                 </Row>
               </Col>
             </Row>
           ))}
+        </div>
+        <div className="d-flex justify-content-center col-m-25 col-button ">
+          <Button
+            style={{ marginLeft: "35px", marginRight: "35px" }}
+            className="customButton1"
+            disabled={selectedStaffTip == null ? true : false}
+            onClick={() => {
+              const currentUrl = window.location.pathname; // Get the current URL
+              const newUrl = currentUrl.replace(
+                "/select-staff",
+                "/private-home-client/"
+              ); // Replace "select-staff" with "test"
+              navigate(newUrl);
+            }}
+          >
+            Suivant
+          </Button>
         </div>
         <SelectRolePopup />
       </Stack>

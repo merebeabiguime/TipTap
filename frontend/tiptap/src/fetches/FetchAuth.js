@@ -1,32 +1,25 @@
 import axios from "axios";
+import { myAxios } from "../axios/axios";
 
 export function useFetchAuth() {
   const login = async (UID) => {
-    const response = await axios.post("http://localhost:8081/auth/login", [
-      { UID: UID },
-    ]);
+    const response = await myAxios.post("/auth/login", [{ UID: UID }]);
     return response.data;
   };
 
   const otherAuth = async (userObject) => {
-    const response = await axios.post(
-      "http://localhost:8081/auth/other",
-      userObject
-    );
+    const response = await myAxios.post("/auth/other", userObject);
     return response.data;
   };
 
   const register = async (jsonData) => {
-    const response = await axios.post(
-      "http://localhost:8081/auth/register",
-      jsonData
-    );
+    const response = await myAxios.post("/auth/register", jsonData);
 
     return response.data;
   };
 
   const logout = async () => {
-    const response = await axios.delete("http://localhost:8081/logout/", {
+    const response = await myAxios.delete("/logout/", {
       withCredentials: true,
     });
 

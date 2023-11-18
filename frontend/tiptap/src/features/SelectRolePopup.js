@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
-import { useStaffContext } from "../../../contexts/fetches-contexts/StaffContext";
+import { useStaffContext } from "../contexts/fetches-contexts/StaffContext";
 
 export default function SelectRolePopup() {
   const { setStaffListFilter, staffList, isPopupVisible, setIsPopupVisible } =

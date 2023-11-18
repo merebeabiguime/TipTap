@@ -19,14 +19,18 @@ router.get("/:id", async (req, res) => {
     if (emailResponse === 0)
       return res.send({
         status: "Error",
-        response: "Veuillez fournir une adresse email valide d'employé.",
+        response: "Veuillez fournir une adresse email valide d'un employé",
       });
     if (emailResponse === 2)
       return res.send({ status: "Error", response: "Staff déjà existant" });
 
-    res.send({ status: "Success", response: "Success" });
+    return res.send({ status: "Success", response: getUserResponse });
   } catch (err) {
-    res.send({ status: "Error", response: "Une erreur s'est produite" });
+    return res.send({
+      status: "Error",
+      response: "Une erreur s'est produite",
+      code: 404,
+    });
   }
 });
 

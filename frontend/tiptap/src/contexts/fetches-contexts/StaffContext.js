@@ -18,12 +18,13 @@ export function StaffContextProvider(props) {
   const restaurantIdParams = useRef(null);
   const fetchStaff = useFetchStaff();
   const staffQuery = useRef(true);
+  const [selectedStaffTip, setSelectedStaffTip] = useState(null);
 
   const allStaffMutation = useMutation({
     mutationFn: async () => await fetchStaff.getStaffList(),
     staleTime: 60 * 1000 * 15,
     onSuccess: (data) => {
-      console.log("data.reponse", data.response);
+      console.log(data.response);
       setStaffList(data.response);
       setStaffListFilter(data.response);
     },
@@ -53,6 +54,8 @@ export function StaffContextProvider(props) {
         setRating,
         restaurantIdParams,
         getAllStaff,
+        selectedStaffTip,
+        setSelectedStaffTip,
       }}
     >
       {props.children}
@@ -80,6 +83,8 @@ export function useStaffContext() {
     setRating,
     restaurantIdParams,
     getAllStaff,
+    selectedStaffTip,
+    setSelectedStaffTip,
   } = useContext(StaffContext);
 
   return {
@@ -101,5 +106,7 @@ export function useStaffContext() {
     setRating,
     restaurantIdParams,
     getAllStaff,
+    selectedStaffTip,
+    setSelectedStaffTip,
   };
 }

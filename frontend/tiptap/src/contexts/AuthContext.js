@@ -52,12 +52,9 @@ export function UserContextProvider(props) {
 
   const qrCodeMutation = useMutation({
     mutationFn: async () =>
-      await myAxios.get(
-        `http://localhost:8081/qrcode/${userIdValueQR.current}`,
-        {
-          headers: { Authorization: "Bearer " + accessToken },
-        }
-      ),
+      await myAxios.get(`/qrcode/${userIdValueQR.current}`, {
+        headers: { Authorization: "Bearer " + accessToken },
+      }),
     onSuccess: (data) => {
       if (data.data.status == "Success") {
         //ADD COOLDOWN BEFOFRE GOING TO NEXT PAGE
@@ -86,7 +83,7 @@ export function UserContextProvider(props) {
 
   const refreshMutation = useMutation({
     mutationFn: async () =>
-      await myAxios.get("http://localhost:8081/refresh", {
+      await myAxios.get("/refresh", {
         withCredentials: true,
       }),
     enabled: enableRefreshQuery.current,

@@ -7,12 +7,10 @@ export default function PrivateWorker() {
 
   useEffect(() => {
     if (!accessToken && !currentUser) {
-      console.log("a");
       setMyreturn(<Navigate to="/signIn"></Navigate>);
     } else if (!currentUser && accessToken) {
       //If Firebase Token has expired logout from mysql token
       signOutMy();
-      console.log("dans le premier");
       setMyreturn(<Navigate to="/signIn"></Navigate>);
     }
   }, [accessToken, currentUser]);

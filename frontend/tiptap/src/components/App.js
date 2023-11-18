@@ -19,6 +19,7 @@ import WorkerQrCode from "./PrivateManager/PrivateHomeManager/WorkerQrCode";
 import PrivateClient from "./PrivateClient/PrivateClient";
 import SuccessPayment from "./PrivateClient/PrivateHomeClient/SuccessPayment";
 import VerifyUser from "./VerifyUser";
+import SelectStaff from "./PrivateClient/PrivateHomeClient/SelectStaff";
 
 function App() {
   return (
@@ -79,6 +80,10 @@ function App() {
             </>
           }
         >
+          <Route
+            path="/privateClient/:restaurantId/select-staff"
+            element={<SelectStaff />}
+          />
           <Route
             path="/privateClient/:restaurantId/private-home-client"
             element={<PrivateHomeClient />}

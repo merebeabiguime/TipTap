@@ -206,6 +206,7 @@ export async function getStaffList() {
         staffList.push({
           role: roleMap[allStaff[i].role] || "Unknown",
           stars: allStaff[i].stars,
+          ID: users[0].ID,
           firstName: users[0].firstName,
           lastName: users[0].lastName,
           pictureUrl: users[0].pictureUrl,

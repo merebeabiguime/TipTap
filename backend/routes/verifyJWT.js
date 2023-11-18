@@ -9,7 +9,7 @@ const verifyJWT = (req, res, next) => {
       return res.send({
         status: "Error",
         response: "Une erreur s'est produite",
-        code: 403,
+        code: 404,
       });
     const token = authHeader.split(" ")[1];
     jsonwebtoken.verify(
@@ -20,6 +20,7 @@ const verifyJWT = (req, res, next) => {
           return res.send({
             status: "Error",
             response: "Une erreur s'est produite",
+            code: 404,
           });
         req.user = decoded;
         next();
@@ -29,6 +30,7 @@ const verifyJWT = (req, res, next) => {
     return res.send({
       status: "Error",
       response: "Une erreur s'est produite",
+      code: 404,
     });
   }
 };

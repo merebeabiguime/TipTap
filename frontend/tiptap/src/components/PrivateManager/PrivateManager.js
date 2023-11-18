@@ -7,17 +7,13 @@ export default function PrivateManager() {
 
   useEffect(() => {
     if (!accessToken && !currentUser) {
-      console.log("a");
       setMyreturn(<Navigate to="/signIn"></Navigate>);
     } else if (!currentUser && accessToken) {
       //If Firebase Token has expired logout from mysql token
       signOutMy();
-      console.log("dans le premier");
       setMyreturn(<Navigate to="/signIn"></Navigate>);
     }
   }, [accessToken, currentUser]);
-
-  console.log("dans private manager", accessToken);
 
   if (userObject.verified === 0) {
     return <Navigate to="/verifyUser"></Navigate>;

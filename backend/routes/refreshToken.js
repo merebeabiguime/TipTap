@@ -8,7 +8,6 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   try {
     const cookies = req.cookies;
-    console.log(cookies);
 
     if (!cookies?.jsonwebtoken)
       return res.send({
@@ -53,6 +52,10 @@ router.get("/", async (req, res) => {
             lastName: userFound[0].lastName,
             pictureUrl: userFound[0].pictureUrl,
             role: userFound[0].role,
+            ID: userFound[0].ID,
+            verified: userFound[0].verified,
+            UID: userFound[0].UID,
+            phone: userFound[0].phone,
           },
           process.env.ACCESS_TOKEN_SECRET,
           { expiresIn: "900s" }
@@ -67,6 +70,7 @@ router.get("/", async (req, res) => {
     res.send({
       status: "Error",
       response: "Une erreur s'est produite",
+      code: 404,
     });
   }
 });

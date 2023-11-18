@@ -13,7 +13,7 @@ router.delete("/", async (req, res) => {
     if (!cookies?.jsonwebtoken)
       return res.send({
         status: "Success",
-        response: "Déconnecté",
+        response: "Déconnection réussie",
       });
 
     const refreshToken = cookies.jsonwebtoken;
@@ -30,7 +30,7 @@ router.delete("/", async (req, res) => {
       });
       return res.send({
         status: "Success",
-        response: "Déconnecté",
+        response: "Déconnection réussie",
       });
     }
 
@@ -39,6 +39,7 @@ router.delete("/", async (req, res) => {
       return res.send({
         status: "Error",
         response: "Une erreur s'est produite",
+        code: 404,
       });
     res.clearCookie("jwt", {
       httpOnly: true,
@@ -47,7 +48,7 @@ router.delete("/", async (req, res) => {
     });
     return res.send({
       status: "Success",
-      response: "Déconnecté",
+      response: "Déconnection réussie",
     });
   } catch (err) {
     res.sendStatus(404);
