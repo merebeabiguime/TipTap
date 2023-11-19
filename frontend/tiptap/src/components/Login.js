@@ -24,10 +24,11 @@ function Login() {
     signIn,
     setAccessToken,
     googleQuery,
-    signInWithGoogle,
+    signInWith,
     loginMutation,
     loginMutationId,
     navigateTo,
+    setNavigateCallback,
   } = useUserContext();
   const inputs = useRef([]);
   const [validation, setValidation] = useState("");
@@ -51,16 +52,13 @@ function Login() {
         inputs.current[0].value,
         inputs.current[1].value
       );
-      setCredentials(cred);
-      loginMutation.current = credentials.user.uid;
-      loginMutation.mutate();
+      setNavigateCallback(navigate, cred.user.uid);
     } catch (err) {
       setValidation("Email or password incorrect");
     }
   };
 
   useEffect(() => {
-    console.log("ca a bougé");
     navigate(navigateTo);
   }, [navigateTo]);
 
@@ -124,13 +122,21 @@ function Login() {
         </div>
         <div className="d-flex justify-content-center mt-4">
           <div>
-            <img src={facebook} alt="facebook" />
+            <img
+              onClick={() => signInWith("facebook")}
+              src={facebook}
+              alt="facebook"
+            />
           </div>
           <div>
-            <img onClick={() => signInWithGoogle()} src={google} alt="google" />
+            <img
+              onClick={() => signInWith("google")}
+              src={google}
+              alt="google"
+            />
           </div>
           <div>
-            <img src={apple} alt="apple" />
+            <img onClick={() => signInWith("apple")} src={apple} alt="apple" />
           </div>
         </div>
         <div className="mt-4">

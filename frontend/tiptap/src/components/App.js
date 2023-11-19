@@ -18,6 +18,8 @@ import { StaffContextProvider } from "../contexts/fetches-contexts/StaffContext"
 import WorkerQrCode from "./PrivateManager/PrivateHomeManager/WorkerQrCode";
 import PrivateClient from "./PrivateClient/PrivateClient";
 import SuccessPayment from "./PrivateClient/PrivateHomeClient/SuccessPayment";
+import VerifyUser from "./VerifyUser";
+import SelectStaff from "./PrivateClient/PrivateHomeClient/SelectStaff";
 
 function App() {
   return (
@@ -29,6 +31,7 @@ function App() {
         <Route path="/signIn" Component={Login}></Route>
         <Route path="/forgotpassword" Component={ForgotPassword}></Route>
         <Route path="/resetpassword" Component={ResetPassword}></Route>
+        <Route path="/verifyUser" Component={VerifyUser}></Route>
         <Route
           path="/privateManager"
           element={
@@ -77,6 +80,10 @@ function App() {
             </>
           }
         >
+          <Route
+            path="/privateClient/:restaurantId/select-staff"
+            element={<SelectStaff />}
+          />
           <Route
             path="/privateClient/:restaurantId/private-home-client"
             element={<PrivateHomeClient />}

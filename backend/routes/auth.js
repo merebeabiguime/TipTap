@@ -28,6 +28,8 @@ router.post("/other", async (req, res) => {
         pictureUrl: userObject.photoURL,
         ID_restaurant: 0,
         UID: userObject.uid,
+        verified: userObject.verified,
+        phone: userObject.phone,
       };
 
       const signInUser = await db.addUser([userToSignup]);
@@ -35,30 +37,28 @@ router.post("/other", async (req, res) => {
       if (signInUser === 0) {
         return res.send({
           status: "Error",
-          response: "Unable to add the user.",
+          response: "Impossible d'ajouter l'utilisateur.",
         });
       }
     }
     res.send({
       status: "Success",
-      response: "Google auth successfull",
+      response: "Connection réussie",
     });
   } catch (err) {
     res.send({
       status: "Error",
-      response: "An error occurred during Google authentication.",
+      response: "Une erreur s'est produite.",
     });
   }
 });
 
 router.post("/login", async (req, res) => {
   try {
-    console.log("req.body", req.body);
     const UID = req.body[0].UID;
     const userFound = await db.getUserFromUID(UID);
     if (userFound === 0)
       return res.send({ status: "Error", response: "Utilisateur Introuvable" });
-    console.log("aaa");
     //Creat JWT
     const accessToken = jsonwebtoken.sign(
       {
@@ -67,6 +67,9 @@ router.post("/login", async (req, res) => {
         pictureUrl: userFound[0].pictureUrl,
         role: userFound[0].role,
         ID: userFound[0].ID,
+        verified: userFound[0].verified,
+        UID: userFound[0].UID,
+        phone: userFound[0].phone,
       },
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: "900s" }
@@ -78,6 +81,10 @@ router.post("/login", async (req, res) => {
         lastName: userFound[0].lastName,
         pictureUrl: userFound[0].pictureUrl,
         role: userFound[0].role,
+        ID: userFound[0].ID,
+        verified: userFound[0].verified,
+        UID: userFound[0].UID,
+        phone: userFound[0].phone,
       },
       process.env.REFRESH_TOKEN_SECRET,
       { expiresIn: "1d" }
@@ -122,7 +129,7 @@ router.post("/login", async (req, res) => {
 
 router.post("/register", async (req, res) => {
   try {
-    const userObject = req.body;
+    const userObject = req.body.current;
     const result = await db.addUser(userObject);
     if (result == 0) {
       res.send({
@@ -133,7 +140,11 @@ router.post("/register", async (req, res) => {
       res.send({ status: "Success", response: result });
     }
   } catch (err) {
-    res.send({ status: "Error", response: "Une erreur s'est produite" });
+    res.send({
+      status: "Error",
+      response: "Une erreur s'est produite",
+      code: 404,
+    });
   }
 });
 

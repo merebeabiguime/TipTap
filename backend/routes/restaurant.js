@@ -7,7 +7,6 @@ const router = express.Router();
 router.get("/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    console.log("rid", id);
     const result = await db.getRestaurant(id);
 
     if (result === 0)
@@ -18,7 +17,11 @@ router.get("/:id", async (req, res) => {
 
     res.send({ status: "Success", response: result });
   } catch (error) {
-    res.send({ status: "Error", response: "Une erreur s'est produite" });
+    res.send({
+      status: "Error",
+      response: "Une erreur s'est produite",
+      code: 404,
+    });
   }
 });
 export default router;

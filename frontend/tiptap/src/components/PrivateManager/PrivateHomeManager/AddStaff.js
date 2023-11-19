@@ -4,10 +4,12 @@ import vector3 from "../../../images/Vector 3.png";
 import vector4 from "../../../images/Vector 4.png";
 import UserIcon from "../../../images/signup_user_icon.png";
 import MailIcon from "../../../images/signup_mail_icon.png";
+import qrCodeScanner from "../../../images/scan_qrcode_icon.png";
 import "../../../style.css";
+import { useZxing } from "react-zxing";
 
 import axios from "axios";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button, Container, Form, InputGroup, Stack } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../../../contexts/AuthContext";
@@ -20,6 +22,16 @@ function AddStaff() {
   const [validation, setValidation] = useState("");
   const navigate = useNavigate();
   const fetchStaff = useFetchStaff();
+  const [showVideo, setShowVideo] = useState(false);
+  const handleQRCodeScannerClick = () => {
+    setShowVideo(true);
+  };
+  const { ref } = useZxing({
+    onDecodeResult(result) {
+      window.location.href = result;
+    },
+    paused: !showVideo,
+  });
 
   const addInput = (el) => {
     inputs.current = el;
@@ -29,6 +41,7 @@ function AddStaff() {
 
   const handleForm = async (e) => {
     e.preventDefault();
+    setValidation("");
 
     try {
       //Is the email attached to this accoung one of a worker ?
@@ -69,7 +82,7 @@ function AddStaff() {
             waiter
           </p>
         </div>
-        <Col className=" d-flex justify-content-center form-mt-89">
+        <div className=" d-flex justify-content-center form-mt-89">
           <Form onSubmit={handleForm} ref={formRef}>
             <InputGroup>
               <img className="iconForm" src={MailIcon} alt="User" />
@@ -89,7 +102,24 @@ function AddStaff() {
               </Button>
             </Col>
           </Form>
-        </Col>
+        </div>
+        <div className="mx-auto mt-4 mb-4">
+          <h1>--OR--</h1>
+        </div>
+        <div
+          className="mx-auto qrCodeScanner"
+          onClick={handleQRCodeScannerClick}
+        >
+          <img src={qrCodeScanner} />
+        </div>
+        {showVideo && (
+          <div>
+            <video
+              ref={ref}
+              style={{ width: "100%", height: "100%", padding: "50px" }}
+            />
+          </div>
+        )}
       </Stack>
     </Container>
   );

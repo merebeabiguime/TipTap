@@ -1,7 +1,7 @@
 import React, { useContext, useState, createContext, useRef } from "react";
 import { useFetchStaff } from "../../fetches/FetchStaff";
 import { getUser } from "../../fetches/FetchUsers";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { Spinner } from "react-bootstrap";
 
 export const StaffContext = createContext();
@@ -18,19 +18,21 @@ export function StaffContextProvider(props) {
   const restaurantIdParams = useRef(null);
   const fetchStaff = useFetchStaff();
   const staffQuery = useRef(true);
+  const [selectedStaffTip, setSelectedStaffTip] = useState(null);
 
-  const { isLoading } = useQuery({
-    queryKey: ["staff"],
-    queryFn: async () => await fetchStaff.getStaffList(),
-    enabled: staffQuery.current,
+  const allStaffMutation = useMutation({
+    mutationFn: async () => await fetchStaff.getStaffList(),
     staleTime: 60 * 1000 * 15,
     onSuccess: (data) => {
-      console.log("Staff COntext : ", data.response);
+      console.log(data.response);
       setStaffList(data.response);
       setStaffListFilter(data.response);
-      staffQuery.current = false;
     },
   });
+
+  function getAllStaff() {
+    allStaffMutation.mutate();
+  }
 
   return (
     <StaffContext.Provider
@@ -51,9 +53,12 @@ export function StaffContextProvider(props) {
         rating,
         setRating,
         restaurantIdParams,
+        getAllStaff,
+        selectedStaffTip,
+        setSelectedStaffTip,
       }}
     >
-      {!isLoading ? props.children : <Spinner animation="border" />}
+      {props.children}
     </StaffContext.Provider>
   );
 }
@@ -77,6 +82,9 @@ export function useStaffContext() {
     rating,
     setRating,
     restaurantIdParams,
+    getAllStaff,
+    selectedStaffTip,
+    setSelectedStaffTip,
   } = useContext(StaffContext);
 
   return {
@@ -97,5 +105,8 @@ export function useStaffContext() {
     rating,
     setRating,
     restaurantIdParams,
+    getAllStaff,
+    selectedStaffTip,
+    setSelectedStaffTip,
   };
 }

@@ -14,8 +14,6 @@ const useAxiosPrivate = () => {
     const user = jwtDecode(accessToken);
     const isExpired = dayjs.unix(user.exp).diff(dayjs()) < 1;
 
-    console.log("expiration", isExpired);
-
     if (!isExpired) return req;
 
     refresh();

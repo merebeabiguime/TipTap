@@ -10,7 +10,7 @@ import logo from "../../../images/logo.PNG";
 import "../../../style.css";
 import QRCode from "react-qr-code";
 import StaffCaroussel from "./StaffCaroussel";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useStaffContext } from "../../../contexts/fetches-contexts/StaffContext";
 import PaypalCheckoutButton from "../../../features/PaypalCheckoutButton";
 
@@ -22,11 +22,12 @@ function PrivateHomeClient() {
     tipComment,
     rating,
     setRating,
+    getAllStaff,
+    selectedStaffTip,
   } = useStaffContext();
   const [selectedPriceTag, setSelectedPriceTag] = useState(0);
   const [enteredAmount, setEnteredAmount] = useState("");
   const [comment, setComment] = useState("");
-
   const product = {
     description: "TIP to",
     price: tipAmount,
@@ -69,6 +70,10 @@ function PrivateHomeClient() {
     setRating(clickedRating);
   };
 
+  useEffect(() => {
+    getAllStaff();
+  }, []);
+
   return (
     <Container className="gx-0 fluid">
       <Stack>
@@ -99,25 +104,41 @@ function PrivateHomeClient() {
         <div className="mx-auto mb-4">
           <Button
             onClick={() => selectPriceTag("1.25")}
-            className="price-button"
+            className={
+              tipAmount === 0 || selectedPriceTag != "1.25"
+                ? `price-button`
+                : ` price-button_focus `
+            }
           >
             {"$ 1.25"}
           </Button>
           <Button
             onClick={() => selectPriceTag("1.50")}
-            className="price-button"
+            className={
+              tipAmount === 0 || selectedPriceTag != "1.50"
+                ? `price-button`
+                : ` price-button_focus `
+            }
           >
             {"$ 1.50"}
           </Button>
           <Button
             onClick={() => selectPriceTag("1.75")}
-            className="price-button"
+            className={
+              tipAmount === 0 || selectedPriceTag != "1.75"
+                ? `price-button`
+                : ` price-button_focus `
+            }
           >
             {"$ 1.75"}
           </Button>
           <Button
             onClick={() => selectPriceTag("2.00")}
-            className="price-button"
+            className={
+              tipAmount === 0 || selectedPriceTag != "2.00"
+                ? `price-button`
+                : ` price-button_focus `
+            }
           >
             {"$ 2.00"}
           </Button>

@@ -11,9 +11,7 @@ router.get("/", async (req, res) => {
     result != 0
       ? res.send(result)
       : res.send("Impossible de charger les utilisateurs");
-  } catch (err) {
-    console.log(err);
-  }
+  } catch (err) {}
 });
 
 /***************************************** GET SPECIFIC ***************************************************** */
@@ -29,7 +27,11 @@ router.get("/:id", async (req, res) => {
       res.send({ status: "Success", response: result });
     }
   } catch (err) {
-    res.send({ status: "Error", response: "Une erreur s'est produite" });
+    res.send({
+      status: "Error",
+      response: "Une erreur s'est produite",
+      code: 404,
+    });
   }
 });
 
@@ -43,7 +45,11 @@ router.get("/id/:id", async (req, res) => {
       res.send({ status: "Success", response: result });
     }
   } catch (err) {
-    res.send({ status: "Error", response: "Une erreur s'est produite" });
+    res.send({
+      status: "Error",
+      response: "Une erreur s'est produite",
+      code: 404,
+    });
   }
 });
 
@@ -60,7 +66,36 @@ router.get("/role/:id", async (req, res) => {
       res.send({ status: "Success", response: result });
     }
   } catch (err) {
-    res.send({ status: "Error", response: "Une erreur s'est produite" });
+    res.send({
+      status: "Error",
+      response: "Une erreur s'est produite",
+      code: 404,
+    });
+  }
+});
+
+router.post("/verify", async (req, res) => {
+  try {
+    const userUID = req.body[0].UID;
+
+    const userVerified = await db.verifyUser(userUID);
+
+    if (userVerified === 0)
+      return res.send({
+        status: "Error",
+        response: "Impossible de vérifié cet utilisateur..",
+      });
+
+    return res.send({
+      status: "Success",
+      response: "L'utilisateur a été vérifié avec succès",
+    });
+  } catch (err) {
+    res.send({
+      status: "Error",
+      response: "Une erreur s'est produtie",
+      code: 404,
+    });
   }
 });
 

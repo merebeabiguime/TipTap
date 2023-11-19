@@ -27,7 +27,7 @@ export async function verifyLogin(email, password) {
 // Ajouter un utilisateur
 export async function addUser(userObject) {
   const [rows] = await pool.query(
-    "INSERT INTO user (firstName, lastName, email, phone, password, role, pictureUrl, ID_restaurant, UID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+    "INSERT INTO user (firstName, lastName, email, phone, password, role, pictureUrl, ID_restaurant, UID,verified) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
     [
       userObject[0].firstName,
       userObject[0].lastName,
@@ -38,6 +38,7 @@ export async function addUser(userObject) {
       userObject[0].pictureUrl,
       userObject[0].ID_restaurant,
       userObject[0].UID,
+      userObject[0].verified,
     ]
   );
 
@@ -46,6 +47,20 @@ export async function addUser(userObject) {
     return 1; // Retournez 1 pour indiquer que l'insertion a réussi
   } else {
     return 0; // Retournez 0 pour indiquer que l'insertion a échoué
+  }
+}
+
+export async function verifyUser(uid) {
+  const [rows] = await pool.query(
+    "UPDATE user SET verified = 1 WHERE UID = ?",
+    [uid]
+  );
+
+  // Vérifiez si la mise à jour a réussi (aucune exception n'a été levée)
+  if (rows.affectedRows === 1) {
+    return 1; // Retournez 1 pour indiquer que la mise à jour a réussi
+  } else {
+    return 0; // Retournez 0 pour indiquer que la mise à jour a échoué
   }
 }
 
@@ -191,6 +206,7 @@ export async function getStaffList() {
         staffList.push({
           role: roleMap[allStaff[i].role] || "Unknown",
           stars: allStaff[i].stars,
+          ID: users[0].ID,
           firstName: users[0].firstName,
           lastName: users[0].lastName,
           pictureUrl: users[0].pictureUrl,

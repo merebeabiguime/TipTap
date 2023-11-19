@@ -38,7 +38,11 @@ router.get("/email/:email", async (req, res) => {
       res.send({ status: "Success", response: result });
     }
   } catch (err) {
-    res.send({ status: "Error", response: "Une erreur s'est produite" });
+    res.send({
+      status: "Error",
+      response: "Une erreur s'est produite",
+      code: 404,
+    });
   }
 });
 
@@ -54,7 +58,11 @@ router.get("/list", async (req, res) => {
       return res.send({ status: "Success", response: result });
     }
   } catch (err) {
-    return res.send({ status: "Error", response: "Une erreur s'est produite" });
+    return res.send({
+      status: "Error",
+      response: "Une erreur s'est produite",
+      code: 404,
+    });
   }
 });
 
@@ -68,10 +76,14 @@ router.post("/addStaff", async (req, res) => {
     if (result === 1) {
       res.send({ status: "Success", response: result });
     } else {
-      res.send({ status: "Error", response: "Impossible d'ajouter le taff'" });
+      res.send({ status: "Error", response: "Impossible d'ajouter le staff'" });
     }
   } catch (err) {
-    res.send({ status: "Error", response: "Une erreur s'est produite" });
+    res.send({
+      status: "Error",
+      response: "Une erreur s'est produite",
+      code: 404,
+    });
   }
 });
 

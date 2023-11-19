@@ -22,7 +22,6 @@ function ForgotPassword() {
     e.preventDefault();
 
     try {
-      console.log("inputt" + email);
       const forgot = await forgotPassword(email);
       setValidation("");
       navigate("/homepage");
