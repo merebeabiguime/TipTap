@@ -105,7 +105,7 @@ router.post("/login", async (req, res) => {
     res.cookie("jsonwebtoken", refreshToken, {
       httpOnly: true,
       sameSite: "none",
-      secure: true,
+      secure: false,
       path: "/",
       maxAge: 60 * 60 * 1000 * 24,
     });

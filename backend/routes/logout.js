@@ -25,8 +25,10 @@ router.delete("/", async (req, res) => {
     if (refreshTokenFound === 0) {
       res.clearCookie("jwt", {
         httpOnly: true,
-        sameSite: "None",
-        secure: true,
+        sameSite: "none",
+        secure: false,
+        path: "/",
+        maxAge: 60 * 60 * 1000 * 24,
       });
       return res.send({
         status: "Success",
@@ -43,8 +45,10 @@ router.delete("/", async (req, res) => {
       });
     res.clearCookie("jwt", {
       httpOnly: true,
-      sameSite: "None",
-      secure: true,
+      sameSite: "none",
+      secure: false,
+      path: "/",
+      maxAge: 60 * 60 * 1000 * 24,
     });
     return res.send({
       status: "Success",
