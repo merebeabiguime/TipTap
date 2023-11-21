@@ -65,7 +65,7 @@ export default function PrivateHomeWorker() {
           <QRCode
             size={256}
             style={{ height: "auto", maxWidth: "50%", width: "50%" }}
-            value={`http://${process.env.AWS_FRONTEND_PUBLIC_IP_ADRESS}:3000/privateManager/private-home-manager/worker-qrcode/userId=${userObject.ID}`}
+            value={`http://35.180.203.65:3000/privateManager/private-home-manager/worker-qrcode/userId=${userObject.ID}`}
             viewBox={`0 0 256 256`}
           />
         </div>
