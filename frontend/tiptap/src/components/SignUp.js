@@ -7,7 +7,14 @@ import UserIcon from "../images/signup_user_icon.png";
 import "../style.css";
 
 import { useEffect, useRef, useState } from "react";
-import { Button, Container, Form, InputGroup, Stack } from "react-bootstrap";
+import {
+  Button,
+  Container,
+  Form,
+  InputGroup,
+  Spinner,
+  Stack,
+} from "react-bootstrap";
 import { useMutation, useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../contexts/AuthContext";
@@ -175,7 +182,11 @@ function SignUp() {
               type="submit"
               className="customButton1"
             >
-              S'inscrire
+              {!signUpWithMysqlMutation.isLoading ? (
+                `Sign up`
+              ) : (
+                <Spinner animation="border" />
+              )}
             </Button>
           </Form>
         </div>

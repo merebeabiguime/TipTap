@@ -119,6 +119,7 @@ export function UserContextProvider(props) {
     mutationFn: async () => await fetchAuth.otherAuth(googleUser.current[0]),
     onSuccess: (data) => {
       if (data.status === "Success") {
+        //Pourquoi setAccess Token avant d'appeler loginMutation ?
         setAccessToken(data.accessToken);
 
         loginMutationId.current = googleUser.current[0].uid;
@@ -237,6 +238,7 @@ export function UserContextProvider(props) {
         qrCodeMutation,
         message,
         staffAuthObject,
+        loginMutation,
       }}
     >
       {!loadingData && !isFetching ? (
@@ -281,6 +283,7 @@ export function useUserContext() {
     qrCodeMutation,
     message,
     staffAuthObject,
+    loginMutation,
   } = useContext(UserContext);
 
   return {
@@ -313,5 +316,6 @@ export function useUserContext() {
     qrCodeMutation,
     message,
     staffAuthObject,
+    loginMutation,
   };
 }
