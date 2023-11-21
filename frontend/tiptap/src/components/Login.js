@@ -11,7 +11,14 @@ import "../style.css";
 import { useQuery } from "react-query";
 
 import { useEffect, useRef, useState } from "react";
-import { Button, Container, Form, InputGroup, Stack } from "react-bootstrap";
+import {
+  Button,
+  Container,
+  Form,
+  InputGroup,
+  Spinner,
+  Stack,
+} from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserContext } from "../contexts/AuthContext";
 import PreviousPageButton from "../features/PreviousPageButton";
@@ -112,7 +119,11 @@ function Login() {
 
             <div className="">
               <Button type="submit" className="customButton1">
-                Sign In
+                {!loginMutation.isLoading ? (
+                  `Sign In`
+                ) : (
+                  <Spinner animation="border" />
+                )}
               </Button>
             </div>
           </Form>
