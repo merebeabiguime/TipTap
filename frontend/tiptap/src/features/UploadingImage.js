@@ -7,12 +7,15 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { useEffect, useState } from "react";
 import { useUserContext } from "../contexts/AuthContext";
 import { storage } from "../firebase";
+import { Spinner } from "react-bootstrap";
 
 export default function UploadingImage() {
   const [file, setFile] = useState("");
-  const { data, setData, setPercentage } = useUserContext();
+  const { data, setData, setPercentage, percentage } = useUserContext();
+  const [loading, setLoading] = useState(false);
 
   const uploadFile = () => {
+    setLoading(true);
     const name = new Date().getTime() + file.name;
     const storageRef = ref(storage, name);
 
@@ -37,6 +40,7 @@ export default function UploadingImage() {
       },
       (error) => {
         //Message d'erreur
+        setLoading(false);
       },
       () => {
         // Handle successful uploads on complete
@@ -44,6 +48,7 @@ export default function UploadingImage() {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setData((prev) => ({ ...prev, img: downloadURL }));
         });
+        setLoading(false);
       }
     );
   };
@@ -60,10 +65,12 @@ export default function UploadingImage() {
         style={{ display: "none" }}
         onChange={(e) => setFile(e.target.files[0])}
       />
-      {data.img ? ( // Vérifiez si une image a été téléchargée
+      {loading ? (
+        <Spinner animation="border" role="status" />
+      ) : data.img ? (
         <img src={data.img} alt="Profile" className="circular-image" />
       ) : (
-        <label htmlFor="file" className="btn ">
+        <label htmlFor="file" className="btn">
           <img src={UploadImage} alt="Upload" className="mr-2" />
         </label>
       )}

@@ -25,8 +25,8 @@ router.delete("/", async (req, res) => {
     if (refreshTokenFound === 0) {
       res.clearCookie("jwt", {
         httpOnly: true,
-        sameSite: "none",
-        secure: false,
+        sameSite: "strict",
+        secure: true,
         path: "/",
         maxAge: 60 * 60 * 1000 * 24,
       });
@@ -43,10 +43,10 @@ router.delete("/", async (req, res) => {
         response: "Une erreur s'est produite",
         code: 404,
       });
-    res.clearCookie("jwt", {
+    res.cookie("jsonwebtoken", refreshToken, {
       httpOnly: true,
-      sameSite: "none",
-      secure: false,
+      sameSite: "strict",
+      secure: true,
       path: "/",
       maxAge: 60 * 60 * 1000 * 24,
     });

@@ -1,7 +1,10 @@
 import axios from "axios";
 axios.defaults.withCredentials = true;
 
-const baseURL = "http://172.31.14.97:8081";
+const baseURL =
+  process.env.NODE_ENV === "production"
+    ? "http://35.180.203.65:8081"
+    : "http://localhost:8081";
 
 //const baseURL = `http://${process.env.AWS_BACKEND_PUBLIC_IP_ADRESS}:8081`;
 

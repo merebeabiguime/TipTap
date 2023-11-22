@@ -16,6 +16,7 @@ import { useUserContext } from "../../../contexts/AuthContext";
 import PreviousPageButton from "../../../features/PreviousPageButton";
 import { isEmailValid, useFetchStaff } from "../../../fetches/FetchStaff";
 import { useStaffContext } from "../../../contexts/fetches-contexts/StaffContext";
+import { QrScanner } from "@yudiel/react-qr-scanner";
 function AddStaff() {
   const { staffObject } = useStaffContext();
   const inputs = useRef("");
@@ -26,12 +27,11 @@ function AddStaff() {
   const handleQRCodeScannerClick = () => {
     setShowVideo(true);
   };
-  const { ref } = useZxing({
-    onDecodeResult(result) {
-      window.location.href = result;
-    },
-    paused: !showVideo,
-  });
+
+  const handleQRScanner = (result) => {
+    window.location.href = result;
+    setShowVideo(false);
+  };
 
   const addInput = (el) => {
     inputs.current = el;
@@ -114,9 +114,9 @@ function AddStaff() {
         </div>
         {showVideo && (
           <div>
-            <video
-              ref={ref}
-              style={{ width: "100%", height: "100%", padding: "50px" }}
+            <QrScanner
+              onDecode={(result) => handleQRScanner(result)}
+              onError={(error) => console.log(error?.message)}
             />
           </div>
         )}
