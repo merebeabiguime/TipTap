@@ -58,7 +58,8 @@ form {
     background-color: #b286046a !important;
   }
 }
-.customButton1:focus {
+.customButton1:focus,
+.customButton1:active {
   background-color: #fbbd04ad !important;
 }
 
@@ -76,7 +77,8 @@ form {
   border: 0 !important;
 }
 
-.popup-button-gray:focus {
+.popup-button-gray:focus,
+.popup-button-gray:active {
   background-color: white !important;
   color: #fbbc04 !important;
   font-family: "Satoshi Variable", sans-serif !important;
@@ -98,7 +100,8 @@ form {
   border-radius: 10px !important;
   box-shadow: 1px 3px 5px 0px rgba(0, 0, 0, 0.5) !important;
 }
-.customButton2:focus {
+.customButton2:focus,
+.customButton2:active {
   background-color: rgba(255, 255, 255, 0.538) !important;
 }
 .customButton4-p {
@@ -127,7 +130,8 @@ form {
   color: black !important;
   box-shadow: 0px 4px 11px 0px rgba(0, 0, 0, 0.25) !important;
 }
-.customButton2:focus {
+.customButton2:focus,
+.customButton2:active {
   background-color: rgba(255, 255, 255, 0.538) !important;
 }
 

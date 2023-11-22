@@ -9,6 +9,7 @@ const router = express.Router();
 router.post("/other", async (req, res) => {
   try {
     const userObject = req.body;
+    console.log(userObject);
 
     const userFound = await db.getUserFromEmail(userObject.email);
 
@@ -18,21 +19,24 @@ router.post("/other", async (req, res) => {
       const firstName = nameParts[0];
       const lastName = nameParts.slice(1).join(" ");
 
-      const userToSignup = {
-        firstName: firstName,
-        lastName: lastName,
-        email: userObject.email,
-        phone: "None",
-        password: "password",
-        role: 1,
-        pictureUrl: userObject.photoURL,
-        ID_restaurant: 0,
-        UID: userObject.uid,
-        verified: userObject.verified,
-        phone: userObject.phone,
-      };
+      const userToSignup = [
+        {
+          firstName: firstName,
+          lastName: lastName,
+          email: userObject.email,
+          phone: "None",
+          password: "password",
+          role: 1,
+          pictureUrl: userObject.photoURL,
+          ID_restaurant: 0,
+          UID: userObject.uid,
+          verified: 1,
+        },
+      ];
 
-      const signInUser = await db.addUser([userToSignup]);
+      const signInUser = await db.addUser(userToSignup);
+
+      console.log("apres signIn");
 
       if (signInUser === 0) {
         return res.send({
@@ -41,6 +45,7 @@ router.post("/other", async (req, res) => {
         });
       }
     }
+    console.log("apres le user found");
     res.send({
       status: "Success",
       response: "Connection réussie",
@@ -104,8 +109,8 @@ router.post("/login", async (req, res) => {
 
     res.cookie("jsonwebtoken", refreshToken, {
       httpOnly: true,
-      sameSite: "none",
-      secure: false,
+      sameSite: "strict",
+      secure: true,
       path: "/",
       maxAge: 60 * 60 * 1000 * 24,
     });

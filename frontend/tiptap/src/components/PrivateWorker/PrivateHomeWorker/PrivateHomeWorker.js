@@ -94,7 +94,7 @@ export default function PrivateHomeWorker() {
           <RWebShare
             data={{
               text: "QRCODE",
-              url: window.location.href, // Change this to the appropriate URL
+              url: "merebe", // Change this to the appropriate URL
               title: "Scan this QRCODE",
             }}
             //Messaage d'erreur/succès dans ce cas
