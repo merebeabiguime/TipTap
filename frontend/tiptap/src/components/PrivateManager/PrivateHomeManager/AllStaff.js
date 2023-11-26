@@ -33,7 +33,7 @@ export default function AllStaff() {
           <h2 className=" ">All Staff</h2>
           <img
             className=" profile-picure"
-            src={userObject.pictureUrl}
+            src={userObject[0].pictureUrl}
             style={{ position: "absolute", right: "15px" }}
           />
         </div>

@@ -10,8 +10,16 @@ import PreviousPageButton from "../features/PreviousPageButton";
 import { useFetchUsers } from "../fetches/FetchUsers";
 
 function VerifyUser() {
-  const { navigateTo, userObject, signOutMy, signOutFirebase, auth } =
-    useUserContext();
+  const {
+    navigateTo,
+    userObject,
+    signOutMy,
+    signOutFirebase,
+    auth,
+    verifyEmail,
+    setCurrentUser,
+    getUserInfos,
+  } = useUserContext();
   const inputs = useRef([]);
   const navigate = useNavigate();
   const fetchUser = useFetchUsers();
@@ -20,6 +28,17 @@ function VerifyUser() {
   const otpCodeExpired = useRef(false);
   const recaptchaVar = useRef(null);
   const [animationActive, setAnimationActive] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
+
+  const handleEmailVerification = async () => {
+    try {
+      const result = await verifyEmail();
+      console.log(result);
+      setEmailSent(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     if (timer === 0) {
@@ -40,7 +59,7 @@ function VerifyUser() {
   };
 
   const verifyUserMutation = useMutation({
-    mutationFn: async () => await fetchUser.verify(userObject.UID),
+    mutationFn: async () => await fetchUser.verify(userObject[0].UID),
     onSuccess: (data) => {
       if (data.status === "Success") {
         signOutFirebase();
@@ -54,7 +73,7 @@ function VerifyUser() {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [realOtp, setRealOtp] = useState(null);
 
-  const phoneNumber = userObject.phone;
+  const phoneNumber = userObject[0].phone;
 
   const sendOtp = async (recaptcha) => {
     try {
@@ -151,7 +170,21 @@ function VerifyUser() {
         <div className="" style={{ marginRight: "38px", marginLeft: "38px" }}>
           <h1 className="h1-mt-33">Verify Account</h1>
           <p className="p-mt-15">
-            Enter the OTP that you received in your email or phone
+            Enter the OTP that you received in phone{" "}
+            {!emailSent ? (
+              <div>
+                <span
+                  style={{ color: "blue" }}
+                  onClick={handleEmailVerification}
+                >
+                  click here
+                </span>{" "}
+                <span>to send email verification</span>
+              </div>
+            ) : (
+              "merebe"
+            )}
+            {" Email verification sent. "}
           </p>
         </div>
         <div className="" style={{ marginRight: "38px", marginLeft: "38px" }}>

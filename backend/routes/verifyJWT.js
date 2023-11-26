@@ -3,6 +3,7 @@ import { config } from "dotenv";
 config();
 
 const verifyJWT = (req, res, next) => {
+  console.log("dednadqsd");
   try {
     const authHeader = req.headers["authorization"];
     if (!authHeader)
