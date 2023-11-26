@@ -35,7 +35,8 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.get("/id/:id", async (req, res) => {
+router.get("/uid/:id", async (req, res) => {
+  console.log("dedans");
   try {
     const id = req.params.id;
     const result = await db.getUser(id);

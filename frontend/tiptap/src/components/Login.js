@@ -1,5 +1,3 @@
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
 import vector3 from "../images/Vector 3.png";
 import vector4 from "../images/Vector 4.png";
 import apple from "../images/signin_with_apple.png";
@@ -8,7 +6,6 @@ import google from "../images/signin_with_google.png";
 import PasswordIcon from "../images/signup_password_icon.png";
 import UserIcon from "../images/signup_user_icon.png";
 import "../style.css";
-import { useQuery } from "react-query";
 
 import { useEffect, useRef, useState } from "react";
 import {
@@ -22,24 +19,20 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { useUserContext } from "../contexts/AuthContext";
 import PreviousPageButton from "../features/PreviousPageButton";
-import { getUserFromUID } from "../fetches/FetchUsers";
 import { useFetchAuth } from "../fetches/FetchAuth";
 
 function Login() {
-  const fetchAuth = useFetchAuth();
   const {
     signIn,
-    setAccessToken,
-    googleQuery,
+
     signInWith,
-    loginMutation,
-    loginMutationId,
-    navigateTo,
-    setNavigateCallback,
+    getUserInfos,
+    userObject,
+    currentUser,
+    setCurrentUser,
   } = useUserContext();
   const inputs = useRef([]);
   const [validation, setValidation] = useState("");
-  const [credentials, setCredentials] = useState(null);
   const navigate = useNavigate();
 
   const addInput = (el) => {
@@ -59,15 +52,21 @@ function Login() {
         inputs.current[0].value,
         inputs.current[1].value
       );
-      setNavigateCallback(navigate, cred.user.uid);
+      setCurrentUser(currentUser);
     } catch (err) {
       setValidation("Email or password incorrect");
     }
   };
 
   useEffect(() => {
-    navigate(navigateTo);
-  }, [navigateTo]);
+    if (currentUser && getUserInfos.isSuccess) {
+      if (getUserInfos.data.response[0].role === 1) {
+        navigate("/privateWorker/private-home-worker");
+      } else if (getUserInfos.data.response[0].role === 2) {
+        navigate("/privateManager/private-home-manager");
+      }
+    }
+  }, [getUserInfos, userObject]);
 
   return (
     <Container className="gx-0 fluid ">
@@ -119,11 +118,7 @@ function Login() {
 
             <div className="">
               <Button type="submit" className="customButton1">
-                {!loginMutation.isLoading ? (
-                  `Sign In`
-                ) : (
-                  <Spinner animation="border" />
-                )}
+                Sign In
               </Button>
             </div>
           </Form>

@@ -7,7 +7,7 @@ import PasswordIcon from "../images/signup_password_icon.png";
 
 import { Button, InputGroup, Form } from "react-bootstrap";
 import { useUserContext } from "../contexts/AuthContext";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 function useQuery() {
@@ -15,6 +15,7 @@ function useQuery() {
 }
 
 function ResetPassword() {
+  const { currentUser } = useUserContext();
   const navigate = useNavigate();
   const { resetPassword } = useUserContext();
   const [validation, setValidation] = useState("");
@@ -29,6 +30,17 @@ function ResetPassword() {
   };
 
   const query = useQuery();
+  const mode = query.get("mode");
+
+  const handleVerifyEmail = async () => {
+    console.log("current", currentUser);
+  };
+  useEffect(() => {
+    if (mode === "verifyEmail") {
+      handleVerifyEmail();
+    }
+  }, []);
+
   const handleForm = async (e) => {
     e.preventDefault();
 

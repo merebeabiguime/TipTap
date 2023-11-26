@@ -20,12 +20,14 @@ import {
   signInWithPopup,
   signOut,
   FacebookAuthProvider,
+  sendEmailVerification,
   RecaptchaVerifier,
 } from "firebase/auth";
 import { auth } from "../firebase.js";
 import { useFetchAuth } from "../fetches/FetchAuth.js";
 import { useIsFetching, useMutation, useQuery } from "react-query";
 import { Spinner } from "react-bootstrap";
+import { useFetchUsers } from "../fetches/FetchUsers.js";
 
 export const UserContext = createContext();
 
@@ -38,17 +40,16 @@ export function UserContextProvider(props) {
   const [data, setData] = useState({});
   const [message, setMessage] = useState("");
   const googleUser = useRef([]);
-  const logoutMy = useRef(false);
-  const enableRefreshQuery = useRef(false);
-  const enableGoogleAuth = useRef(false);
+  const [enableGetUser, setEnableGetUser] = useState(false);
   const fetchAuth = useFetchAuth();
   const googleProvider = new GoogleAuthProvider();
   const facebookProvider = new FacebookAuthProvider();
-  let loginMutationId = useRef(null);
   const [navigateTo, setNavigateTo] = useState("");
   const isFetching = useIsFetching();
   const userIdValueQR = useRef(null);
   const staffAuthObject = useRef({});
+  const fetchUser = useFetchUsers();
+  auth.languageCode = "fr";
 
   const qrCodeMutation = useMutation({
     mutationFn: async () =>
@@ -72,46 +73,31 @@ export function UserContextProvider(props) {
     },
   });
 
-  const logoutMutation = useMutation({
-    mutationFn: async () => await fetchAuth.logout(),
-  });
-
   function qrCodeCall(uId) {
     userIdValueQR.current = uId;
     qrCodeMutation.mutate();
   }
+  const [currentUser, setCurrentUser] = useState();
 
-  const refreshMutation = useMutation({
-    mutationFn: async () =>
-      await myAxios.get("/refresh", {
-        withCredentials: true,
-      }),
-    enabled: enableRefreshQuery.current,
-    onSuccess: (data) => {
-      if (data.data.status === "Success") {
-        //On est connecté redirect vers la response(c'est forcément un worker)
-        setAccessToken(data.data.accessToken);
-        setUserObject(jwtDecode(data.data.accessToken));
-      } else {
-        //On logout de google et on affiche un message d'erreur
-        //Message d'erreur
-        signOutFirebase();
-      }
-      enableRefreshQuery.current = false;
-    },
-  });
+  useEffect(() => {
+    if (currentUser) {
+      setEnableGetUser(true);
+    }
+  }, [currentUser]);
 
-  const loginMutation = useMutation({
-    mutationFn: async () => await fetchAuth.login(loginMutationId.current),
+  const getUserInfos = useQuery({
+    queryFn: async () => await fetchUser.getUser(currentUser.uid),
+    queryKey: "User Infos",
+    enabled: enableGetUser,
     onSuccess: (data) => {
+      console.log("luser", currentUser);
       if (data.status === "Success") {
-        setAccessToken(data.accessToken);
-        setUserObject(jwtDecode(data.accessToken));
-        setNavigateTo(data.response);
+        //Pourquoi setAccess Token avant d'appeler loginMutation ?
+        setUserObject(data.response);
       } else {
         //Message d'erreur
-        setNavigateTo(data.response);
       }
+      setEnableGetUser(false);
     },
   });
 
@@ -121,28 +107,12 @@ export function UserContextProvider(props) {
       if (data.status === "Success") {
         //Pourquoi setAccess Token avant d'appeler loginMutation ?
         setAccessToken(data.accessToken);
-
-        loginMutationId.current = googleUser.current[0].uid;
-        loginMutation.mutate();
+        //LOGIN MUTATION
       } else {
         //Message d'erreur
       }
     },
   });
-
-  function setNavigateCallback(callback, id) {
-    loginMutationId.current = id;
-    loginMutation.mutate();
-    callback(navigateTo);
-  }
-
-  async function signOutMy() {
-    logoutMutation.mutate();
-  }
-
-  function refresh() {
-    refreshMutation.mutate();
-  }
 
   function selectRole(userRole) {
     setUserRole(userRole);
@@ -150,6 +120,10 @@ export function UserContextProvider(props) {
 
   function signUp(email, password) {
     return createUserWithEmailAndPassword(auth, email, password);
+  }
+
+  function verifyEmail() {
+    return sendEmailVerification(auth.currentUser);
   }
 
   function signIn(email, password) {
@@ -189,7 +163,6 @@ export function UserContextProvider(props) {
     }
   }
 
-  const [currentUser, setCurrentUser] = useState();
   const [loadingData, setLoadingData] = useState(true);
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -198,12 +171,6 @@ export function UserContextProvider(props) {
     });
 
     return unsubscribe;
-  }, []);
-
-  useEffect(() => {
-    if (!accessToken) {
-      refresh();
-    }
   }, []);
 
   return (
@@ -225,20 +192,16 @@ export function UserContextProvider(props) {
         userObjectRole,
         accessToken,
         setAccessToken,
-        refresh,
-        logoutMutation,
-        signOutMy,
         signOutFirebase,
         signInWith,
-        loginMutationId,
         navigateTo,
-        setNavigateCallback,
         auth,
         qrCodeCall,
         qrCodeMutation,
         message,
         staffAuthObject,
-        loginMutation,
+        getUserInfos,
+        verifyEmail,
       }}
     >
       {!loadingData && !isFetching ? (
@@ -270,20 +233,16 @@ export function useUserContext() {
     userObjectRole,
     accessToken,
     setAccessToken,
-    refresh,
-    logoutMutation,
-    signOutMy,
     signOutFirebase,
     signInWith,
-    loginMutationId,
     navigateTo,
-    setNavigateCallback,
     auth,
     qrCodeCall,
     qrCodeMutation,
     message,
     staffAuthObject,
-    loginMutation,
+    getUserInfos,
+    verifyEmail,
   } = useContext(UserContext);
 
   return {
@@ -303,19 +262,15 @@ export function useUserContext() {
     userObjectRole,
     accessToken,
     setAccessToken,
-    refresh,
-    logoutMutation,
-    signOutMy,
     signOutFirebase,
     signInWith,
-    loginMutationId,
     navigateTo,
-    setNavigateCallback,
     auth,
     qrCodeCall,
     qrCodeMutation,
     message,
     staffAuthObject,
-    loginMutation,
+    getUserInfos,
+    verifyEmail,
   };
 }

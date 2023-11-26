@@ -11,10 +11,23 @@ import SaveIcon from "../../../images/save_to_gallery_icon.png";
 import shareIcon from "../../../images/share_icon.png";
 
 export default function PrivateHomeWorker() {
-  const { userObject, signOutMy } = useUserContext();
+  const { userObject, signOutFirebase, setUserObject, setCurrentUser } =
+    useUserContext();
 
   const qrCodeRef = useRef();
   const [canvasRendered, setCanvasRendered] = useState(false);
+
+  const handleLogout = async () => {
+    console.log("dedans");
+    try {
+      const result = await signOutFirebase();
+      setCurrentUser(null);
+      window.location.href = "/signIn";
+      console.log("success", result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     if (qrCodeRef.current && !canvasRendered) {
@@ -65,7 +78,7 @@ export default function PrivateHomeWorker() {
           <QRCode
             size={256}
             style={{ height: "auto", maxWidth: "50%", width: "50%" }}
-            value={`http://35.180.203.65:3000/privateManager/private-home-manager/worker-qrcode/userId=${userObject.ID}`}
+            value={`http://35.180.203.65/privateManager/private-home-manager/worker-qrcode/userId=${userObject[0].ID}`}
             viewBox={`0 0 256 256`}
           />
         </div>
@@ -74,7 +87,7 @@ export default function PrivateHomeWorker() {
             style={{ color: "rgba(251, 188, 4, 1) !important" }}
             className="customName"
           >
-            {`${userObject.firstName} ${userObject.lastName}`}{" "}
+            {`${userObject[0].firstName} ${userObject[0].lastName}`}{" "}
           </h1>
         </div>
         <div
@@ -107,13 +120,7 @@ export default function PrivateHomeWorker() {
           </RWebShare>
         </div>
         <div className="d-flex justify-content-center mt-4">
-          <Link
-            to="/homepage"
-            style={{ textDecoration: "none", color: "inherit" }}
-            onClick={signOutMy}
-          >
-            <p>Logout</p>
-          </Link>
+          <p onClick={handleLogout}>Logout</p>
         </div>
       </Stack>
     </Container>
