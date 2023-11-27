@@ -24,7 +24,7 @@ export default function SelectStaff() {
     staffList,
   } = useStaffContext();
   const { userObject } = useUserContext();
-  const { getAllStaff } = useStaffContext();
+  const { getAllStaff, selectedStaff } = useStaffContext();
   const navigate = useNavigate();
 
   console.log(selectedStaffTip);

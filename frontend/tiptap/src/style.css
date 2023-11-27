@@ -432,6 +432,31 @@ h6 {
   padding-left: 60px !important;
 }
 
+.customPriceForm {
+  width: 100% !important;
+  border: 0 !important;
+  border-radius: 10px !important;
+  color: rgba(117, 117, 117, 1) !important;
+  background-color: rgba(217, 217, 217, 0.46) !important;
+  height: 65px;
+  font-size: 14px !important;
+  text-align: center; /* Centrez le texte horizontalement */
+  display: flex;
+  align-items: center;
+}
+
+.changePriceButton {
+  width: 9% !important;
+  height: 45% !important;
+  border-radius: 50% !important;
+  border: 1px solid rgb(0, 0, 0) !important;
+  color: rgb(0, 0, 0) !important;
+  justify-content: center !important;
+  text-align: center !important;
+  background-color: white !important;
+  font-size: 28px !important;
+}
+
 /*****Custom Button*****/
 .button_role_addStaff {
   height: 119px !important;

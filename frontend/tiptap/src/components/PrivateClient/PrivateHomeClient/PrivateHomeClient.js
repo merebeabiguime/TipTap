@@ -24,6 +24,7 @@ function PrivateHomeClient() {
     setRating,
     getAllStaff,
     selectedStaffTip,
+    selectedStaff,
   } = useStaffContext();
   const [selectedPriceTag, setSelectedPriceTag] = useState(0);
   const [enteredAmount, setEnteredAmount] = useState("");
@@ -68,6 +69,22 @@ function PrivateHomeClient() {
 
   const handleRatingClick = (clickedRating) => {
     setRating(clickedRating);
+  };
+
+  const increasePrice = () => {
+    if (selectedPriceTag === 0) {
+      const newAmount = (parseFloat(enteredAmount) || 0) + 0.25;
+      setEnteredAmount(newAmount.toFixed(2)); // Limitez le nombre de décimales à deux
+      setTipAmount(newAmount);
+    }
+  };
+
+  const decreasePrice = () => {
+    if (selectedPriceTag === 0) {
+      const newAmount = Math.max((parseFloat(enteredAmount) || 0) - 0.25, 0);
+      setEnteredAmount(newAmount.toFixed(2));
+      setTipAmount(newAmount);
+    }
   };
 
   useEffect(() => {
@@ -144,18 +161,34 @@ function PrivateHomeClient() {
           </Button>
         </div>
 
-        <div className=" d-flex justify-content-center form-mt-74" sm={12}>
+        <div className=" d-flex justify-content-center form-mt-74">
           <Form>
             <InputGroup className="mb-4">
-              <Form.Control
-                type="text"
-                placeholder="Enter Amount"
-                className="customForm1"
-                style={{ height: "65px" }}
-                disabled={selectedPriceTag === 0 ? false : true}
-                value={enteredAmount}
-                onChange={handleAmountChange}
-              />
+              <Row className=" mx-auto align-items-center d-flex mb-2">
+                <Button
+                  onClick={decreasePrice}
+                  className="col-2 changePriceButton mx-auto d-flex align-items-center"
+                >
+                  <span className="">-</span>
+                </Button>
+                <div className="col-8">
+                  <Form.Control
+                    type="text"
+                    inputMode="numeric"
+                    placeholder="Enter Amount"
+                    className="customPriceForm "
+                    disabled={selectedPriceTag === 0 ? false : true}
+                    value={enteredAmount}
+                    onChange={handleAmountChange}
+                  />
+                </div>
+                <Button
+                  onClick={increasePrice}
+                  className="col-2 changePriceButton mx-auto d-flex align-items-center"
+                >
+                  <span className="">+</span>
+                </Button>
+              </Row>
               <Form.Control
                 type="text"
                 placeholder="Leave a comment"
@@ -168,7 +201,11 @@ function PrivateHomeClient() {
 
             <div className="">
               <Button
-                disabled={tipAmount === 0 || rating === 0 ? true : false}
+                disabled={
+                  tipAmount === 0 || rating === 0 || selectedStaff == null
+                    ? true
+                    : false
+                }
                 type="submit"
                 className="customButton1"
                 value={enteredAmount}
@@ -176,7 +213,7 @@ function PrivateHomeClient() {
                 {`Pay (${tipAmount}) €`}
               </Button>
             </div>
-            {tipAmount !== 0 && (
+            {tipAmount !== 0 && selectedStaff !== null && rating !== 0 && (
               <div className="justify-content-center mx-auto mt-4">
                 <p className="text-center">Or pay with PayPal</p>
                 <PaypalCheckoutButton product={product} />

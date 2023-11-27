@@ -215,7 +215,6 @@ export async function getStaffList() {
       const users = await getUserFromId(allStaff[i].ID_user);
 
       if (users != 0) {
-        console.log("cest pas 0");
         staffList.push({
           role: roleMap[allStaff[i].role] || "Unknown",
           stars: allStaff[i].stars,
