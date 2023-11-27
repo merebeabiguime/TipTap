@@ -13,11 +13,7 @@ export default function PrivateWorker() {
 
   useEffect(() => {
     if (getUserInfos.isSuccess) {
-      if (
-        currentUser &&
-        !currentUser.emailVerified &&
-        userObject[0].verified === 0
-      ) {
+      if (userObject[0].verified === 0) {
         setMyreturn(<Navigate to="/verifyUser"></Navigate>);
       }
     }

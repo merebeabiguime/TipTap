@@ -9,7 +9,14 @@ export function useFetchUsers() {
     return response.data;
   };
 
+  const verify = async (uid) => {
+    const response = await myAxios.post(`/user/verify`, [{ UID: uid }]);
+
+    return response.data;
+  };
+
   return {
     getUser,
+    verify,
   };
 }

@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../contexts/AuthContext";
 import PreviousPageButton from "../features/PreviousPageButton";
 import { useFetchUsers } from "../fetches/FetchUsers";
+import { auth } from "../firebase";
 
 function VerifyUser() {
   const {
@@ -15,7 +16,6 @@ function VerifyUser() {
     userObject,
     signOutMy,
     signOutFirebase,
-    auth,
     verifyEmail,
     setCurrentUser,
     getUserInfos,
@@ -60,6 +60,7 @@ function VerifyUser() {
 
   const verifyUserMutation = useMutation({
     mutationFn: async () => await fetchUser.verify(userObject[0].UID),
+    refetchOnWindowFocus: false,
     onSuccess: (data) => {
       if (data.status === "Success") {
         signOutFirebase();
@@ -172,7 +173,7 @@ function VerifyUser() {
           <p className="p-mt-15">
             Enter the OTP that you received in phone{" "}
             {!emailSent ? (
-              <div>
+              <span>
                 <span
                   style={{ color: "blue" }}
                   onClick={handleEmailVerification}
@@ -180,11 +181,10 @@ function VerifyUser() {
                   click here
                 </span>{" "}
                 <span>to send email verification</span>
-              </div>
+              </span>
             ) : (
-              "merebe"
+              " Email verification sent. "
             )}
-            {" Email verification sent. "}
           </p>
         </div>
         <div className="" style={{ marginRight: "38px", marginLeft: "38px" }}>

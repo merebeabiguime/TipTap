@@ -23,7 +23,8 @@ import UploadingImage from "../features/UploadingImage";
 import { useFetchAuth } from "../fetches/FetchAuth";
 
 function SignUp() {
-  const { userRole, signUp, data, percentage } = useUserContext();
+  const { userRole, signUp, data, percentage, setCurrentUser } =
+    useUserContext();
   const inputs = useRef([]);
   const [validation, setValidation] = useState("");
   const navigate = useNavigate();
@@ -38,10 +39,13 @@ function SignUp() {
       if (data.status === "Success") {
         navigate("/signIn");
         setValidation("");
-        formRef.current.reset();
       } else {
         setValidation(data.response);
+        console.log(data.response);
       }
+    },
+    onError: (data) => {
+      console.log("erreur", data);
     },
     enabled: addUserEnabled.current,
   });
@@ -59,6 +63,8 @@ function SignUp() {
         inputs.current[2].value,
         inputs.current[4].value
       );
+      console.log("this user", credentials.user);
+      //setCurrentUser(credentials.user);
       //Creating temporary variable to store input data
       jsonData.current.push({
         firstName: inputs.current[0].value,
