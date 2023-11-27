@@ -33,6 +33,14 @@ function SignUp() {
   const jsonData = useRef([]);
   const formRef = useRef();
 
+  const isValidPhoneNumber = (phoneNumber) => {
+    // Define a regular expression for the specific phone number format
+    const phoneRegex = /^\+\d{2}\d+$/;
+
+    // Test the input phone number against the regular expression
+    return phoneRegex.test(phoneNumber);
+  };
+
   const signUpWithMysqlMutation = useMutation({
     mutationFn: async () => await fetchAuth.register(jsonData),
     onSuccess: (data) => {
@@ -91,6 +99,14 @@ function SignUp() {
     }
   }
 
+  const validatePhoneNumber = (phoneNumber) => {
+    // Expression régulière pour valider le numéro de téléphone
+    const phoneNumberRegex = /^\+330\d{9}$/;
+
+    // Vérifier si le numéro de téléphone correspond à l'expression régulière
+    return phoneNumberRegex.test(phoneNumber);
+  };
+
   const handleForm = async (e) => {
     e.preventDefault();
 
@@ -103,6 +119,12 @@ function SignUp() {
       return;
     } else if (inputs.current[4].value != inputs.current[5].value) {
       setValidation("Veuillez entrer des mots de passe qui correspondent.");
+      return;
+    } else if (!isValidPhoneNumber(inputs.current[3].value)) {
+      setValidation("Veuillez entrer un numéro de téléphone valide.");
+      return;
+    } else if (!isValidPhoneNumber(inputs.current[3].value)) {
+      setValidation("Veuillez entrer un numéro de téléphone valide.");
       return;
     }
 
@@ -160,7 +182,7 @@ function SignUp() {
               <Form.Control
                 ref={addInput}
                 type="text"
-                placeholder="Phone number"
+                placeholder="Phone number : +330769575354"
                 className="customForm"
               />
             </InputGroup>

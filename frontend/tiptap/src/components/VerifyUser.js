@@ -119,6 +119,18 @@ function VerifyUser() {
 
   useEffect(() => {
     generateRecaptcha();
+    const handleLogout = async () => {
+      console.log("dedans");
+      try {
+        const result = await signOutFirebase();
+        setCurrentUser(null);
+        window.location.href = "/signIn";
+        console.log("success", result);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    return handleLogout;
   }, []);
 
   const handleInputChange = async (index, value) => {
