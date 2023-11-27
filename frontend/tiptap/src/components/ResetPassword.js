@@ -5,10 +5,12 @@ import vector3 from "../images/Vector 3.png";
 import vector4 from "../images/Vector 4.png";
 import PasswordIcon from "../images/signup_password_icon.png";
 
-import { Button, InputGroup, Form } from "react-bootstrap";
+import { Button, InputGroup, Form, Spinner } from "react-bootstrap";
 import { useUserContext } from "../contexts/AuthContext";
 import { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useMutation } from "react-query";
+import { useFetchUsers } from "../fetches/FetchUsers";
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -32,8 +34,26 @@ function ResetPassword() {
   const query = useQuery();
   const mode = query.get("mode");
 
+  const [verified, setVerified] = useState(false);
+  const fetchUser = useFetchUsers();
+  const verifyEmailMutation = useMutation({
+    mutationFn: async () => await fetchUser.verify(currentUser.uid),
+    refetchOnWindowFocus: false,
+    onSuccess: (data) => {
+      if (data.status === "Success") {
+        setVerified(true);
+      } else {
+        setVerified(false);
+      }
+    },
+    onError: (data) => {
+      setVerified(false);
+    },
+  });
+
   const handleVerifyEmail = async () => {
-    console.log("current", currentUser);
+    console.log(currentUser.uid);
+    verifyEmailMutation.mutate();
   };
   useEffect(() => {
     if (mode === "verifyEmail") {
@@ -57,7 +77,7 @@ function ResetPassword() {
       console.dir(err);
     }
   };
-  return (
+  return mode === "resetpassword" ? (
     <div>
       <Row>
         <Col className="justify-content-end" sm={12}>
@@ -69,7 +89,9 @@ function ResetPassword() {
           </div>
         </Col>
         <Col className="d-flex justify-content-center  col-m-200" sm={12}>
-          <h1 className="col-m-25">Réinitialiser son mot de passe </h1>
+          <h1 className="col-m-25">
+            Réinitialiser soqfsqsfqsfqfsn mot de passe{" "}
+          </h1>
         </Col>
         <Col className="d-flex justify-content-center  col-m-50" sm={12}>
           <p>Veuillez entrer un nouveau mot de passe</p>
@@ -104,6 +126,42 @@ function ResetPassword() {
           </Form>
         </Col>
       </Row>
+    </div>
+  ) : !verifyEmailMutation.isLoading ? (
+    <div>
+      <Row>
+        <Col className="justify-content-end" sm={12}>
+          <div>
+            <img src={vector3} alt="Vector 3" className="vector" />
+          </div>
+          <div>
+            <img src={vector4} alt="Vector 4" className="vector" />
+          </div>
+        </Col>
+        <Col className="d-flex justify-content-center  col-m-200" sm={12}>
+          <h1 className="col-m-25">Vérification email </h1>
+        </Col>
+        <Col className="d-flex justify-content-center  col-m-50" sm={12}>
+          <p>Votre adresse email a été vérifié avec succès.</p>
+        </Col>
+        <Link
+          to="/homepage"
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          <div className="d-flex justify-content-center col-button button-mt-40">
+            <Button
+              style={{ marginLeft: "35px", marginRight: "35px" }}
+              className="customButton1"
+            >
+              Retour à la page d'accueil
+            </Button>
+          </div>
+        </Link>
+      </Row>
+    </div>
+  ) : (
+    <div className="centered-div">
+      <Spinner animation="border" />
     </div>
   );
 }

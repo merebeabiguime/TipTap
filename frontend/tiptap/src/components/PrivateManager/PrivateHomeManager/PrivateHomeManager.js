@@ -9,7 +9,25 @@ import { useUserContext } from "../../../contexts/AuthContext";
 import { Container, Stack } from "react-bootstrap";
 
 function PrivateHomeManager() {
-  const { selectRole, currentUser, signOutMy } = useUserContext();
+  const {
+    selectRole,
+    currentUser,
+    signOutMy,
+    setCurrentUser,
+    signOutFirebase,
+  } = useUserContext();
+
+  const handleLogout = async () => {
+    console.log("dedans");
+    try {
+      const result = await signOutFirebase();
+      setCurrentUser(null);
+      window.location.href = "/signIn";
+      console.log("success", result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <Container>
@@ -55,14 +73,9 @@ function PrivateHomeManager() {
             </div>
           </Col>
         </Link>
-        <Link
-          to="/homepage"
-          className="mx-auto text-center"
-          style={{ textDecoration: "none", color: "inherit" }}
-          onClick={signOutMy}
-        >
-          <p>Logout</p>
-        </Link>
+        <div className="d-flex justify-content-center mt-4">
+          <p onClick={handleLogout}>Logout</p>
+        </div>
       </Stack>
     </Container>
   );
