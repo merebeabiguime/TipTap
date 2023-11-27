@@ -1,5 +1,5 @@
 const credentials = (req, res, next) => {
-  const allowedOrigins = "http://localhost:3000";
+  const allowedOrigins = "http://35.180.203.65";
   const origin = req.headers.origin;
 
   if (allowedOrigins.includes(origin)) {

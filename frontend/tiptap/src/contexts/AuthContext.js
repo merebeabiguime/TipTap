@@ -8,26 +8,23 @@ import React, {
 
 import { myAxios } from "../axios/axios";
 
-import { jwtDecode } from "jwt-decode";
-
 import {
+  FacebookAuthProvider,
   GoogleAuthProvider,
   confirmPasswordReset,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  sendEmailVerification,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
-  FacebookAuthProvider,
-  sendEmailVerification,
-  RecaptchaVerifier,
 } from "firebase/auth";
-import { auth } from "../firebase.js";
-import { useFetchAuth } from "../fetches/FetchAuth.js";
-import { useIsFetching, useMutation, useQuery } from "react-query";
 import { Spinner } from "react-bootstrap";
+import { useIsFetching, useMutation, useQuery } from "react-query";
+import { useFetchAuth } from "../fetches/FetchAuth.js";
 import { useFetchUsers } from "../fetches/FetchUsers.js";
+import { auth } from "../firebase.js";
 
 export const UserContext = createContext();
 
@@ -49,6 +46,11 @@ export function UserContextProvider(props) {
   const userIdValueQR = useRef(null);
   const staffAuthObject = useRef({});
   const fetchUser = useFetchUsers();
+  const resetPasswordURL = useRef("");
+
+  function setResetPasswordURL(url) {
+    resetPasswordURL.current = url;
+  }
   auth.languageCode = "fr";
 
   const qrCodeMutation = useMutation({
@@ -57,7 +59,7 @@ export function UserContextProvider(props) {
         headers: { Authorization: "Bearer " + accessToken },
       }),
     onSuccess: (data) => {
-      if (data.data.status == "Success") {
+      if (data.data.status === "Success") {
         //ADD COOLDOWN BEFOFRE GOING TO NEXT PAGE
         setMessage("Success");
         staffAuthObject.current = data.data.response[0];
@@ -142,11 +144,11 @@ export function UserContextProvider(props) {
 
   async function signInWith(authProvider) {
     let provider = null;
-    if (authProvider == "google") {
+    if (authProvider === "google") {
       provider = googleProvider;
-    } else if (authProvider == "facebook") {
+    } else if (authProvider === "facebook") {
       provider = facebookProvider;
-    } else if (authProvider == "apple") {
+    } else if (authProvider === "apple") {
       //provider = facebookProvider;
       provider = googleProvider;
     }
@@ -157,8 +159,6 @@ export function UserContextProvider(props) {
       otherAuthMutation.mutate();
     } catch (error) {
       // Handle Errors here.
-      const errorCode = error.code;
-      const errorMessage = error.message;
       //Message d'erreur
     }
   }
@@ -202,6 +202,8 @@ export function UserContextProvider(props) {
         staffAuthObject,
         getUserInfos,
         verifyEmail,
+        resetPasswordURL,
+        setResetPasswordURL,
       }}
     >
       {!loadingData && !isFetching ? (
@@ -243,6 +245,8 @@ export function useUserContext() {
     staffAuthObject,
     getUserInfos,
     verifyEmail,
+    resetPasswordURL,
+    setResetPasswordURL,
   } = useContext(UserContext);
 
   return {
@@ -272,5 +276,7 @@ export function useUserContext() {
     staffAuthObject,
     getUserInfos,
     verifyEmail,
+    resetPasswordURL,
+    setResetPasswordURL,
   };
 }

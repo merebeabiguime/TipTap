@@ -30,6 +30,7 @@ function Login() {
     userObject,
     currentUser,
     setCurrentUser,
+    resetPasswordURL,
   } = useUserContext();
   const inputs = useRef([]);
   const [validation, setValidation] = useState("");
@@ -40,6 +41,10 @@ function Login() {
       inputs.current.push(el);
     }
   };
+
+  useEffect(() => {
+    console.log("reset", resetPasswordURL.current);
+  }, []);
 
   const formRef = useRef();
 

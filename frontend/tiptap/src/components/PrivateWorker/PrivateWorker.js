@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { useUserContext } from "../../contexts/AuthContext";
 export default function PrivateWorker() {
-  const { currentUser, userObject, getUserInfos } = useUserContext();
+  const { currentUser, userObject, getUserInfos, resetPasswordURL } =
+    useUserContext();
   const [myReturn, setMyreturn] = useState(<Outlet />);
 
   useEffect(() => {
@@ -16,12 +17,23 @@ export default function PrivateWorker() {
       if (
         currentUser &&
         !currentUser.emailVerified &&
-        userObject[0].verified === 0
+        userObject[0].verified === 0 &&
+        resetPasswordURL.current === ""
       ) {
         setMyreturn(<Navigate to="/verifyUser"></Navigate>);
       }
     }
   }, [getUserInfos]);
 
-  return getUserInfos.isSuccess && <div>{myReturn}</div>;
+  useEffect(() => {
+    console.log("reset", resetPasswordURL.current);
+    if (resetPasswordURL.current !== "") {
+      window.location.href = resetPasswordURL.current;
+    }
+  }, [resetPasswordURL]);
+
+  return (
+    getUserInfos.isSuccess &&
+    resetPasswordURL.current === "" && <div>{myReturn}</div>
+  );
 }

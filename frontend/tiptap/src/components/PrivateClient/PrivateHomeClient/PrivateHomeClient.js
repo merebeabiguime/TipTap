@@ -169,7 +169,7 @@ function PrivateHomeClient() {
                   onClick={decreasePrice}
                   className="col-2 changePriceButton mx-auto d-flex align-items-center"
                 >
-                  <span className="">-</span>
+                  -
                 </Button>
                 <div className="col-8">
                   <Form.Control
@@ -186,7 +186,7 @@ function PrivateHomeClient() {
                   onClick={increasePrice}
                   className="col-2 changePriceButton mx-auto d-flex align-items-center"
                 >
-                  <span className="">+</span>
+                  +
                 </Button>
               </Row>
               <Form.Control

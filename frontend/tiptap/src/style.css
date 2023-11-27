@@ -446,15 +446,16 @@ h6 {
 }
 
 .changePriceButton {
-  width: 9% !important;
-  height: 45% !important;
+  width: 10%; /* Ajustez la largeur du bouton */
+  height: 45%; /* Ajustez la hauteur du bouton */
   border-radius: 50% !important;
-  border: 1px solid rgb(0, 0, 0) !important;
+  border: 2px solid rgb(0, 0, 0) !important;
   color: rgb(0, 0, 0) !important;
-  justify-content: center !important;
-  text-align: center !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: white !important;
-  font-size: 28px !important;
+  font-size: 1em; /* Taille de police adaptative */
 }
 
 /*****Custom Button*****/

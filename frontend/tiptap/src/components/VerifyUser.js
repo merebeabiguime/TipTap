@@ -11,22 +11,14 @@ import { useFetchUsers } from "../fetches/FetchUsers";
 import { auth } from "../firebase";
 
 function VerifyUser() {
-  const {
-    navigateTo,
-    userObject,
-    signOutMy,
-    signOutFirebase,
-    verifyEmail,
-    setCurrentUser,
-    getUserInfos,
-  } = useUserContext();
+  const { userObject, signOutFirebase, verifyEmail, setCurrentUser } =
+    useUserContext();
   const inputs = useRef([]);
   const navigate = useNavigate();
   const fetchUser = useFetchUsers();
   const [timer, setTimer] = useState(30); // Use a number instead of string for the timer
   const [validation, setValidation] = useState("");
   const otpCodeExpired = useRef(false);
-  const recaptchaVar = useRef(null);
   const [animationActive, setAnimationActive] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
 
@@ -95,30 +87,32 @@ function VerifyUser() {
     }
   };
 
-  const generateRecaptcha = async () => {
-    try {
-      const recaptcha = new RecaptchaVerifier(
-        "recaptcha",
-        {
-          callback: () => {
-            if (timer <= 0) {
-              resetTimer();
-            } else {
-              sendOtp(recaptcha);
-            }
+  useEffect(() => {
+    const generateRecaptcha = async () => {
+      try {
+        const recaptcha = new RecaptchaVerifier(
+          "recaptcha",
+          {
+            callback: () => {
+              if (timer <= 0) {
+                resetTimer();
+              } else {
+                sendOtp(recaptcha);
+              }
+            },
           },
-        },
 
-        auth
-      );
-      recaptcha.render();
-    } catch (error) {
-      console.error(error);
-    }
-  };
+          auth
+        );
+        recaptcha.render();
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    generateRecaptcha();
+  }, []);
 
   useEffect(() => {
-    generateRecaptcha();
     const handleLogout = async () => {
       console.log("dedans");
       try {
@@ -130,7 +124,11 @@ function VerifyUser() {
         console.error(error);
       }
     };
-    return handleLogout;
+
+    // ComponentWillUnmount logic (cleanup)
+    return () => {
+      handleLogout(); // Call the logout function when the component is unmounted
+    };
   }, []);
 
   const handleInputChange = async (index, value) => {

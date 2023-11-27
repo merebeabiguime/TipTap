@@ -11,16 +11,29 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useMutation } from "react-query";
 import { useFetchUsers } from "../fetches/FetchUsers";
+import { applyActionCode } from "firebase/auth";
+import { auth } from "../firebase";
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
 
 function ResetPassword() {
-  const { currentUser } = useUserContext();
+  const { currentUser, resetPasswordURL, setResetPasswordURL } =
+    useUserContext();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!currentUser && resetPasswordURL.current === "") {
+      setResetPasswordURL(window.location.href); // Store the current URL
+      navigate("/signIn");
+    }
+  }, []);
+
   const { resetPassword } = useUserContext();
   const [validation, setValidation] = useState("");
+
+  const [verificationMessage, setVerificationMessage] = useState("");
 
   const formRef = useRef();
   const inputs = useRef([]);
@@ -33,6 +46,7 @@ function ResetPassword() {
 
   const query = useQuery();
   const mode = query.get("mode");
+  const oobCode = query.get("oobCode");
 
   const [verified, setVerified] = useState(false);
   const fetchUser = useFetchUsers();
@@ -41,7 +55,9 @@ function ResetPassword() {
     refetchOnWindowFocus: false,
     onSuccess: (data) => {
       if (data.status === "Success") {
-        setVerified(true);
+        setVerificationMessage(
+          "Votre adresse email a été vérifié avec succès."
+        );
       } else {
         setVerified(false);
       }
@@ -52,11 +68,22 @@ function ResetPassword() {
   });
 
   const handleVerifyEmail = async () => {
-    console.log(currentUser.uid);
+    try {
+      const result = await applyActionCode(auth, oobCode);
+      setVerificationMessage("Votre adresse email a été vérifié avec succès.");
+      return;
+    } catch (error) {
+      console.log(error.message);
+      if ((error.message = "Firebase: Error (auth/invalid-action-code).")) {
+        setVerificationMessage(
+          "Votre code a expiré. Veuillez renvoyer un nouvel email de confirmation."
+        );
+      }
+    }
     verifyEmailMutation.mutate();
   };
   useEffect(() => {
-    if (mode === "verifyEmail") {
+    if (mode === "verifyEmail" && currentUser) {
       handleVerifyEmail();
     }
   }, []);
@@ -70,12 +97,16 @@ function ResetPassword() {
     }
 
     try {
-      await resetPassword(query.get("oobCode"), inputs.current[0].value);
+      await resetPassword(oobCode, inputs.current[0].value);
       setValidation("");
-      navigate("/homepage");
+      handleGoToHomePage();
     } catch (err) {
       console.dir(err);
     }
+  };
+
+  const handleGoToHomePage = () => {
+    window.location.href = "/signIn";
   };
   return mode === "resetpassword" ? (
     <div>
@@ -127,7 +158,7 @@ function ResetPassword() {
         </Col>
       </Row>
     </div>
-  ) : !verifyEmailMutation.isLoading ? (
+  ) : mode === "verifyEmail" && !verifyEmailMutation.isLoading ? (
     <div>
       <Row>
         <Col className="justify-content-end" sm={12}>
@@ -142,21 +173,17 @@ function ResetPassword() {
           <h1 className="col-m-25">Vérification email </h1>
         </Col>
         <Col className="d-flex justify-content-center  col-m-50" sm={12}>
-          <p>Votre adresse email a été vérifié avec succès.</p>
+          <p>{verificationMessage}</p>
         </Col>
-        <Link
-          to="/homepage"
-          style={{ textDecoration: "none", color: "inherit" }}
-        >
-          <div className="d-flex justify-content-center col-button button-mt-40">
-            <Button
-              style={{ marginLeft: "35px", marginRight: "35px" }}
-              className="customButton1"
-            >
-              Retour à la page d'accueil
-            </Button>
-          </div>
-        </Link>
+        <div className="d-flex justify-content-center col-button button-mt-40">
+          <Button
+            style={{ marginLeft: "35px", marginRight: "35px" }}
+            className="customButton1"
+            onClick={handleGoToHomePage}
+          >
+            Retour à la page d'accueil
+          </Button>
+        </div>
       </Row>
     </div>
   ) : (
