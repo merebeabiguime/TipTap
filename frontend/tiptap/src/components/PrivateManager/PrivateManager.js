@@ -13,8 +13,12 @@ export default function PrivateManager() {
 
   useEffect(() => {
     if (getUserInfos.isSuccess) {
-      if (userObject[0].verified === 0) {
-        return <Navigate to="/verifyUser"></Navigate>;
+      if (
+        currentUser &&
+        !currentUser.emailVerified &&
+        userObject[0].verified === 0
+      ) {
+        setMyreturn(<Navigate to="/verifyUser"></Navigate>);
       }
     }
   }, [getUserInfos]);
