@@ -1,5 +1,3 @@
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
 import MailIcon from "../images/signup_mail_icon.png";
 import PasswordIcon from "../images/signup_password_icon.png";
 import PhoneIcon from "../images/signup_phone_icon.png";
@@ -15,7 +13,7 @@ import {
   Spinner,
   Stack,
 } from "react-bootstrap";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../contexts/AuthContext";
 import PreviousPageButton from "../features/PreviousPageButton";
@@ -23,8 +21,7 @@ import UploadingImage from "../features/UploadingImage";
 import { useFetchAuth } from "../fetches/FetchAuth";
 
 function SignUp() {
-  const { userRole, signUp, data, percentage, setCurrentUser } =
-    useUserContext();
+  const { userRole, signUp, data, percentage } = useUserContext();
   const inputs = useRef([]);
   const [validation, setValidation] = useState("");
   const navigate = useNavigate();
@@ -117,7 +114,7 @@ function SignUp() {
         "Votre mot de passe doit contenir 6 caractères au minimum."
       );
       return;
-    } else if (inputs.current[4].value != inputs.current[5].value) {
+    } else if (inputs.current[4].value !== inputs.current[5].value) {
       setValidation("Veuillez entrer des mots de passe qui correspondent.");
       return;
     } else if (!isValidPhoneNumber(inputs.current[3].value)) {

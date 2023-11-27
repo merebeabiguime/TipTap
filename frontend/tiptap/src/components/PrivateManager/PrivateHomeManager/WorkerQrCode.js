@@ -4,10 +4,9 @@ import "../../../style.css";
 import { useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
-import { useFetchQRCode } from "../../../fetches/FetchQRCode";
-import { useQuery } from "react-query";
 import { useUserContext } from "../../../contexts/AuthContext";
 import { useStaffContext } from "../../../contexts/fetches-contexts/StaffContext";
+import { useFetchQRCode } from "../../../fetches/FetchQRCode";
 
 export default function WorkerQrCode() {
   const { qrCodeCall, qrCodeMutation, message, navigateTo, staffAuthObject } =

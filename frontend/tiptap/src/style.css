@@ -432,6 +432,32 @@ h6 {
   padding-left: 60px !important;
 }
 
+.customPriceForm {
+  width: 100% !important;
+  border: 0 !important;
+  border-radius: 10px !important;
+  color: rgba(117, 117, 117, 1) !important;
+  background-color: rgba(217, 217, 217, 0.46) !important;
+  height: 65px;
+  font-size: 14px !important;
+  text-align: center; /* Centrez le texte horizontalement */
+  display: flex;
+  align-items: center;
+}
+
+.changePriceButton {
+  width: 10%; /* Ajustez la largeur du bouton */
+  height: 45%; /* Ajustez la hauteur du bouton */
+  border-radius: 50% !important;
+  border: 2px solid rgb(0, 0, 0) !important;
+  color: rgb(0, 0, 0) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white !important;
+  font-size: 1em; /* Taille de police adaptative */
+}
+
 /*****Custom Button*****/
 .button_role_addStaff {
   height: 119px !important;
@@ -441,14 +467,14 @@ h6 {
 
 .price-button {
   font-family: "Satoshi Variable", sans-serif !important;
-  border: solid 2px;
-  border-color: rgba(251, 188, 4, 0.75);
-  background-color: white;
-  color: rgba(63, 63, 63, 1);
-  font-weight: 700;
-  line-height: 18.9px;
-  font-size: 14px;
-  margin-left: 15px;
+  border: solid 2px !important;
+  border-color: rgba(251, 188, 4, 0.75) !important;
+  background-color: white !important;
+  color: rgba(63, 63, 63, 1) !important;
+  font-weight: 700 !important;
+  line-height: 18.9px !important;
+  font-size: 14px !important;
+  margin-left: 15px !important;
 }
 .price-button_focus {
   font-family: "Satoshi Variable", sans-serif !important;
