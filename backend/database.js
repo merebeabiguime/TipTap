@@ -94,6 +94,11 @@ export async function getUser(uid) {
   return rows.length === 0 ? 0 : rows;
 }
 
+export async function getUserFromId(id) {
+  const [rows] = await pool.query("SELECT * FROM user WHERE id=?", [id]);
+  return rows.length === 0 ? 0 : rows;
+}
+
 export async function getUserFromUID(id) {
   const [rows] = await pool.query("SELECT * FROM user WHERE UID=?", [id]);
   return rows.length === 0 ? 0 : rows;
@@ -136,7 +141,7 @@ export async function verifyUserEmail(email) {
 
 // Supprimer un utilisateur
 export async function deleteUser(id) {
-  const user = await getUser(id);
+  const user = await getUserFromId(id);
 
   if (user === 0) {
     return "L'utilisateur n'existe pas.";
@@ -195,14 +200,22 @@ export async function staffExists(email) {
   return rows.length === 0 ? 0 : rows;
 }
 
+// Obtenir tous les membres du personnel
+export async function getAllStaff() {
+  const [rows] = await pool.query("SELECT * FROM staff");
+  return rows.length === 0 ? 0 : rows;
+}
+
 export async function getStaffList() {
   const allStaff = await getAllStaff();
   const staffList = [];
   const roleMap = ["Chef", "Waiter", "Cleaner"];
   if (allStaff != 0) {
     for (let i = 0; i < allStaff.length; i++) {
-      const users = await getUser(allStaff[i].ID_user);
+      const users = await getUserFromId(allStaff[i].ID_user);
+
       if (users != 0) {
+        console.log("cest pas 0");
         staffList.push({
           role: roleMap[allStaff[i].role] || "Unknown",
           stars: allStaff[i].stars,
@@ -229,12 +242,6 @@ export async function deleteStaff(id) {
 
   const [rows] = await pool.query("DELETE FROM staff WHERE ID = ?", [id]);
   return "Staff supprimé avec succès.";
-}
-
-// Obtenir tous les membres du personnel
-export async function getAllStaff() {
-  const [rows] = await pool.query("SELECT * FROM staff");
-  return rows.length === 0 ? 0 : rows;
 }
 
 /************************************** QUERIES DES RESTAURANTS **********************************************/

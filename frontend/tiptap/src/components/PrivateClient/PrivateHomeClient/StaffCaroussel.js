@@ -29,44 +29,42 @@ export default function StaffCaroussel() {
 
   return (
     <div>
-      {isImagesVisible ? (
-        <div className="mx-auto mb-4 d-flex justify-content-center align-items-center">
-          <img
-            style={{ width: "31%", height: "11%" }}
-            src={IconChef}
-            className="image_selectRole"
-            alt="icon"
-            onClick={() => {
-              handleRoleFilterChange("Chef");
-            }}
-          />
-          <img
-            style={{ width: "31%", height: "11%" }}
-            src={IconCleaner}
-            className="image_selectRole"
-            alt="icon"
-            onClick={() => {
-              handleRoleFilterChange("Cleaner");
-            }}
-          />
-          <img
-            style={{ width: "31%", height: "11%" }}
-            src={IconWaiter}
-            className="image_selectRole"
-            alt="icon"
-            onClick={() => {
-              handleRoleFilterChange("Waiter");
-            }}
-          />
-        </div>
-      ) : (
+      <div className="mx-auto mb-4 d-flex justify-content-center align-items-center">
+        <img
+          style={{ width: "31%", height: "11%" }}
+          src={IconChef}
+          className="image_selectRole"
+          alt="icon"
+          onClick={() => {
+            handleRoleFilterChange("Chef");
+          }}
+        />
+        <img
+          style={{ width: "31%", height: "11%" }}
+          src={IconCleaner}
+          className="image_selectRole"
+          alt="icon"
+          onClick={() => {
+            handleRoleFilterChange("Cleaner");
+          }}
+        />
+        <img
+          style={{ width: "31%", height: "11%" }}
+          src={IconWaiter}
+          className="image_selectRole"
+          alt="icon"
+          onClick={() => {
+            handleRoleFilterChange("Waiter");
+          }}
+        />
+      </div>
+      {!isImagesVisible && (
         <div className="mx-auto mb-4 carrousel-container">
           <div className="carrousel">
             {staffListFilter.map((staffMember, index) => (
               <Button
                 key={index}
                 onMouseEnter={() => setActiveIndex(index)}
-                onMouseLeave={() => setActiveIndex(null)}
                 style={{ background: "white", border: "none" }}
                 onClick={() => selectStaff(staffMember.ID)}
               >
@@ -79,9 +77,7 @@ export default function StaffCaroussel() {
                     className="profilePicture_payments"
                     src={staffMember.pictureUrl}
                   ></img>
-                  <h1 className="customTitle2">
-                    {staffMember.firstName} {staffMember.lastName}
-                  </h1>
+                  <h1 className="customTitle2">{staffMember.firstName}</h1>
                 </div>
               </Button>
             ))}
