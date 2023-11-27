@@ -110,7 +110,7 @@ function PrivateHomeClient() {
                 : ` price-button_focus `
             }
           >
-            {"$ 1.25"}
+            {"1.00 €"}
           </Button>
           <Button
             onClick={() => selectPriceTag("1.50")}
@@ -120,7 +120,7 @@ function PrivateHomeClient() {
                 : ` price-button_focus `
             }
           >
-            {"$ 1.50"}
+            {"1.25 €"}
           </Button>
           <Button
             onClick={() => selectPriceTag("1.75")}
@@ -130,7 +130,7 @@ function PrivateHomeClient() {
                 : ` price-button_focus `
             }
           >
-            {"$ 1.75"}
+            {"1.50 €"}
           </Button>
           <Button
             onClick={() => selectPriceTag("2.00")}
@@ -140,7 +140,7 @@ function PrivateHomeClient() {
                 : ` price-button_focus `
             }
           >
-            {"$ 2.00"}
+            {"1.75 €"}
           </Button>
         </div>
 
@@ -173,7 +173,7 @@ function PrivateHomeClient() {
                 className="customButton1"
                 value={enteredAmount}
               >
-                {`Pay ($ ${tipAmount})`}
+                {`Pay (${tipAmount}) €`}
               </Button>
             </div>
             {tipAmount !== 0 && (
