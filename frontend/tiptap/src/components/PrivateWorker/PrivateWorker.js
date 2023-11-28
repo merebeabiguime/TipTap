@@ -20,7 +20,7 @@ export default function PrivateWorker() {
         userObject[0].verified === 0 &&
         resetPasswordURL.current === ""
       ) {
-        setMyreturn(<Navigate to="/verifyUser"></Navigate>);
+        setMyreturn(<Navigate to="/choose-verif-method"></Navigate>);
       }
     }
   }, [getUserInfos]);

@@ -11,7 +11,7 @@ import { useFetchUsers } from "../fetches/FetchUsers";
 import { auth } from "../firebase";
 
 function VerifyUser() {
-  const { userObject, signOutFirebase, verifyEmail, setCurrentUser } =
+  const { userObject, signOutFirebase, verifyEmail, otpPhoneNumber } =
     useUserContext();
   const inputs = useRef([]);
   const navigate = useNavigate();
@@ -21,16 +21,6 @@ function VerifyUser() {
   const otpCodeExpired = useRef(false);
   const [animationActive, setAnimationActive] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
-
-  const handleEmailVerification = async () => {
-    try {
-      const result = await verifyEmail();
-      console.log(result);
-      setEmailSent(true);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   useEffect(() => {
     if (timer === 0) {
@@ -50,6 +40,10 @@ function VerifyUser() {
     setValidation("");
   };
 
+  useEffect(() => {
+    //Destroy recaptcha on unmount
+  }, []);
+
   const verifyUserMutation = useMutation({
     mutationFn: async () => await fetchUser.verify(userObject[0].UID),
     refetchOnWindowFocus: false,
@@ -66,7 +60,7 @@ function VerifyUser() {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [realOtp, setRealOtp] = useState(null);
 
-  const phoneNumber = userObject[0].phone;
+  const phoneNumber = otpPhoneNumber;
 
   const sendOtp = async (recaptcha) => {
     try {
@@ -110,25 +104,6 @@ function VerifyUser() {
       }
     };
     generateRecaptcha();
-  }, []);
-
-  useEffect(() => {
-    const handleLogout = async () => {
-      console.log("dedans");
-      try {
-        const result = await signOutFirebase();
-        setCurrentUser(null);
-        window.location.href = "/signIn";
-        console.log("success", result);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    // ComponentWillUnmount logic (cleanup)
-    return () => {
-      handleLogout(); // Call the logout function when the component is unmounted
-    };
   }, []);
 
   const handleInputChange = async (index, value) => {
@@ -181,20 +156,7 @@ function VerifyUser() {
         <div className="" style={{ marginRight: "38px", marginLeft: "38px" }}>
           <h1 className="h1-mt-33">Verify Account</h1>
           <p className="p-mt-15">
-            Enter the OTP that you received in phone{" "}
-            {!emailSent ? (
-              <span>
-                <span
-                  style={{ color: "blue" }}
-                  onClick={handleEmailVerification}
-                >
-                  click here
-                </span>{" "}
-                <span>to send email verification</span>
-              </span>
-            ) : (
-              " Email verification sent. "
-            )}
+            Validate the Captcha then enter the OTP that you received in phone.
           </p>
         </div>
         <div className="" style={{ marginRight: "38px", marginLeft: "38px" }}>

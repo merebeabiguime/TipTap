@@ -20,11 +20,18 @@ import PrivateClient from "./PrivateClient/PrivateClient";
 import SuccessPayment from "./PrivateClient/PrivateHomeClient/SuccessPayment";
 import VerifyUser from "./VerifyUser";
 import SelectStaff from "./PrivateClient/PrivateHomeClient/SelectStaff";
+import ChooseVerifMethod from "./ChooseVerifMethod";
+import ValidatePhone from "./ValidatePhone";
 
 function App() {
   return (
     <Router>
       <Routes>
+        <Route
+          path="/choose-verif-method"
+          Component={ChooseVerifMethod}
+        ></Route>
+        <Route path="/validate-phone" Component={ValidatePhone}></Route>
         <Route path="/homepage" Component={HomePage}></Route>
         <Route path="/selectRole" Component={SelectRole}></Route>
         <Route path="/signup" Component={SignUp}></Route>
