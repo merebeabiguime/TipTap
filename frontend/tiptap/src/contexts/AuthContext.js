@@ -47,6 +47,7 @@ export function UserContextProvider(props) {
   const staffAuthObject = useRef({});
   const fetchUser = useFetchUsers();
   const resetPasswordURL = useRef("");
+  const [otpPhoneNumber, setOtpPhoneNumber] = useState("");
 
   function setResetPasswordURL(url) {
     resetPasswordURL.current = url;
@@ -204,6 +205,8 @@ export function UserContextProvider(props) {
         verifyEmail,
         resetPasswordURL,
         setResetPasswordURL,
+        otpPhoneNumber,
+        setOtpPhoneNumber,
       }}
     >
       {!loadingData && !isFetching ? (
@@ -247,6 +250,8 @@ export function useUserContext() {
     verifyEmail,
     resetPasswordURL,
     setResetPasswordURL,
+    otpPhoneNumber,
+    setOtpPhoneNumber,
   } = useContext(UserContext);
 
   return {
@@ -278,5 +283,7 @@ export function useUserContext() {
     verifyEmail,
     resetPasswordURL,
     setResetPasswordURL,
+    otpPhoneNumber,
+    setOtpPhoneNumber,
   };
 }
