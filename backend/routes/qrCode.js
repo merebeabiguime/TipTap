@@ -4,13 +4,9 @@ const router = express.Router();
 
 router.get("/:id", async (req, res) => {
   try {
-    const user = req.user;
-
-    if (user.role != 2)
-      return res.send({ status: "Error", response: "Accès refusé" });
-
     const id = req.params.id;
-    const getUserResponse = await db.getUser(id);
+    console.log("id", id);
+    const getUserResponse = await db.getUserFromId(id);
     if (getUserResponse == 0)
       return res.send({ status: "Error", response: "Utilisateur Introuvable" });
 

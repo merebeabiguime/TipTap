@@ -9,7 +9,7 @@ import iconCleaner from "../../../images/icon_cleaner.png";
 import axios from "axios";
 
 import PreviousPageButton from "../../../features/PreviousPageButton";
-import { Button, Container, Stack } from "react-bootstrap";
+import { Button, Container, Stack, Modal } from "react-bootstrap";
 import { json, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useFetchStaff } from "../../../fetches/FetchStaff";
@@ -20,6 +20,7 @@ function SelectStaffRole() {
   const { staffObject } = useStaffContext();
   const [role, setRole] = useState(0);
   const navigate = useNavigate();
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
     staffObject.current.role = role;
@@ -29,14 +30,18 @@ function SelectStaffRole() {
     const jsonData = [
       {
         role: staffObject.current.role,
-        stars: staffObject.current.stars,
-        ID_users: staffObject.current.ID_USER,
+        stars: 5,
+        ID_users: staffObject.current.ID,
       },
     ];
+    console.log("json", jsonData);
     try {
       const addStaffResponse = await fetchStaff.addStaff(jsonData);
       if (addStaffResponse.status === "Success") {
-        navigate("/privateManager/private-home-manager");
+        setShowPopup(true);
+        setTimeout(() => {
+          navigate("/privateManager/private-home-manager");
+        }, 2000);
       } else {
         //Message d'erreur
       }
@@ -53,6 +58,14 @@ function SelectStaffRole() {
           <img src={vector3} alt="Vector 3" className="vector" />
           <img src={vector4} alt="Vector 4" className="vector" />
         </div>
+        <Modal show={showPopup} onHide={() => setShowPopup(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Staff ajouté avec succès</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            La redirection se fera dans quelques instants...
+          </Modal.Body>
+        </Modal>
         <div className="" style={{ marginRight: "38px", marginLeft: "38px" }}>
           <h1 className="h1-mt-33">Select Role </h1>
           <p className="p-mt-15">

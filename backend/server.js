@@ -16,15 +16,15 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/api/restaurant", restaurantRoutes);
+app.use("/restaurant", restaurantRoutes);
 
-app.use("/api/auth", authRoutes);
+app.use("/auth", authRoutes);
 
-app.use("/api/staff", staffRoutes);
+app.use("/staff", staffRoutes);
 
-app.use("/api/user", userRoutes);
+app.use("/user", userRoutes);
 
-app.use("/api/qrcode", qrCodeRoutes);
+app.use("/qrcode", qrCodeRoutes);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

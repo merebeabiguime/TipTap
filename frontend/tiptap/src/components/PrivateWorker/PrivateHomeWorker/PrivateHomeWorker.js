@@ -56,6 +56,8 @@ export default function PrivateHomeWorker() {
     });
   };
 
+  const qrCodeUrl = `http://35.180.203.65/privateManager/private-home-manager/worker-qrcode/userId=${userObject[0].ID}`;
+
   return (
     <Container>
       <Stack>
@@ -78,7 +80,7 @@ export default function PrivateHomeWorker() {
           <QRCode
             size={256}
             style={{ height: "auto", maxWidth: "50%", width: "50%" }}
-            value={`http://35.180.203.65/privateManager/private-home-manager/worker-qrcode/userId=${userObject[0].ID}`}
+            value={qrCodeUrl}
             viewBox={`0 0 256 256`}
           />
         </div>
@@ -106,9 +108,9 @@ export default function PrivateHomeWorker() {
           </Button>
           <RWebShare
             data={{
-              text: "QRCODE",
-              url: "merebe", // Change this to the appropriate URL
-              title: "Scan this QRCODE",
+              text: { qrCodeUrl },
+              url: { qrCodeUrl }, // Change this to the appropriate URL
+              title: "Scan this QRCODE to add a worker as a staff member",
             }}
             //Messaage d'erreur/succès dans ce cas
             /*onClick={() => console.log("shared successfully!")}*/
