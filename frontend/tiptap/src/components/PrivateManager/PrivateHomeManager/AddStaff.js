@@ -7,6 +7,7 @@ import MailIcon from "../../../images/signup_mail_icon.png";
 import qrCodeScanner from "../../../images/scan_qrcode_icon.png";
 import "../../../style.css";
 import { useZxing } from "react-zxing";
+import { Html5QrcodeScanner } from "html5-qrcode";
 
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
@@ -24,6 +25,23 @@ function AddStaff() {
   const navigate = useNavigate();
   const fetchStaff = useFetchStaff();
   const [showVideo, setShowVideo] = useState(false);
+
+  /*const scanner = new Html5QrcodeScanner("reader", {
+    qrbox: { width: 250, height: 250 },
+    fps: 5,
+  });
+
+  scanner.render(success, error);
+
+  function success(result) {
+    scanner.clear();
+    window.location.href = result;
+  }
+
+  function error(err) {
+    console.log(err);
+  }*/
+
   const handleQRCodeScannerClick = () => {
     setShowVideo(true);
   };

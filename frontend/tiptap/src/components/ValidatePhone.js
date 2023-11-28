@@ -74,25 +74,27 @@ function ValidatePhone() {
             +330*********)
           </p>
         </div>
-        <Form>
-          <InputGroup className="mb-4">
-            <Form.Control
-              type="text"
-              placeholder={userObject[0].phone}
-              value={newPhoneNumber}
-              onChange={handlePhoneNumberChange} // Gérer le changement du numéro de téléphone
-              className="customForm1"
-              style={{ height: "65px" }}
-            />
-            <Button
-              style={{ marginLeft: "35px", marginRight: "35px" }}
-              className="customButton1"
-              onClick={goToOtp}
-            >
-              Valider
-            </Button>
-          </InputGroup>
-        </Form>
+        <div className=" d-flex justify-content-center form-mt-74" sm={12}>
+          <Form>
+            <InputGroup className="mb-4">
+              <Form.Control
+                type="text"
+                placeholder={userObject[0].phone}
+                value={newPhoneNumber}
+                onChange={handlePhoneNumberChange} // Gérer le changement du numéro de téléphone
+                className="customForm1"
+                style={{ height: "65px" }}
+              />
+              <Button
+                style={{ marginLeft: "35px", marginRight: "35px" }}
+                className="customButton1"
+                onClick={goToOtp}
+              >
+                Valider
+              </Button>
+            </InputGroup>
+          </Form>
+        </div>
       </Stack>
     </Container>
   );

@@ -77,7 +77,10 @@ function ChooseVerifMethod() {
             <img src={vector4} alt="Vector 4" className="vector" />
           </div>
         </Col>
-        <Col className="d-flex justify-content-center  col-m-200" sm={12}>
+        <Col
+          className="d-flex justify-content-center  col-m-200 mx-auto text-center"
+          sm={12}
+        >
           <h1 className="col-m-25">Choix de la méthode de vérificaiton </h1>
         </Col>
         <div className="d-flex justify-content-center col-button button-mt-40">

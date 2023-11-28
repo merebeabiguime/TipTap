@@ -209,7 +209,7 @@ export async function getAllStaff() {
 export async function getStaffList() {
   const allStaff = await getAllStaff();
   const staffList = [];
-  const roleMap = ["Chef", "Waiter", "Cleaner"];
+  const roleMap = ["Unknown", "Waiter", "Cleaner", "Chef"];
   if (allStaff != 0) {
     for (let i = 0; i < allStaff.length; i++) {
       const users = await getUserFromId(allStaff[i].ID_user);

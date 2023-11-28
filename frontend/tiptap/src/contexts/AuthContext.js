@@ -54,32 +54,6 @@ export function UserContextProvider(props) {
   }
   auth.languageCode = "fr";
 
-  const qrCodeMutation = useMutation({
-    mutationFn: async () =>
-      await myAxios.get(`/qrcode/${userIdValueQR.current}`, {
-        headers: { Authorization: "Bearer " + accessToken },
-      }),
-    onSuccess: (data) => {
-      if (data.data.status === "Success") {
-        //ADD COOLDOWN BEFOFRE GOING TO NEXT PAGE
-        setMessage("Success");
-        staffAuthObject.current = data.data.response[0];
-
-        setNavigateTo(
-          "/privateManager/private-home-manager/add-staff/select-staff-role"
-        );
-      } else {
-        //setValidation(data.response);
-        setMessage(data.data.response);
-        setNavigateTo("/privateManager/private-home-manager/");
-      }
-    },
-  });
-
-  function qrCodeCall(uId) {
-    userIdValueQR.current = uId;
-    qrCodeMutation.mutate();
-  }
   const [currentUser, setCurrentUser] = useState();
 
   useEffect(() => {
@@ -197,8 +171,7 @@ export function UserContextProvider(props) {
         signInWith,
         navigateTo,
         auth,
-        qrCodeCall,
-        qrCodeMutation,
+
         message,
         staffAuthObject,
         getUserInfos,
@@ -242,8 +215,6 @@ export function useUserContext() {
     signInWith,
     navigateTo,
     auth,
-    qrCodeCall,
-    qrCodeMutation,
     message,
     staffAuthObject,
     getUserInfos,
@@ -275,8 +246,6 @@ export function useUserContext() {
     signInWith,
     navigateTo,
     auth,
-    qrCodeCall,
-    qrCodeMutation,
     message,
     staffAuthObject,
     getUserInfos,
