@@ -7,7 +7,6 @@ import { UserContextProvider } from "./contexts/AuthContext.js";
 import "./firebase.js";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { disableReactDevTools } from "@fvilers/disable-react-devtools";
-import { TestContextProvider } from "./contexts/fetches-contexts/TestContext.js";
 
 if (process.env.NODE_ENV === "production") disableReactDevTools();
 

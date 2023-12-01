@@ -31,7 +31,6 @@ export default function StaffCaroussel() {
     <div>
       <div className="mx-auto mb-4 d-flex justify-content-center align-items-center">
         <img
-          style={{ width: "31%", height: "11%" }}
           src={IconChef}
           className="image_selectRole"
           alt="icon"
@@ -40,7 +39,6 @@ export default function StaffCaroussel() {
           }}
         />
         <img
-          style={{ width: "31%", height: "11%" }}
           src={IconCleaner}
           className="image_selectRole"
           alt="icon"
@@ -49,7 +47,6 @@ export default function StaffCaroussel() {
           }}
         />
         <img
-          style={{ width: "31%", height: "11%" }}
           src={IconWaiter}
           className="image_selectRole"
           alt="icon"

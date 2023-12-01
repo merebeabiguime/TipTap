@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useRef, useState } from "react";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { useFetchStaff } from "../../fetches/FetchStaff";
+import { useFetchRestaurant } from "../../fetches/FetchRestaurant";
 
 export const StaffContext = createContext();
 
@@ -15,7 +16,7 @@ export function StaffContextProvider(props) {
   const [rating, setRating] = useState(0);
   const restaurantIdParams = useRef(null);
   const fetchStaff = useFetchStaff();
-  const staffQuery = useRef(true);
+  const [navigateTo, setNavigateTo] = useState(null);
   const [selectedStaffTip, setSelectedStaffTip] = useState(null);
 
   const allStaffMutation = useMutation({
@@ -54,6 +55,8 @@ export function StaffContextProvider(props) {
         getAllStaff,
         selectedStaffTip,
         setSelectedStaffTip,
+        navigateTo,
+        setNavigateTo,
       }}
     >
       {props.children}
@@ -83,6 +86,8 @@ export function useStaffContext() {
     getAllStaff,
     selectedStaffTip,
     setSelectedStaffTip,
+    navigateTo,
+    setNavigateTo,
   } = useContext(StaffContext);
 
   return {
@@ -106,5 +111,7 @@ export function useStaffContext() {
     getAllStaff,
     selectedStaffTip,
     setSelectedStaffTip,
+    navigateTo,
+    setNavigateTo,
   };
 }
