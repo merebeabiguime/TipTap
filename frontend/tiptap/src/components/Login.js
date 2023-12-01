@@ -31,6 +31,7 @@ function Login() {
     currentUser,
     setCurrentUser,
     resetPasswordURL,
+    navigateTo,
   } = useUserContext();
   const inputs = useRef([]);
   const [validation, setValidation] = useState("");
@@ -41,10 +42,6 @@ function Login() {
       inputs.current.push(el);
     }
   };
-
-  useEffect(() => {
-    console.log("reset", resetPasswordURL.current);
-  }, []);
 
   const formRef = useRef();
 
@@ -57,22 +54,16 @@ function Login() {
         inputs.current[0].value,
         inputs.current[1].value
       );
-      setCurrentUser(currentUser);
+      setCurrentUser(cred.user);
     } catch (err) {
       setValidation("Email or password incorrect");
+      console.error(err);
     }
   };
 
   useEffect(() => {
-    if (currentUser && getUserInfos.isSuccess) {
-      if (getUserInfos.data.response[0].role === 1) {
-        navigate("/privateWorker/private-home-worker");
-      } else if (getUserInfos.data.response[0].role === 2) {
-        navigate("/privateManager/private-home-manager");
-      }
-    }
-  }, [getUserInfos, userObject]);
-
+    navigate(navigateTo);
+  }, [navigateTo]);
   return (
     <Container className="gx-0 fluid ">
       <Stack>

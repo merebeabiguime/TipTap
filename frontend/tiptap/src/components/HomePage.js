@@ -1,15 +1,17 @@
+import { useEffect } from "react";
 import { Button, Container, Stack } from "react-bootstrap";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
 import { Link } from "react-router-dom";
 import vector3 from "../images/Vector 3.png";
 import vector4 from "../images/Vector 4.png";
 import homepageIcon from "../images/homepage_icon.png";
 import logo from "../images/logo.PNG";
 import "../style.css";
-import QRCode from "react-qr-code";
 
 function HomePage() {
+  useEffect(() => {
+    console.log("creeraa");
+    return () => console.log("détruitaa");
+  }, []);
   return (
     <Container className="gx-0 fluid ">
       <Stack>

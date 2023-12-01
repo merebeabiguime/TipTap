@@ -1,24 +1,21 @@
-import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import "../style.css";
 
 import { useEffect, useRef, useState } from "react";
-import { Button, Container, Form, InputGroup, Stack } from "react-bootstrap";
-import { useMutation } from "react-query";
+import {
+  Button,
+  Container,
+  Form,
+  InputGroup,
+  Spinner,
+  Stack,
+} from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../contexts/AuthContext";
 import PreviousPageButton from "../features/PreviousPageButton";
 import { useFetchUsers } from "../fetches/FetchUsers";
-import { auth } from "../firebase";
 
 function ValidatePhone() {
-  const {
-    userObject,
-    signOutFirebase,
-    verifyEmail,
-    setCurrentUser,
-    otpPhoneNumber,
-    setOtpPhoneNumber,
-  } = useUserContext();
+  const { userObject, setOtpPhoneNumber, getUserInfos } = useUserContext();
   const inputs = useRef([]);
   const navigate = useNavigate();
   const fetchUser = useFetchUsers();
@@ -61,7 +58,7 @@ function ValidatePhone() {
     navigate("/verifyUser");
   };
 
-  return (
+  return !getUserInfos.isLoading && getUserInfos.isSuccess ? (
     <Container className="gx-0 fluid ">
       <Stack>
         <div>
@@ -97,6 +94,10 @@ function ValidatePhone() {
         </div>
       </Stack>
     </Container>
+  ) : (
+    <div className="centered-div">
+      <Spinner animation="border" />
+    </div>
   );
 }
 

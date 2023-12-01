@@ -1,10 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { useUserContext } from "../../contexts/AuthContext";
 export default function PrivateManager() {
-  const { currentUser, userObject, getUserInfos, resetPasswordURL } =
-    useUserContext();
+  const {
+    currentUser,
+    userObject,
+    getUserInfos,
+    resetPasswordURL,
+    navigateTo,
+  } = useUserContext();
   const [myReturn, setMyreturn] = useState(<Outlet />);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    navigate(navigateTo);
+  }, [navigateTo]);
 
   useEffect(() => {
     if (!currentUser) {
@@ -26,7 +36,6 @@ export default function PrivateManager() {
   }, [getUserInfos]);
 
   useEffect(() => {
-    console.log("reset", resetPasswordURL.current);
     if (resetPasswordURL.current !== "") {
       window.location.href = resetPasswordURL.current;
     }
