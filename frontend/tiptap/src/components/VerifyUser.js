@@ -121,7 +121,6 @@ function VerifyUser() {
     refetchOnWindowFocus: false,
     onSuccess: (data) => {
       if (data.status === "Success") {
-        signOutFirebase();
         window.location.href = "/signin";
       } else {
         //Message d'erreur

@@ -30,19 +30,11 @@ function SignUp() {
   const jsonData = useRef([]);
   const formRef = useRef();
 
-  const isValidPhoneNumber = (phoneNumber) => {
-    // Define a regular expression for the specific phone number format
-    const phoneRegex = /^\+\d{2}\d+$/;
-
-    // Test the input phone number against the regular expression
-    return phoneRegex.test(phoneNumber);
-  };
-
   const signUpWithMysqlMutation = useMutation({
     mutationFn: async () => await fetchAuth.register(jsonData),
     onSuccess: (data) => {
       if (data.status === "Success") {
-        navigate("/signIn");
+        window.location.href = "/signIn";
         setValidation("");
       } else {
         setValidation(data.response);
@@ -78,7 +70,9 @@ function SignUp() {
         phone: inputs.current[3].value,
         password: "password",
         role: userRole,
-        pictureUrl: data.img ? data.img : "default.png",
+        pictureUrl: data.img
+          ? data.img
+          : "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Windows_10_Default_Profile_Picture.svg/2048px-Windows_10_Default_Profile_Picture.svg.png",
         ID_restaurant: 0,
         UID: credentials.user.uid,
         verified: 0,
@@ -96,7 +90,7 @@ function SignUp() {
     }
   }
 
-  const validatePhoneNumber = (phoneNumber) => {
+  const isValidPhoneNumber = (phoneNumber) => {
     // Expression régulière pour valider le numéro de téléphone
     const phoneNumberRegex = /^\+330\d{9}$/;
 

@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   Navigate,
   Outlet,
@@ -9,49 +9,66 @@ import {
 import { useUserContext } from "../../contexts/AuthContext";
 import { Spinner } from "react-bootstrap";
 import { useFetchRestaurant } from "../../fetches/FetchRestaurant";
-import { useQuery } from "react-query";
+import { QueryClient, useQuery } from "react-query";
 import { useStaffContext } from "../../contexts/fetches-contexts/StaffContext";
 export default function PrivateClient() {
   let { restaurantId } = useParams();
   const restaurantIdValue = restaurantId.split("=")[1];
-  const [validation, setValidation] = useState("");
-  const fetchRestaurant = useFetchRestaurant();
-  const enableQuery = useRef(true);
-  const { restaurantIdParams, setRestaurantIdParams } = useStaffContext();
+  const { restaurantIdParams, navigateTo } = useStaffContext();
   const navigate = useNavigate();
 
-  if (restaurantIdParams !== null) {
-    enableQuery.current = false;
-  }
+  const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const fetchRestaurant = useFetchRestaurant();
 
-  //Check in db if restaurant exists
-  const restaurantQuery = useQuery({
-    queryKey: ["restaurant"],
-    queryFn: async () => await fetchRestaurant.getRestaurant(restaurantIdValue),
-    enabled: enableQuery.current,
-    onSuccess: (data) => {
-      if (data.status != "Success") {
-        setValidation(data.response);
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: Infinity,
+      },
+    },
+  });
+
+  const fetchRes = async (resId) => {
+    try {
+      setIsLoading(true);
+      const data = await queryClient.fetchQuery(["restaurant"], {
+        queryFn: async () => await fetchRestaurant.getRestaurant(resId),
+      });
+
+      if (data.status === "Success") {
+        restaurantIdParams.current = resId;
+        navigate(`/privateClient/restaurantId=${resId}/private-home-client/`);
+      } else {
+        setMessage(data.response);
         setTimeout(() => {
           navigate("/homepage/");
         }, 3000);
-      } else {
-        restaurantIdParams.current = restaurantIdValue;
-        navigate(
-          `/privateClient/restaurantId=${restaurantIdValue}/private-home-client/`
-        );
       }
-    },
-  });
-  return !restaurantQuery.isLoading || enableQuery.current === false ? (
+    } catch (e) {
+      setMessage("Une erreur s'est produite...");
+    }
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    if (restaurantIdParams.current === null) {
+      fetchRes(restaurantIdValue);
+    } else {
+      setIsLoading(false);
+    }
+  }, []);
+
+  return !isLoading && message === "" ? (
     <div>
-      <div className=" d-flex justify-content-center align-items-center">
-        <h1>{validation}</h1>
-      </div>
       <Outlet />
     </div>
+  ) : !isLoading && message !== "" ? (
+    <div className=" centered-div mx-auto text-center">
+      <h1>{message}</h1>
+    </div>
   ) : (
-    <div>
+    <div className="centered-div">
       <Spinner animation="border" />
     </div>
   );
