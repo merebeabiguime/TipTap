@@ -1,23 +1,17 @@
 import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
 import vector3 from "../../../images/Vector 3.png";
 import vector4 from "../../../images/Vector 4.png";
-import UserIcon from "../../../images/signup_user_icon.png";
-import MailIcon from "../../../images/signup_mail_icon.png";
 import qrCodeScanner from "../../../images/scan_qrcode_icon.png";
+import MailIcon from "../../../images/signup_mail_icon.png";
 import "../../../style.css";
-import { useZxing } from "react-zxing";
-import { Html5QrcodeScanner } from "html5-qrcode";
 
-import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { QrScanner } from "@yudiel/react-qr-scanner";
+import { useRef, useState } from "react";
 import { Button, Container, Form, InputGroup, Stack } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { useUserContext } from "../../../contexts/AuthContext";
-import PreviousPageButton from "../../../features/PreviousPageButton";
-import { isEmailValid, useFetchStaff } from "../../../fetches/FetchStaff";
 import { useStaffContext } from "../../../contexts/fetches-contexts/StaffContext";
-import { QrScanner } from "@yudiel/react-qr-scanner";
+import PreviousPageButton from "../../../features/PreviousPageButton";
+import { useFetchStaff } from "../../../fetches/FetchStaff";
 function AddStaff() {
   const { staffObject } = useStaffContext();
   const inputs = useRef("");
@@ -66,7 +60,7 @@ function AddStaff() {
       const getValidStaffResponse = await fetchStaff.isEmailValid(
         inputs.current.value
       );
-      if (getValidStaffResponse.status == "Success") {
+      if (getValidStaffResponse.status === "Success") {
         staffObject.current = {
           firstName: getValidStaffResponse.response[0].firstName,
           lastName: getValidStaffResponse.response[0].lastName,
@@ -128,7 +122,7 @@ function AddStaff() {
           className="mx-auto qrCodeScanner"
           onClick={handleQRCodeScannerClick}
         >
-          <img src={qrCodeScanner} />
+          <img alt="" src={qrCodeScanner} />
         </div>
         {showVideo && (
           <div>

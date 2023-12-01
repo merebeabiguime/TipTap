@@ -6,8 +6,6 @@ import React, {
   useState,
 } from "react";
 
-import { myAxios } from "../axios/axios";
-
 import {
   FacebookAuthProvider,
   GoogleAuthProvider,
@@ -37,7 +35,7 @@ export function UserContextProvider(props) {
   const [data, setData] = useState({});
   const [message, setMessage] = useState("");
   const googleUser = useRef([]);
-  const [enableGetUser, setEnableGetUser] = useState(false);
+
   const fetchAuth = useFetchAuth();
   const googleProvider = new GoogleAuthProvider();
   const facebookProvider = new FacebookAuthProvider();
@@ -52,29 +50,34 @@ export function UserContextProvider(props) {
   function setResetPasswordURL(url) {
     resetPasswordURL.current = url;
   }
-  auth.languageCode = "fr";
 
-  const [currentUser, setCurrentUser] = useState();
-
-  useEffect(() => {
-    if (currentUser) {
-      setEnableGetUser(true);
-    }
-  }, [currentUser]);
+  const [currentUser, setCurrentUser] = useState(null);
 
   const getUserInfos = useQuery({
     queryFn: async () => await fetchUser.getUser(currentUser.uid),
     queryKey: "User Infos",
-    enabled: enableGetUser,
+    enabled: !!currentUser,
+    refetchOnWindowFocus: false,
     onSuccess: (data) => {
-      console.log("luser", currentUser);
       if (data.status === "Success") {
+        console.log("successsss");
         //Pourquoi setAccess Token avant d'appeler loginMutation ?
         setUserObject(data.response);
+        if (
+          !currentUser.emailVerified &&
+          data.response[0].verified === 0 &&
+          resetPasswordURL.current === ""
+        ) {
+          setNavigateTo("/choose-verif-method");
+        } else if (resetPasswordURL.current !== "") {
+          setNavigateTo(resetPasswordURL.current);
+        } else if (data.response[0].role === 1) {
+          setNavigateTo("/privateWorker/private-home-worker");
+        } else if (data.response[0].role === 2) {
+        }
       } else {
         //Message d'erreur
       }
-      setEnableGetUser(false);
     },
   });
 
@@ -139,6 +142,7 @@ export function UserContextProvider(props) {
   }
 
   const [loadingData, setLoadingData] = useState(true);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setCurrentUser(currentUser);
@@ -171,7 +175,7 @@ export function UserContextProvider(props) {
         signInWith,
         navigateTo,
         auth,
-
+        setCurrentUser,
         message,
         staffAuthObject,
         getUserInfos,
@@ -182,7 +186,7 @@ export function UserContextProvider(props) {
         setOtpPhoneNumber,
       }}
     >
-      {!loadingData && !isFetching ? (
+      {!isFetching && !loadingData ? (
         props.children
       ) : (
         <div className="centered-div">
@@ -223,6 +227,7 @@ export function useUserContext() {
     setResetPasswordURL,
     otpPhoneNumber,
     setOtpPhoneNumber,
+    setCurrentUser,
   } = useContext(UserContext);
 
   return {
@@ -254,5 +259,6 @@ export function useUserContext() {
     setResetPasswordURL,
     otpPhoneNumber,
     setOtpPhoneNumber,
+    setCurrentUser,
   };
 }

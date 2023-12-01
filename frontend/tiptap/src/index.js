@@ -7,6 +7,7 @@ import { UserContextProvider } from "./contexts/AuthContext.js";
 import "./firebase.js";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { disableReactDevTools } from "@fvilers/disable-react-devtools";
+import { TestContextProvider } from "./contexts/fetches-contexts/TestContext.js";
 
 if (process.env.NODE_ENV === "production") disableReactDevTools();
 
@@ -15,15 +16,15 @@ const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <PayPalScriptProvider
-        options={{ clientId: process.env.REACT_APP_PAYPAL_CLIENT_ID }}
-      >
-        <UserContextProvider>
-          <App />
-        </UserContextProvider>
-      </PayPalScriptProvider>
-    </QueryClientProvider>
-  </React.StrictMode>
+  //<React.StrictMode>
+  <QueryClientProvider client={queryClient}>
+    <PayPalScriptProvider
+      options={{ clientId: process.env.REACT_APP_PAYPAL_CLIENT_ID }}
+    >
+      <UserContextProvider>
+        <App />
+      </UserContextProvider>
+    </PayPalScriptProvider>
+  </QueryClientProvider>
+  //</React.StrictMode>
 );

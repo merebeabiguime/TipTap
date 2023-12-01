@@ -1,8 +1,6 @@
-import React, { useContext, useState, createContext, useRef } from "react";
+import React, { createContext, useContext, useRef, useState } from "react";
+import { useMutation } from "react-query";
 import { useFetchStaff } from "../../fetches/FetchStaff";
-import { getUser } from "../../fetches/FetchUsers";
-import { useMutation, useQuery } from "react-query";
-import { Spinner } from "react-bootstrap";
 
 export const StaffContext = createContext();
 

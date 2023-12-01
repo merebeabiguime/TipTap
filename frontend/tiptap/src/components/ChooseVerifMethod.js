@@ -1,32 +1,20 @@
-import "../style.css";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import vector3 from "../images/Vector 3.png";
 import vector4 from "../images/Vector 4.png";
-import PasswordIcon from "../images/signup_password_icon.png";
+import "../style.css";
 
-import { Button, InputGroup, Form, Spinner } from "react-bootstrap";
+import { useState } from "react";
+import { Button, Spinner } from "react-bootstrap";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useUserContext } from "../contexts/AuthContext";
-import { useEffect, useRef, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useMutation } from "react-query";
-import { useFetchUsers } from "../fetches/FetchUsers";
-import { applyActionCode } from "firebase/auth";
-import { auth } from "../firebase";
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
 
 function ChooseVerifMethod() {
-  const {
-    currentUser,
-    resetPasswordURL,
-    setResetPasswordURL,
-    verifyEmail,
-    setCurrentUser,
-    signOutFirebase,
-  } = useUserContext();
+  const { verifyEmail, getUserInfos } = useUserContext();
   const navigate = useNavigate();
 
   const [sendingEmail, setSendingEmail] = useState(false);
@@ -66,7 +54,7 @@ function ChooseVerifMethod() {
     };
   }, []);*/
 
-  return (
+  return !getUserInfos.isLoading && getUserInfos.isSuccess ? (
     <div>
       <Row>
         <Col className="justify-content-end" sm={12}>
@@ -118,6 +106,10 @@ function ChooseVerifMethod() {
           </Button>
         </div>
       </Row>
+    </div>
+  ) : (
+    <div className="centered-div">
+      <Spinner animation="border" />
     </div>
   );
 }
