@@ -12,7 +12,7 @@ import userRoutes from "./routes/user.js";
 const app = express();
 const port = 8081;
 app.use(credentials);
-app.use(/*cors(corsOptions)*/);
+app.use(cors(/*corsOptions*/));
 app.use(express.json());
 app.use(cookieParser());
 

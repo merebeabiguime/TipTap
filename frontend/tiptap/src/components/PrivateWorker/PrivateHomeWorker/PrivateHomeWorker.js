@@ -21,7 +21,6 @@ export default function PrivateHomeWorker() {
     console.log("dedans");
     try {
       const result = await signOutFirebase();
-      setCurrentUser(null);
       window.location.href = "/signIn";
       console.log("success", result);
     } catch (error) {
@@ -56,7 +55,7 @@ export default function PrivateHomeWorker() {
     });
   };
 
-  const qrCodeUrl = `http://35.180.203.65/privateManager/private-home-manager/worker-qrcode/userId=${userObject[0].ID}`;
+  const qrCodeUrl = `https://tiptap.biz/privateManager/private-home-manager/worker-qrcode/userId=${userObject[0].ID}`;
 
   return (
     <Container>

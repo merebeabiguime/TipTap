@@ -74,6 +74,7 @@ export function UserContextProvider(props) {
         } else if (data.response[0].role === 1) {
           setNavigateTo("/privateWorker/private-home-worker");
         } else if (data.response[0].role === 2) {
+          setNavigateTo("/privateManager/private-home-manager");
         }
       } else {
         //Message d'erreur

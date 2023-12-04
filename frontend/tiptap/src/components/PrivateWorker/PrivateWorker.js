@@ -14,7 +14,9 @@ export default function PrivateWorker() {
 
   useEffect(() => {
     if (!currentUser) {
-      setMyreturn(<Navigate to="/signIn"></Navigate>);
+      if (!currentUser) {
+        window.location.href = "/signin";
+      }
     }
   }, [currentUser]);
 
