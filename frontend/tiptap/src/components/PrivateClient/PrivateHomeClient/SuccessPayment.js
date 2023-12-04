@@ -39,7 +39,7 @@ function SuccessPayment() {
             style={{ marginLeft: "35px", marginRight: "35px" }}
             className="customButton1"
             onClick={() => {
-              navigate("/homepage");
+              navigate("/");
             }}
           >
             Back To Home
