@@ -24,7 +24,7 @@ function ForgotPassword() {
     try {
       const forgot = await forgotPassword(email);
       setValidation("");
-      navigate("/homepage");
+      navigate("/");
     } catch (err) {
       setValidation("Incorrect Email Adress");
     }

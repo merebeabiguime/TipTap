@@ -42,7 +42,7 @@ export default function PrivateClient() {
       } else {
         setMessage(data.response);
         setTimeout(() => {
-          navigate("/homepage/");
+          navigate("/");
         }, 3000);
       }
     } catch (e) {

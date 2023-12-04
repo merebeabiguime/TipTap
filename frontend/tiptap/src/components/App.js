@@ -32,7 +32,7 @@ function App() {
           Component={ChooseVerifMethod}
         ></Route>
         <Route path="/validate-phone" Component={ValidatePhone}></Route>
-        <Route path="/homepage" Component={HomePage}></Route>
+        <Route path="/" Component={HomePage}></Route>
         <Route path="/selectRole" Component={SelectRole}></Route>
         <Route path="/signup" Component={SignUp}></Route>
         <Route path="/signIn" Component={Login}></Route>
