@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import "../../../style.css";
 
 import { useState } from "react";
-import { Col, Row } from "react-bootstrap";
+import { Col, Row, Spinner } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { useUserContext } from "../../../contexts/AuthContext";
 import { useStaffContext } from "../../../contexts/fetches-contexts/StaffContext";
@@ -53,7 +53,7 @@ export default function WorkerQrCode() {
     qrCodeMutation.mutate();
   }, []);
 
-  return (
+  return !qrCodeMutation.isLoading && qrCodeMutation.isSuccess ? (
     <div>
       <Row>
         <Col
@@ -63,6 +63,10 @@ export default function WorkerQrCode() {
           <h1>{message}</h1>
         </Col>
       </Row>
+    </div>
+  ) : (
+    <div className="centered-div">
+      <Spinner animation="border" />
     </div>
   );
 }

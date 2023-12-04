@@ -21,7 +21,6 @@ function PrivateHomeManager() {
     console.log("dedans");
     try {
       const result = await signOutFirebase();
-      setCurrentUser(null);
       window.location.href = "/signIn";
       console.log("success", result);
     } catch (error) {

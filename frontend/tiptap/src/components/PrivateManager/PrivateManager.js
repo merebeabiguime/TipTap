@@ -18,9 +18,9 @@ export default function PrivateManager() {
 
   useEffect(() => {
     if (!currentUser) {
-      setMyreturn(<Navigate to="/signIn"></Navigate>);
+      window.location.href = "/signin";
     }
-  }, [currentUser, getUserInfos]);
+  }, [currentUser]);
 
   useEffect(() => {
     if (getUserInfos.isSuccess) {
