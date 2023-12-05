@@ -67,6 +67,7 @@ export default function WorkerQrCode() {
   ) : (
     <div className="centered-div">
       <Spinner animation="border" />
+      <h1>Spinning</h1>
     </div>
   );
 }

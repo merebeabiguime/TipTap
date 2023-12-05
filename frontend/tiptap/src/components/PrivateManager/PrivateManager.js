@@ -2,19 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { useUserContext } from "../../contexts/AuthContext";
 export default function PrivateManager() {
-  const {
-    currentUser,
-    userObject,
-    getUserInfos,
-    resetPasswordURL,
-    navigateTo,
-  } = useUserContext();
+  const { currentUser, userObject, getUserInfos, resetPasswordURL } =
+    useUserContext();
   const [myReturn, setMyreturn] = useState(<Outlet />);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    navigate(navigateTo);
-  }, [navigateTo]);
 
   useEffect(() => {
     if (!currentUser) {
