@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useStaffContext } from "../contexts/fetches-contexts/StaffContext";
 
 const PaypalCheckoutButton = (props) => {
-  const { restaurantIdParams } = useStaffContext();
+  const { restaurantIdParams, transactionId, setTransactionId } =
+    useStaffContext();
   const { product } = props;
   const [paidFor, setPaidFor] = useState(false);
   const [error, setError] = useState(null);
@@ -42,6 +43,8 @@ const PaypalCheckoutButton = (props) => {
       }}
       onApprove={async (data, actions) => {
         const order = await actions.order.capture();
+        setTransactionId(data.orderID);
+        console.log(transactionId);
         handleApprove(data.orderID);
       }}
       onError={(err) => {

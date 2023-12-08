@@ -1,18 +1,15 @@
 import { Button, Container, Form, InputGroup, Stack } from "react-bootstrap";
-import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import { Link } from "react-router-dom";
 
-import IconStar from "../../../images/other_stars.png";
-import IconStarUnselected from "../../../images/other_stars_unselected.png";
-import Divider from "../../../images/divider.png";
-import logo from "../../../images/logo.PNG";
-import "../../../style.css";
-import QRCode from "react-qr-code";
-import StaffCaroussel from "./StaffCaroussel";
 import { useEffect, useState } from "react";
 import { useStaffContext } from "../../../contexts/fetches-contexts/StaffContext";
 import PaypalCheckoutButton from "../../../features/PaypalCheckoutButton";
+import Divider from "../../../images/divider.png";
+import logo from "../../../images/logo.PNG";
+import IconStar from "../../../images/other_stars.png";
+import IconStarUnselected from "../../../images/other_stars_unselected.png";
+import "../../../style.css";
+import StaffCaroussel from "./StaffCaroussel";
 
 function PrivateHomeClient() {
   const {
@@ -120,19 +117,12 @@ function PrivateHomeClient() {
         </div>
         <div className="mx-auto mb-4">
           <Button
-            onClick={() => selectPriceTag("1.25")}
+            onClick={() => {
+              selectPriceTag("1.25");
+              setEnteredAmount(null);
+            }}
             className={
               tipAmount === 0 || selectedPriceTag != "1.25"
-                ? `price-button`
-                : ` price-button_focus `
-            }
-          >
-            {"1.00 €"}
-          </Button>
-          <Button
-            onClick={() => selectPriceTag("1.50")}
-            className={
-              tipAmount === 0 || selectedPriceTag != "1.50"
                 ? `price-button`
                 : ` price-button_focus `
             }
@@ -140,9 +130,12 @@ function PrivateHomeClient() {
             {"1.25 €"}
           </Button>
           <Button
-            onClick={() => selectPriceTag("1.75")}
+            onClick={() => {
+              selectPriceTag("1.50");
+              setEnteredAmount(null);
+            }}
             className={
-              tipAmount === 0 || selectedPriceTag != "1.75"
+              tipAmount === 0 || selectedPriceTag != "1.50"
                 ? `price-button`
                 : ` price-button_focus `
             }
@@ -150,14 +143,30 @@ function PrivateHomeClient() {
             {"1.50 €"}
           </Button>
           <Button
-            onClick={() => selectPriceTag("2.00")}
+            onClick={() => {
+              selectPriceTag("1.75");
+              setEnteredAmount(null);
+            }}
+            className={
+              tipAmount === 0 || selectedPriceTag != "1.75"
+                ? `price-button`
+                : ` price-button_focus `
+            }
+          >
+            {"1.75 €"}
+          </Button>
+          <Button
+            onClick={() => {
+              selectPriceTag("2.00");
+              setEnteredAmount(null);
+            }}
             className={
               tipAmount === 0 || selectedPriceTag != "2.00"
                 ? `price-button`
                 : ` price-button_focus `
             }
           >
-            {"1.75 €"}
+            {"2.00 €"}
           </Button>
         </div>
 
@@ -200,18 +209,28 @@ function PrivateHomeClient() {
             </InputGroup>
 
             <div className="">
-              <Button
-                disabled={
-                  tipAmount === 0 || rating === 0 || selectedStaff == null
-                    ? true
-                    : false
-                }
-                type="submit"
-                className="customButton1"
-                value={enteredAmount}
-              >
-                {`Pay (${tipAmount}) €`}
-              </Button>
+              {comment === "" ? (
+                <Button
+                  disabled={
+                    tipAmount === 0 || rating === 0 || selectedStaff == null
+                      ? true
+                      : false
+                  }
+                  type="submit"
+                  className="customButton1"
+                  value={enteredAmount}
+                >
+                  {`Pay (${tipAmount}) €`}
+                </Button>
+              ) : (
+                <Button
+                  type="submit"
+                  className="customButton1"
+                  value={enteredAmount}
+                >
+                  Envoyer le commentaire
+                </Button>
+              )}
             </div>
             {tipAmount !== 0 && selectedStaff !== null && rating !== 0 && (
               <div className="justify-content-center mx-auto mt-4">

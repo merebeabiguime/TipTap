@@ -1,18 +1,15 @@
-import React, { useEffect, useRef, useState } from "react";
-import QRCode from "react-qr-code";
-import { useUserContext } from "../../../contexts/AuthContext";
-import { Button, Container, Stack } from "react-bootstrap";
-import PreviousPageButton from "../../../features/PreviousPageButton";
-import { Link } from "react-router-dom";
-import { RWebShare } from "react-web-share";
 import { saveAs } from "file-saver";
 import html2canvas from "html2canvas";
+import React, { useEffect, useRef, useState } from "react";
+import { Button, Container, Stack } from "react-bootstrap";
+import QRCode from "react-qr-code";
+import { RWebShare } from "react-web-share";
+import { useUserContext } from "../../../contexts/AuthContext";
 import SaveIcon from "../../../images/save_to_gallery_icon.png";
 import shareIcon from "../../../images/share_icon.png";
 
 export default function PrivateHomeWorker() {
-  const { userObject, signOutFirebase, setUserObject, setCurrentUser } =
-    useUserContext();
+  const { userObject, signOutFirebase } = useUserContext();
 
   const qrCodeRef = useRef();
   const [canvasRendered, setCanvasRendered] = useState(false);
@@ -61,9 +58,6 @@ export default function PrivateHomeWorker() {
     <Container>
       <Stack>
         <Stack direction="horizontal" className="mb-4">
-          <div className="">
-            <PreviousPageButton />
-          </div>
           <div style={{ marginTop: " 65px", marginLeft: "20px" }}>
             <h1 className="customTitle1">Tip QR Code </h1>
           </div>

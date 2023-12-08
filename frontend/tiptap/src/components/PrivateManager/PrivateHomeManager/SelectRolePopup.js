@@ -14,6 +14,7 @@ export default function SelectRolePopup() {
         staffList.filter((staff) => staff.role === newRoleFilter)
       );
     }
+    setIsPopupVisible(!isPopupVisible);
   };
   return (
     <div>

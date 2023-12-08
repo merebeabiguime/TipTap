@@ -301,6 +301,10 @@ h4 {
 .image_selectRole {
   margin-top: 42px;
 }
+.image_selectRoleOther {
+  margin-top: 42px;
+  width: 30% !important;
+}
 /***** Margins *****/
 .h1-mt-15 {
   margin-top: 15px;

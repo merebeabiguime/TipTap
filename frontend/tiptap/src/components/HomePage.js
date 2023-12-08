@@ -31,12 +31,12 @@ function HomePage() {
         >
           <h1 className="h1-mt-15">How would you like to register? </h1>
         </div>
-        <div className="" style={{ marginRight: "33px", marginLeft: "33px" }}>
+        {/*<div className="" style={{ marginRight: "33px", marginLeft: "33px" }}>
           <p className="p-mt-28">
             Jorem ipsum dolor sit amet, consectetur adipiscing elit. Nconubia
             nostra, per inceptos himenaeos. Nconubia nostra, per{" "}
           </p>
-        </div>
+  </div>*/}
         <Link to="/signIn" style={{ textDecoration: "none", color: "inherit" }}>
           <div className="d-flex justify-content-center col-button button-mt-40">
             <Button
