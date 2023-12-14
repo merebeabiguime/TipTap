@@ -294,12 +294,14 @@ h4 {
 
 /**********************************/
 .logo {
-  width: 135px;
-  height: 57px;
   margin-top: 152px;
 }
 .image_selectRole {
   margin-top: 42px;
+}
+.image_selectRoleOther {
+  margin-top: 42px;
+  width: 30% !important;
 }
 /***** Margins *****/
 .h1-mt-15 {
@@ -418,17 +420,26 @@ h6 {
   color: rgba(251, 188, 4, 1);
 }
 
+.allStaff_text {
+  font-size: 16px;
+  font-family: "Satoshi Variable";
+  font-weight: 500;
+  line-height: 21.6px;
+  margin-right: 20px;
+  white-space: pre;
+}
+
 /**** Profile picture ****/
 .profile-picure {
-  width: 55px !important; /* Ajustez la taille de l'image comme vous le souhaitez */
-  height: 45px !important; /* Ajustez la taille de l'image comme vous le souhaitez */
-  border-radius: 0px 25px 0px 25px !important; /* Cela rendra les coins de l'image arrondis */
-  object-fit: cover !important; /* Ajuste l'image pour remplir le carré */
+  width: 55px !important;
+  height: 55px !important; /* Ajustez la hauteur pour faire correspondre la largeur */
+  border-radius: 50% !important; /* Utilisez 50% pour obtenir un cercle parfait */
+  object-fit: cover !important;
   border: solid 2px;
   border-color: rgba(255, 255, 255, 1);
-
   box-shadow: 0px 4px 10px 3px rgba(0, 0, 0, 0.25);
 }
+
 .profile-picture-2 {
   width: 90px; /* Ajustez la taille de l'image comme vous le souhaitez */
   height: 90px; /* Ajustez la taille de l'image comme vous le souhaitez */

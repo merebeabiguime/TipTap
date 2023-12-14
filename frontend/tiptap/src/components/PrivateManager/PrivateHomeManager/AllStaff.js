@@ -1,19 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Button, Container, Stack } from "react-bootstrap";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import { getAllStaff } from "../../../fetches/FetchStaff";
-import { getUser } from "../../../fetches/FetchUsers";
-import DeleteButton from "../../../images/delete_staff_button.png";
-import EditButton from "../../../images/edit_staff_button.png";
+import { useUserContext } from "../../../contexts/AuthContext";
+import { useStaffContext } from "../../../contexts/fetches-contexts/StaffContext";
+import DeleteStaffButton from "../../../features/DeleteStaffButton";
+import PreviousPageButton from "../../../features/PreviousPageButton";
+import SelectRolePopup from "../../../features/SelectRolePopup";
 import Filter from "../../../images/filter_icon.png";
 import NoStar from "../../../images/no_star_icon.png";
 import Stars from "../../../images/stars.png";
-import Test from "../../../images/testeee.png";
-import SelectRolePopup from "../../../features/SelectRolePopup";
-import { useStaffContext } from "../../../contexts/fetches-contexts/StaffContext";
-import { useUserContext } from "../../../contexts/AuthContext";
-import PreviousPageButton from "../../../features/PreviousPageButton";
 
 export default function AllStaff() {
   const { staffListFilter, isPopupVisible, setIsPopupVisible } =
@@ -29,12 +25,13 @@ export default function AllStaff() {
     <Container>
       <Stack>
         <PreviousPageButton />
-        <div className="col-12 d-flex justify-content-center align-items-center first-margin  ">
+        <div className="col-12 d-flex justify-content-center align-items-center mb-2">
           <h2 className=" ">All Staff</h2>
           <img
             className=" profile-picure"
             src={userObject[0].pictureUrl}
-            style={{ position: "absolute", right: "15px" }}
+            style={{ position: "absolute", right: "18px" }}
+            alt="photo de profil"
           />
         </div>
 
@@ -44,7 +41,7 @@ export default function AllStaff() {
             style={{ backgroundColor: "transparent", border: "0" }}
           >
             {" "}
-            <img src={Filter} />
+            <img src={Filter} alt="Filtre" />
           </Button>
         </div>
         <div className="">
@@ -60,16 +57,9 @@ export default function AllStaff() {
               <Col className="customButton6 align-items-center">
                 <Row>
                   <Col className="col-10">
-                    <Col className="col-12 h-50">
-                      <span
-                        style={{
-                          fontSize: "16px",
-                          fontFamily: "Satoshi Variable",
-                          fontWeight: "500",
-                          lineHeight: "21.6px",
-                        }}
-                      >
-                        {staff.firstName} {staff.lastName}
+                    <Col className="col-12 h-50 allStaff_text">
+                      <span>
+                        {`${staff.firstName}  ${staff.lastName}  `}
                         <span
                           style={{
                             fontSize: "12px",
@@ -77,7 +67,7 @@ export default function AllStaff() {
                             fontFamily: "Satoshi Variable",
                           }}
                         >
-                          ({staff.role})
+                          ({`${staff.role}`})
                         </span>
                       </span>
                     </Col>
@@ -117,8 +107,7 @@ export default function AllStaff() {
                     </Col>
                   </Col>
                   <Col className="col-2">
-                    <img src={DeleteButton} alt="logo" className="" />
-                    <img src={EditButton} alt="logo" className="" />
+                    <DeleteStaffButton staff={staff} />
                   </Col>
                 </Row>
               </Col>

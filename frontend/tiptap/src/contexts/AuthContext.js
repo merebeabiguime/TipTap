@@ -86,9 +86,8 @@ export function UserContextProvider(props) {
     mutationFn: async () => await fetchAuth.otherAuth(googleUser.current[0]),
     onSuccess: (data) => {
       if (data.status === "Success") {
-        //Pourquoi setAccess Token avant d'appeler loginMutation ?
-        setAccessToken(data.accessToken);
-        //LOGIN MUTATION
+        setCurrentUser(googleUser.current[0]);
+        window.location.href = "/signIn";
       } else {
         //Message d'erreur
       }

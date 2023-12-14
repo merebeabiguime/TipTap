@@ -6,21 +6,29 @@ import { Button, Carousel } from "react-bootstrap";
 import { useStaffContext } from "../../../contexts/fetches-contexts/StaffContext";
 
 export default function StaffCaroussel() {
-  const [isImagesVisible, setImagesVisible] = useState(true);
+  const [isCarousselVisible, setIsCarousselVisible] = useState(false);
   const [activeIndex, setActiveIndex] = useState(null);
+  const [selectedRole, setSelectedRole] = useState("");
 
   const { staffListFilter, setStaffListFilter, staffList, setSelectedStaff } =
     useStaffContext();
 
   const handleRoleFilterChange = (newRoleFilter) => {
-    if (newRoleFilter === "") {
-      setStaffListFilter(staffList);
-      setImagesVisible(false);
+    if (isCarousselVisible && newRoleFilter === selectedRole) {
+      setIsCarousselVisible(false);
+      selectStaff(null);
+    } else if (newRoleFilter === "Cleaner") {
+      setIsCarousselVisible(false);
+      selectStaff(-1);
+    } else if (newRoleFilter === "Chef") {
+      setIsCarousselVisible(false);
+      selectStaff(0);
     } else {
       setStaffListFilter(
         staffList.filter((staff) => staff.role === newRoleFilter)
       );
-      setImagesVisible(false);
+      setIsCarousselVisible(true);
+      setSelectedRole(newRoleFilter);
     }
   };
   const selectStaff = (id) => {
@@ -32,18 +40,28 @@ export default function StaffCaroussel() {
       <div className="mx-auto mb-4 d-flex justify-content-center align-items-center">
         <img
           src={IconChef}
-          className="image_selectRole"
+          className={
+            selectedRole === "Chef"
+              ? `image_selectRoleOther`
+              : `image_selectRole`
+          }
           alt="icon"
           onClick={() => {
             handleRoleFilterChange("Chef");
+            setSelectedRole("Chef");
           }}
         />
         <img
           src={IconCleaner}
-          className="image_selectRole"
+          className={
+            selectedRole === "Cleaner"
+              ? `image_selectRoleOther`
+              : `image_selectRole`
+          }
           alt="icon"
           onClick={() => {
             handleRoleFilterChange("Cleaner");
+            setSelectedRole("Cleaner");
           }}
         />
         <img
@@ -52,10 +70,11 @@ export default function StaffCaroussel() {
           alt="icon"
           onClick={() => {
             handleRoleFilterChange("Waiter");
+            setSelectedRole("Waiter");
           }}
         />
       </div>
-      {!isImagesVisible && (
+      {isCarousselVisible && (
         <div className="mx-auto mb-4 carrousel-container">
           <div className="carrousel">
             {staffListFilter.map((staffMember, index) => (

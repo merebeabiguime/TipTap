@@ -153,11 +153,73 @@ export async function deleteUser(id) {
 
 /************************************** QUERIES DU PERSONNEL **********************************************/
 
+// Mettre à jour les étoiles d'un membre du personnel et recalculer la moyenne
+export async function updateStars(staffId, newStars) {
+  // Obtenir les informations actuelles du personnel
+  const [currentStaff] = await pool.query("SELECT * FROM staff WHERE ID = ?", [
+    staffId,
+  ]);
+
+  if (currentStaff.length === 0) {
+    return "Le membre du personnel n'existe pas.";
+  }
+
+  // Obtenir le nombre total d'étoiles à partir de la table tip
+  const [tipRows] = await pool.query(
+    "SELECT COUNT(*) AS total FROM tip WHERE id_staff = ?",
+    [staffId]
+  );
+  var totalStars = tipRows[0].total;
+
+  const [CommentRows] = await pool.query(
+    "SELECT COUNT(*) AS total FROM comment WHERE id_staff = ?",
+    [staffId]
+  );
+
+  totalStars = totalStars + CommentRows[0].total;
+
+  const currentRating = currentStaff[0].stars; // Ancien nombre d'étoiles
+  const newRating =
+    newStars !== 0
+      ? (currentRating * totalStars + newStars) / (totalStars + 1)
+      : currentRating;
+
+  var [rows] = null;
+
+  // Mettre à jour les étoiles et la moyenne dans la base de données
+  if (newRating !== currentRating) {
+    if (staffId === -1) {
+      [rows] = await pool.query("UPDATE staff SET stars = ? WHERE role = 2", [
+        newRating,
+      ]);
+    } else if (staffId === 0) {
+      [rows] = await pool.query("UPDATE staff SET stars = ? WHERE role = 3", [
+        newRating,
+      ]);
+    } else {
+      [rows] = await pool.query("UPDATE staff SET stars = ? WHERE ID = ?", [
+        newRating,
+        staffId,
+      ]);
+    }
+  }
+
+  // Vérifiez si la mise à jour a réussi (aucune exception n'a été levée)
+  if (
+    (rows !== null && rows.affectedRows === 1) ||
+    newRating === currentRating
+  ) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
 // Ajouter un membre du personnel
 export async function addStaff(staffObject) {
   const [rows] = await pool.query(
     "INSERT INTO staff (role,stars,ID_user) VALUES(?,?,?) ",
-    [staffObject[0].role, staffObject[0].stars, staffObject[0].ID_users]
+    [staffObject[0].role, 0, staffObject[0].ID_users]
   );
   // Vérifiez si l'insertion a réussi (aucune exception n'a été levée)
   if (rows.affectedRows === 1) {
@@ -209,7 +271,7 @@ export async function getAllStaff() {
 export async function getStaffList() {
   const allStaff = await getAllStaff();
   const staffList = [];
-  const roleMap = ["Unknown", "Waiter", "Cleaner", "Chef"];
+  const roleMap = ["Inconnu", "Serveur", "Nettoyeur", "Cuisinier"];
   if (allStaff != 0) {
     for (let i = 0; i < allStaff.length; i++) {
       const users = await getUserFromId(allStaff[i].ID_user);
@@ -218,7 +280,7 @@ export async function getStaffList() {
         staffList.push({
           role: roleMap[allStaff[i].role] || "Unknown",
           stars: allStaff[i].stars,
-          ID: users[0].ID,
+          ID: allStaff[i].ID,
           firstName: users[0].firstName,
           lastName: users[0].lastName,
           pictureUrl: users[0].pictureUrl,
@@ -233,14 +295,14 @@ export async function getStaffList() {
 
 // Supprimer un membre du personnel
 export async function deleteStaff(id) {
-  const user = await getStaff(id);
+  const staffExists = await getStaff(id);
 
-  if (staff === 0) {
-    return "Aucun staff n'existe pour cet ID.";
+  if (staffExists === 0) {
+    return 0;
   }
 
   const [rows] = await pool.query("DELETE FROM staff WHERE ID = ?", [id]);
-  return "Staff supprimé avec succès.";
+  return rows.length === 0 ? 0 : rows;
 }
 
 /************************************** QUERIES DES RESTAURANTS **********************************************/
@@ -312,11 +374,12 @@ export async function deleteRestaurant(id) {
 // Ajouter un commentaire
 export async function addComment(commentObject) {
   const [rows] = await pool.query(
-    "INSERT INTO comment (firstName,lastName,ID_restaurant) VALUES(?,?,?) ",
+    "INSERT INTO comment (comment,id_transaction,date,id_restaurant) VALUES(?,?,?,?) ",
     [
-      commentObject[0].firstName,
-      commentObject[0].lastName,
-      commentObject[0].ID_restaurant,
+      commentObject[0].tipComment,
+      commentObject[0].id_transaction,
+      commentObject[0].date,
+      commentObject[0].id_restaurant,
     ]
   );
   // Vérifiez si l'insertion a réussi (aucune exception n'a été levée)
@@ -401,5 +464,27 @@ export async function deleteRefreshToken(token) {
     return 1;
   } else {
     return 0;
+  }
+}
+
+/************************************** QUERIES DES TIPS **********************************************/
+
+// Ajouter un commentaire
+export async function addTip(tipObject) {
+  const [rows] = await pool.query(
+    "INSERT INTO comment (amount,id_restaurant,id_staff,id_transaction,date) VALUES(?,?,?,?,?) ",
+    [
+      tipObject[0].amount,
+      tipObject[0].restaurantId,
+      tipObject[0].id_staff,
+      tipObject[0].id_transaction,
+      tipObject[0].date,
+    ]
+  );
+  // Vérifiez si l'insertion a réussi (aucune exception n'a été levée)
+  if (rows.affectedRows === 1) {
+    return 1; // Retournez 1 pour indiquer que l'insertion a réussi
+  } else {
+    return 0; // Retournez 0 pour indiquer que l'insertion a échoué
   }
 }

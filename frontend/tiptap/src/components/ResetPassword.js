@@ -1,17 +1,17 @@
-import "../style.css";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import vector3 from "../images/Vector 3.png";
 import vector4 from "../images/Vector 4.png";
 import PasswordIcon from "../images/signup_password_icon.png";
+import "../style.css";
 
-import { Button, InputGroup, Form, Spinner } from "react-bootstrap";
-import { useUserContext } from "../contexts/AuthContext";
-import { useEffect, useRef, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useMutation } from "react-query";
-import { useFetchUsers } from "../fetches/FetchUsers";
 import { applyActionCode } from "firebase/auth";
+import { useEffect, useRef, useState } from "react";
+import { Button, Form, InputGroup, Spinner } from "react-bootstrap";
+import { useMutation } from "react-query";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useUserContext } from "../contexts/AuthContext";
+import { useFetchUsers } from "../fetches/FetchUsers";
 import { auth } from "../firebase";
 
 function useQuery() {
@@ -48,7 +48,6 @@ function ResetPassword() {
   const mode = query.get("mode");
   const oobCode = query.get("oobCode");
 
-  const [verified, setVerified] = useState(false);
   const fetchUser = useFetchUsers();
   const verifyEmailMutation = useMutation({
     mutationFn: async () => await fetchUser.verify(currentUser.uid),
@@ -59,11 +58,7 @@ function ResetPassword() {
           "Votre adresse email a été vérifié avec succès."
         );
       } else {
-        setVerified(false);
       }
-    },
-    onError: (data) => {
-      setVerified(false);
     },
   });
 
@@ -91,7 +86,7 @@ function ResetPassword() {
   const handleForm = async (e) => {
     e.preventDefault();
 
-    if (inputs.current[0].value != inputs.current[1].value) {
+    if (inputs.current[0].value !== inputs.current[1].value) {
       setValidation("Les mots de passe ne correspondent pas");
       return;
     }
@@ -120,9 +115,7 @@ function ResetPassword() {
           </div>
         </Col>
         <Col className="d-flex justify-content-center  col-m-200" sm={12}>
-          <h1 className="col-m-25">
-            Réinitialiser soqfsqsfqsfqfsn mot de passe{" "}
-          </h1>
+          <h1 className="col-m-25">Réinitialiser le mot de passe </h1>
         </Col>
         <Col className="d-flex justify-content-center  col-m-50" sm={12}>
           <p>Veuillez entrer un nouveau mot de passe</p>

@@ -1,21 +1,14 @@
 import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
 import customerIcon from "../../../images/customer_icon.png";
 import managerIcon from "../../../images/manager_icon.png";
 import "../../../style.css";
 
+import { Container, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useUserContext } from "../../../contexts/AuthContext";
-import { Container, Stack } from "react-bootstrap";
 
 function PrivateHomeManager() {
-  const {
-    selectRole,
-    currentUser,
-    signOutMy,
-    setCurrentUser,
-    signOutFirebase,
-  } = useUserContext();
+  const { selectRole, signOutFirebase } = useUserContext();
 
   const handleLogout = async () => {
     console.log("dedans");
@@ -36,7 +29,7 @@ function PrivateHomeManager() {
         "
           sm={12}
         >
-          <h1 className="text-center">Hotel Details </h1>
+          <h1 className="text-center">Tous les détails</h1>
         </Col>
         <Link
           to="/privateManager/private-home-manager/all-staff"
@@ -51,7 +44,7 @@ function PrivateHomeManager() {
               <img src={customerIcon} alt="logo" />
             </div>
             <div className="flex-grow-1  text-right d-flex justify-content-center align-items-center">
-              <h1 className="mb-0">All Staff</h1>
+              <h1 className="mb-0">Le personnel</h1>
             </div>
           </Col>
         </Link>
@@ -68,12 +61,12 @@ function PrivateHomeManager() {
               <img src={managerIcon} alt="logo" />
             </div>
             <div className="flex-grow-1  text-right d-flex justify-content-center align-items-center">
-              <h1 className="mb-0">Add Staff</h1>
+              <h1 className="mb-0">Ajouter</h1>
             </div>
           </Col>
         </Link>
         <div className="d-flex justify-content-center mt-4">
-          <p onClick={handleLogout}>Logout</p>
+          <p onClick={handleLogout}>Déconnexion</p>
         </div>
       </Stack>
     </Container>

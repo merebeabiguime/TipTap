@@ -1,9 +1,13 @@
-import axios from "axios";
 import { myAxios } from "../axios/axios";
 
 export function useFetchStaff() {
   const isEmailValid = async (email) => {
     const response = await myAxios.get(`/staff/email/${email}`);
+    return response.data;
+  };
+
+  const deleteStaff = async (staffId) => {
+    const response = await myAxios.delete(`/staff/delete/${staffId}`);
     return response.data;
   };
 
@@ -27,5 +31,6 @@ export function useFetchStaff() {
     getAllStaff,
     addStaff,
     getStaffList,
+    deleteStaff,
   };
 }

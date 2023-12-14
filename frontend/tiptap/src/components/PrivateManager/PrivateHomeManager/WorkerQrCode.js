@@ -10,15 +10,12 @@ import { useFetchQRCode } from "../../../fetches/FetchQRCode";
 import { useMutation } from "react-query";
 
 export default function WorkerQrCode() {
-  const { navigateTo, staffAuthObject } = useUserContext();
   const { staffObject } = useStaffContext();
   const fetchQRCode = useFetchQRCode();
   const navigate = useNavigate();
-  const [validation, setValidation] = useState("");
   const [message, setMessage] = useState("");
   let { userId } = useParams();
   const userIdValue = userId.split("=")[1];
-  const enableQuery = useRef(true);
 
   const qrCodeMutation = useMutation({
     mutationFn: async () => await fetchQRCode.getUser(userIdValue),
@@ -67,7 +64,6 @@ export default function WorkerQrCode() {
   ) : (
     <div className="centered-div">
       <Spinner animation="border" />
-      <h1>Spinning</h1>
     </div>
   );
 }

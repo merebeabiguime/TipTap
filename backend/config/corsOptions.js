@@ -1,4 +1,4 @@
-const allowedOrigins = "http://35.180.203.65";
+const allowedOrigins = "https://tiptap.biz";
 
 const corsOptions = {
   origin: (origin, callback) => {

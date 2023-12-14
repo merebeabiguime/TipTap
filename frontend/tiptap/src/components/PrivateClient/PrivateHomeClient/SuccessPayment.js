@@ -1,16 +1,82 @@
-import { Button, Container, Stack } from "react-bootstrap";
+import { Button, Container, Spinner, Stack } from "react-bootstrap";
 
 import { useStaffContext } from "../../../contexts/fetches-contexts/StaffContext";
-import logo from "../../../images/logo.PNG";
+import logo from "../../../images/logo.png";
 import Success from "../../../images/payment_success_icon.png";
 import "../../../style.css";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useMutation } from "react-query";
+import { useFetchTip } from "../../../fetches/FetchTip";
+import { useFetchComment } from "../../../fetches/FetchComment";
 
 function SuccessPayment() {
-  const { tipAmount, restaurantIdParams } = useStaffContext();
+  const {
+    tipAmount,
+    restaurantIdParams,
+    tipComment,
+    selectedStaff,
+    transactionId,
+    rating,
+  } = useStaffContext();
+  const fetchTip = useFetchTip();
+  const fetchComment = useFetchComment();
   const navigate = useNavigate();
+  const amount = tipAmount;
+  const restaurantId = restaurantIdParams.current;
+  const id_staff = selectedStaff;
+  const id_transaction = transactionId ? transactionId : 0;
+  const staff_rating = rating;
+  /*Current Date */
+  const currentDate = new Date();
+  const formattedDate = `${currentDate.getFullYear()}-${
+    currentDate.getMonth() + 1
+  }-${currentDate.getDate()}`;
+  const date = formattedDate;
 
-  return (
+  const addTipMutation = useMutation({
+    mutationFn: async () =>
+      await fetchTip.addTip([
+        {
+          amount: amount,
+          restaurantId: restaurantId,
+          id_staff: id_staff,
+          id_transaction: id_transaction,
+          date: date,
+          rating: staff_rating,
+        },
+      ]),
+    refetchOnWindowFocus: false,
+  });
+
+  const addCommentMutation = useMutation({
+    mutationFn: async () =>
+      await fetchComment.addComment([
+        {
+          tipComment: tipComment,
+          id_transaction: id_transaction,
+          date: date,
+          id_restaurant: restaurantIdParams.current,
+          rating: staff_rating,
+        },
+      ]),
+    refetchOnWindowFocus: false,
+  });
+
+  useEffect(() => {
+    //On teste si commentaire est nul ou non pour savoir si on ajoute un commentaire
+    if (tipComment !== "") {
+      addCommentMutation.mutate();
+    }
+
+    if (tipAmount !== 0) {
+      if (restaurantIdParams.current != null) {
+        addTipMutation.mutate();
+      }
+    }
+  }, []);
+
+  return addTipMutation.isSuccess || addCommentMutation.isSuccess ? (
     <Container className="gx-0 fluid ">
       <Stack>
         <div className=" mx-auto mb-4">
@@ -18,8 +84,8 @@ function SuccessPayment() {
         </div>
         <div className=" mx-auto mb-4">
           <p className="payment-success text-center">
-            Your tip is greatly appreciated. I hope you had a lovley dining
-            experience
+            Votre pourboire est grandement apprécié. Nous esperons que vous avez
+            eu une merveilleuse expérience culinaire
           </p>
         </div>
         <div className=" mx-auto mb-4">
@@ -30,7 +96,7 @@ function SuccessPayment() {
         </div>
         <div className=" mx-auto mb-4">
           <p className="payment-success-message">
-            Your tip has been successfully sent
+            Votre pourboire a été envoyé avec succès
           </p>
         </div>
 
@@ -42,11 +108,15 @@ function SuccessPayment() {
               navigate("/");
             }}
           >
-            Back To Home
+            Retournner à l'accueil
           </Button>
         </div>
       </Stack>
     </Container>
+  ) : (
+    <div className="centered-div">
+      <Spinner animation="border" />
+    </div>
   );
 }
 

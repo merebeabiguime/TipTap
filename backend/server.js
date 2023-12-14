@@ -8,13 +8,20 @@ import qrCodeRoutes from "./routes/qrCode.js";
 import restaurantRoutes from "./routes/restaurant.js";
 import staffRoutes from "./routes/staff.js";
 import userRoutes from "./routes/user.js";
+import aydenRoutes from "./routes/ayden.js";
 
 const app = express();
 const port = 8081;
 app.use(credentials);
-app.use(cors(/*corsOptions*/));
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
+
+/*AYDEN PAYMENTS */
+
+app.use("/api/ayden", aydenRoutes);
+
+/* PROJECT ROOTS */
 
 app.use("/api/restaurant", restaurantRoutes);
 

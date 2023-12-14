@@ -11,6 +11,7 @@ export function StaffContextProvider(props) {
   const [staffList, setStaffList] = useState([]);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [selectedStaff, setSelectedStaff] = useState(null);
+  const [transactionId, setTransactionid] = useState(null);
   const [tipComment, setTipComment] = useState("");
   const [tipAmount, setTipAmount] = useState(0);
   const [rating, setRating] = useState(0);
@@ -57,6 +58,8 @@ export function StaffContextProvider(props) {
         setSelectedStaffTip,
         navigateTo,
         setNavigateTo,
+        transactionId,
+        setTransactionid,
       }}
     >
       {props.children}
@@ -88,6 +91,8 @@ export function useStaffContext() {
     setSelectedStaffTip,
     navigateTo,
     setNavigateTo,
+    transactionId,
+    setTransactionid,
   } = useContext(StaffContext);
 
   return {
@@ -113,5 +118,7 @@ export function useStaffContext() {
     setSelectedStaffTip,
     navigateTo,
     setNavigateTo,
+    transactionId,
+    setTransactionid,
   };
 }

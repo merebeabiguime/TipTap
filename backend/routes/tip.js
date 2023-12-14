@@ -2,17 +2,17 @@ import express from "express";
 import * as db from "../database.js";
 const router = express.Router();
 
-router.post("/addComment", async (req, res) => {
+router.post("/addTip", async (req, res) => {
   // Récupérez les données de la demande POST
-  const commentObject = req.body; // Assurez-vous que les données POST sont correctement formatées
+  const tipObject = req.body; // Assurez-vous que les données POST sont correctement formatées
   try {
     // Appelez la fonction pour ajouter un utilisateur
-    const result = await db.addComment(commentObject);
+    const result = await db.addTip(tipObject);
 
     if (result === 1) {
       const addStarsResult = await db.updateStars(
-        commentObject[0].id_staff,
-        commentObject[0].rating
+        tipObject[0].id_staff,
+        tipObject[0].rating
       );
 
       if (addStarsResult !== 1) {

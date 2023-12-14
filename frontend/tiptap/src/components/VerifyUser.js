@@ -4,22 +4,13 @@ import "../style.css";
 import { useEffect, useRef, useState } from "react";
 import { Button, Container, Form, Spinner, Stack } from "react-bootstrap";
 import { useMutation } from "react-query";
-import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../contexts/AuthContext";
 import PreviousPageButton from "../features/PreviousPageButton";
 import { useFetchUsers } from "../fetches/FetchUsers";
 
 function VerifyUser() {
-  const {
-    userObject,
-    signOutFirebase,
-    otpPhoneNumber,
-    auth,
-    currentUser,
-    getUserInfos,
-  } = useUserContext();
+  const { userObject, otpPhoneNumber, auth, getUserInfos } = useUserContext();
   const inputs = useRef([]);
-  const navigate = useNavigate();
   const fetchUser = useFetchUsers();
   const [animationActive, setAnimationActive] = useState(false);
   const [otpTime, setOtpTime] = useState(31);
@@ -52,13 +43,15 @@ function VerifyUser() {
     } catch (error) {
       switch (error.code) {
         case "auth/too-many-requests":
-          setMessage("Too many requests. Please try again later.");
+          setMessage(
+            "Vous avez effectuer un trop grand nombre de tentative qui ont échoués. Veuillez réessayer plus tard."
+          );
           break;
         case "auth/invalid-phone-number":
-          setMessage("The phone number is invalid.");
+          setMessage("Le numéro de téléphone est invalide");
           break;
         default:
-          setMessage("Something went wrong. Please try again later.");
+          setMessage("Une erreur s'est produite");
           break;
       }
       console.log(error);
@@ -66,14 +59,11 @@ function VerifyUser() {
   };
 
   useEffect(() => {
-    resendOTP();
-    console.log("composant créer");
+    initializeRecaptchaVerifier();
     return () => {
       if (window.recaptchaVerifier) {
-        console.log("window recaptcha était la");
         window.recaptchaVerifier.clear();
       }
-      console.log("composant détruit");
     };
   }, []);
 
@@ -85,34 +75,20 @@ function VerifyUser() {
     resetOtpFields();
     sendOtp();
   };
-  const resendOTP = async () => {
+  const initializeRecaptchaVerifier = async () => {
     if (phoneNumber == null) {
       setMessage("something wrong try to again send otp");
-
       return;
     }
 
     try {
-      console.log("windows recaptcha créer");
       window.recaptchaVerifier = new RecaptchaVerifier(
         "recaptcha",
         { size: "invisible" },
         auth
       );
-      console.log("window", window.recaptchaVerifier);
     } catch (error) {
-      switch (error.code) {
-        case "auth/too-many-requests":
-          setMessage("Too many requests. Please try again later.");
-          break;
-        case "auth/invalid-phone-number":
-          setMessage("The phone number is invalid.");
-          break;
-        default:
-          setMessage("Something went wrong. Please try again later.");
-          break;
-      }
-      console.log(error);
+      setMessage("Une erreur s'est produite");
     }
   };
 
@@ -177,17 +153,17 @@ function VerifyUser() {
           <PreviousPageButton />
         </div>
         <div className="" style={{ marginRight: "38px", marginLeft: "38px" }}>
-          <h1 className="h1-mt-33">Verify Account</h1>
+          <h1 className="h1-mt-33">Vérifier le compte</h1>
           <p className="p-mt-15">
-            Validate the Captcha then enter the OTP that you received in phone.
+            Cliquez sur le bouton "Envoyer le code" puis entrez le mot de passe
+            à usage unique que vous avez reçu dans votre téléphone.
           </p>
         </div>
         <div className="" style={{ marginRight: "38px", marginLeft: "38px" }}>
-          <h1 className="h1-mt-33 text-center">Enter OTP</h1>
+          <h1 className="h1-mt-33 text-center">Entrez l'OTP</h1>
           <p className="mx-auto text-center">
-            We sent your 4 digit code to{" "}
-            {`${phoneNumber}.
-             This code will epxire in`}{" "}
+            Nous avons envoyé votre code à 4 chiffres au{" "}
+            {`+${phoneNumber.slice(-3)} ***. Ce code expirera dans`}{" "}
             <span style={{ color: "red" }}>{`00:${otpTime}`}</span>
           </p>
         </div>
@@ -217,7 +193,7 @@ function VerifyUser() {
             className="customButton1"
             onClick={handleButton}
           >
-            Send OTP
+            Envoyer le code
           </Button>
         </div>
         <div id="recaptcha" className="mx-auto m-4"></div>

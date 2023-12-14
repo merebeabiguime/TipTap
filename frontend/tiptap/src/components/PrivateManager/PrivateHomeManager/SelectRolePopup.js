@@ -14,6 +14,7 @@ export default function SelectRolePopup() {
         staffList.filter((staff) => staff.role === newRoleFilter)
       );
     }
+    setIsPopupVisible(!isPopupVisible);
   };
   return (
     <div>
@@ -26,7 +27,7 @@ export default function SelectRolePopup() {
           type="submit"
           className="popup-button-gray"
         >
-          Waiter's
+          Serveurs
         </Button>
         <Button
           onClick={() => {
@@ -35,7 +36,7 @@ export default function SelectRolePopup() {
           type="submit"
           className="popup-button-gray"
         >
-          Cleaner's
+          Nettoyeurs
         </Button>
         <Button
           onClick={() => {
@@ -44,7 +45,7 @@ export default function SelectRolePopup() {
           type="submit"
           className="popup-button-gray"
         >
-          Chef's
+          Cuisiniers
         </Button>
         <Button
           onClick={() => {
