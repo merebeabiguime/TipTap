@@ -146,7 +146,7 @@ function SignUp() {
               <Form.Control
                 ref={addInput}
                 type="text"
-                placeholder="First name"
+                placeholder="Prénom"
                 className="customForm"
               />
             </InputGroup>
@@ -155,7 +155,7 @@ function SignUp() {
               <Form.Control
                 ref={addInput}
                 type="text"
-                placeholder="Last name"
+                placeholder="Nom"
                 className="customForm"
               />
             </InputGroup>
@@ -173,7 +173,7 @@ function SignUp() {
               <Form.Control
                 ref={addInput}
                 type="text"
-                placeholder="Phone number : +330769575354"
+                placeholder="Téléphone : +330769575354"
                 className="customForm"
               />
             </InputGroup>
@@ -182,7 +182,7 @@ function SignUp() {
               <Form.Control
                 ref={addInput}
                 type="password"
-                placeholder="Password"
+                placeholder="Mot de passe"
                 className="customForm"
               />
             </InputGroup>
@@ -191,7 +191,7 @@ function SignUp() {
               <Form.Control
                 ref={addInput}
                 type="password"
-                placeholder="Confirm Password"
+                placeholder="Confirmer le mot de passe"
                 className="customForm"
               />
             </InputGroup>
@@ -202,7 +202,7 @@ function SignUp() {
               className="customButton1"
             >
               {!signUpWithMysqlMutation.isLoading ? (
-                `Sign up`
+                `S'inscrire`
               ) : (
                 <Spinner animation="border" />
               )}

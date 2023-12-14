@@ -6,12 +6,8 @@ import "../style.css";
 
 import { useState } from "react";
 import { Button, Spinner } from "react-bootstrap";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../contexts/AuthContext";
-
-function useQuery() {
-  return new URLSearchParams(useLocation().search);
-}
 
 function ChooseVerifMethod() {
   const { verifyEmail, getUserInfos } = useUserContext();
@@ -35,25 +31,6 @@ function ChooseVerifMethod() {
     navigate("/validate-phone");
   };
 
-  /*useEffect(() => {
-    const handleLogout = async () => {
-      console.log("dedans");
-      try {
-        const result = await signOutFirebase();
-        setCurrentUser(null);
-        window.location.href = "/signIn";
-        console.log("success", result);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    // ComponentWillUnmount logic (cleanup)
-    return () => {
-      handleLogout(); // Call the logout function when the component is unmounted
-    };
-  }, []);*/
-
   return !getUserInfos.isLoading && getUserInfos.isSuccess ? (
     <div>
       <Row>
@@ -70,6 +47,10 @@ function ChooseVerifMethod() {
           sm={12}
         >
           <h1 className="col-m-25">Choix de la méthode de vérificaiton </h1>
+          <p className="p-mt-15">
+            Veuillez choisir la méthode de validation qui vous convient le
+            mieux.
+          </p>
         </Col>
         <div className="d-flex justify-content-center col-button button-mt-40">
           <Button

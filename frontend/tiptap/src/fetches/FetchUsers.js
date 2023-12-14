@@ -1,5 +1,3 @@
-import { useUserContext } from "../contexts/AuthContext";
-import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import { myAxios } from "../axios/axios";
 
 export function useFetchUsers() {

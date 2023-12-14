@@ -1,5 +1,5 @@
 const credentials = (req, res, next) => {
-  const allowedOrigins = "http://localhost:3000";
+  const allowedOrigins = "https://tiptap.biz";
   const origin = req.headers.origin;
 
   if (allowedOrigins.includes(origin)) {

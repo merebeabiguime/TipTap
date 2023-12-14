@@ -1,19 +1,18 @@
-import "../../../style.css";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import vector3 from "../../../images/Vector 3.png";
 import vector4 from "../../../images/Vector 4.png";
-import iconWaiter from "../../../images/icon_waiter.png";
 import iconChef from "../../../images/icon_chef.png";
 import iconCleaner from "../../../images/icon_cleaner.png";
-import axios from "axios";
+import iconWaiter from "../../../images/icon_waiter.png";
+import "../../../style.css";
 
-import PreviousPageButton from "../../../features/PreviousPageButton";
-import { Button, Container, Stack, Modal } from "react-bootstrap";
-import { json, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useFetchStaff } from "../../../fetches/FetchStaff";
+import { Button, Container, Modal, Stack } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import { useStaffContext } from "../../../contexts/fetches-contexts/StaffContext";
+import PreviousPageButton from "../../../features/PreviousPageButton";
+import { useFetchStaff } from "../../../fetches/FetchStaff";
 
 function SelectStaffRole() {
   const fetchStaff = useFetchStaff();
@@ -67,11 +66,8 @@ function SelectStaffRole() {
           </Modal.Body>
         </Modal>
         <div className="" style={{ marginRight: "38px", marginLeft: "38px" }}>
-          <h1 className="h1-mt-33">Select Role </h1>
-          <p className="p-mt-15">
-            Enter the staff that are working in the hotel like chef,cleaner,
-            waiter
-          </p>
+          <h1 className="h1-mt-33">Sélectionner un rôle</h1>
+          <p className="p-mt-15">Choisissez la catégorie du personnel</p>
         </div>
 
         <div className=" d-flex justify-content-center mb-3 mt-3" sm={12}>
@@ -87,7 +83,7 @@ function SelectStaffRole() {
           </h5>
         </div>
         <div className="">
-          <h6 style={{ marginLeft: "38px" }}>Select Role</h6>
+          {/*<h6 style={{ marginLeft: "38px" }}>Select Role</h6>*/}
           <Row
             className=" mx-auto"
             style={{ paddingLeft: "38px", paddingRight: "38px" }}
@@ -108,7 +104,7 @@ function SelectStaffRole() {
                   <img src={iconWaiter} alt="logo" />
                 </div>
                 <div className="">
-                  <h3 className="">Waiter</h3>
+                  <h3 className="">Serveur</h3>
                 </div>
               </Col>
             </Button>
@@ -124,7 +120,7 @@ function SelectStaffRole() {
                   <img src={iconCleaner} alt="logo" />
                 </div>
                 <div className="">
-                  <h3 className="">Cleaner</h3>
+                  <h3 className="">Nettoyeur</h3>
                 </div>
               </Col>
             </Button>
@@ -140,7 +136,7 @@ function SelectStaffRole() {
                   <img src={iconChef} alt="logo" />
                 </div>
                 <div className="">
-                  <h3 className="">Chef</h3>
+                  <h3 className="">Cuisinier</h3>
                 </div>
               </Col>
             </Button>
@@ -153,7 +149,7 @@ function SelectStaffRole() {
             className="customButton1"
             disabled={role === 0}
           >
-            Add Staff
+            Ajouter personnel
           </Button>
         </div>
       </Stack>

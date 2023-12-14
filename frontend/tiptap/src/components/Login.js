@@ -8,29 +8,17 @@ import UserIcon from "../images/signup_user_icon.png";
 import "../style.css";
 
 import { useEffect, useRef, useState } from "react";
-import {
-  Button,
-  Container,
-  Form,
-  InputGroup,
-  Spinner,
-  Stack,
-} from "react-bootstrap";
+import { Button, Container, Form, InputGroup, Stack } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserContext } from "../contexts/AuthContext";
 import PreviousPageButton from "../features/PreviousPageButton";
-import { useFetchAuth } from "../fetches/FetchAuth";
 
 function Login() {
   const {
     signIn,
 
     signInWith,
-    getUserInfos,
-    userObject,
-    currentUser,
     setCurrentUser,
-    resetPasswordURL,
     navigateTo,
   } = useUserContext();
   const inputs = useRef([]);
@@ -73,9 +61,9 @@ function Login() {
           <img src={vector4} alt="Vector 4" className="vector" />
         </div>
         <div className="" style={{ marginRight: "38px", marginLeft: "38px" }}>
-          <h1 className="h1-mt-33">Log In</h1>
+          <h1 className="h1-mt-33">Connexion</h1>
           <p className="p-mt-15">
-            Sign In with user ID & password provided by the management
+            Connectez-vous avec votre mail et le mot de passe
           </p>
         </div>
 
@@ -86,7 +74,7 @@ function Login() {
               <Form.Control
                 ref={addInput}
                 type="text"
-                placeholder="Email or username"
+                placeholder="Email"
                 className="customForm"
               />
             </InputGroup>
@@ -95,7 +83,7 @@ function Login() {
               <Form.Control
                 ref={addInput}
                 type="password"
-                placeholder="Password"
+                placeholder="Mot de passe"
                 className="customForm"
               />
             </InputGroup>
@@ -107,20 +95,20 @@ function Login() {
                 style={{ textDecoration: "none", color: "inherit" }}
               >
                 <p className="p-bold d-flex justify-content-end">
-                  Forgot password ?
+                  Mot de passe oublié ?
                 </p>
               </Link>
             </div>
 
             <div className="">
               <Button type="submit" className="customButton1">
-                Sign In
+                Connexion
               </Button>
             </div>
           </Form>
         </div>
         <div className="  ">
-          <p className=" line-divider ">Or continue with</p>
+          <p className=" line-divider ">Ou continuez avec</p>
         </div>
         <div className="d-flex justify-content-center mt-4">
           <div>
@@ -141,17 +129,17 @@ function Login() {
             <img onClick={() => signInWith("apple")} src={apple} alt="apple" />
           </div>
         </div>
-        <div className="mt-4">
+        <div className="mt-4" style={{ whiteSpace: "pre" }}>
           <p
             style={{ fontWeight: "bold" }}
             className="d-flex justify-content-center"
           >
-            Not a member ?
+            {`Vous n'êtes pas membre?`}
             <Link
               to="/signup"
-              style={{ color: "#E09C4A", textDecoration: "none" }}
+              style={{ color: "#FBBC04", textDecoration: "none" }}
             >
-              Register Now
+              {`  Inscrivez-vous`}
             </Link>
           </p>
         </div>

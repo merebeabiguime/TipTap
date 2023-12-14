@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import vector3 from "../images/Vector 3.png";
 import vector4 from "../images/Vector 4.png";
 import homepageIcon from "../images/homepage_icon.png";
-import logo from "../images/logo.PNG";
+import logo from "../images/logo.png";
 import "../style.css";
 
 function HomePage() {
@@ -29,7 +29,7 @@ function HomePage() {
           className="text-center"
           style={{ marginRight: "65px", marginLeft: "65px" }}
         >
-          <h1 className="h1-mt-15">How would you like to register? </h1>
+          <h1 className="h1-mt-15">Pour débuter, Créez un compte</h1>
         </div>
         {/*<div className="" style={{ marginRight: "33px", marginLeft: "33px" }}>
           <p className="p-mt-28">
@@ -43,7 +43,7 @@ function HomePage() {
               style={{ marginLeft: "35px", marginRight: "35px" }}
               className="customButton1"
             >
-              Log In
+              Connexion
             </Button>
           </div>
         </Link>
@@ -56,7 +56,7 @@ function HomePage() {
               style={{ marginLeft: "35px", marginRight: "35px" }}
               className="customButton2"
             >
-              Sign Up
+              Inscription
             </Button>
           </div>
         </Link>

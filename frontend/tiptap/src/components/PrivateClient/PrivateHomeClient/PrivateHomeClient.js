@@ -5,39 +5,44 @@ import { useEffect, useState } from "react";
 import { useStaffContext } from "../../../contexts/fetches-contexts/StaffContext";
 import PaypalCheckoutButton from "../../../features/PaypalCheckoutButton";
 import Divider from "../../../images/divider.png";
-import logo from "../../../images/logo.PNG";
+import logo from "../../../images/logo.png";
 import IconStar from "../../../images/other_stars.png";
 import IconStarUnselected from "../../../images/other_stars_unselected.png";
 import "../../../style.css";
 import StaffCaroussel from "./StaffCaroussel";
+import AydenDropIn from "../../../features/AydenDropIn";
 
 function PrivateHomeClient() {
   const {
     setTipAmount,
     tipAmount,
     setTipComment,
-    tipComment,
     rating,
     setRating,
     getAllStaff,
-    selectedStaffTip,
     selectedStaff,
   } = useStaffContext();
   const [selectedPriceTag, setSelectedPriceTag] = useState(0);
   const [enteredAmount, setEnteredAmount] = useState("");
   const [comment, setComment] = useState("");
-  const product = {
-    description: "TIP to",
-    price: tipAmount,
-  };
+  const [product, setProduct] = useState(null);
+
+  useEffect(() => {
+    if (tipAmount !== 0) {
+      setProduct({
+        description: "TIP to",
+        price: tipAmount,
+      });
+    }
+  }, [tipAmount]);
 
   const selectPriceTag = (amount) => {
-    if (selectedPriceTag == 0) {
+    if (selectedPriceTag === 0) {
       setSelectedPriceTag(amount);
       setTipAmount(amount);
       setEnteredAmount("");
     } else {
-      if (amount == selectedPriceTag) {
+      if (amount === selectedPriceTag) {
         setSelectedPriceTag(0);
         setTipAmount(0);
       } else {
@@ -119,10 +124,10 @@ function PrivateHomeClient() {
           <Button
             onClick={() => {
               selectPriceTag("1.25");
-              setEnteredAmount(null);
+              setEnteredAmount("");
             }}
             className={
-              tipAmount === 0 || selectedPriceTag != "1.25"
+              tipAmount === 0 || selectedPriceTag !== "1.25"
                 ? `price-button`
                 : ` price-button_focus `
             }
@@ -132,10 +137,10 @@ function PrivateHomeClient() {
           <Button
             onClick={() => {
               selectPriceTag("1.50");
-              setEnteredAmount(null);
+              setEnteredAmount("");
             }}
             className={
-              tipAmount === 0 || selectedPriceTag != "1.50"
+              tipAmount === 0 || selectedPriceTag !== "1.50"
                 ? `price-button`
                 : ` price-button_focus `
             }
@@ -145,10 +150,10 @@ function PrivateHomeClient() {
           <Button
             onClick={() => {
               selectPriceTag("1.75");
-              setEnteredAmount(null);
+              setEnteredAmount("");
             }}
             className={
-              tipAmount === 0 || selectedPriceTag != "1.75"
+              tipAmount === 0 || selectedPriceTag !== "1.75"
                 ? `price-button`
                 : ` price-button_focus `
             }
@@ -161,7 +166,7 @@ function PrivateHomeClient() {
               setEnteredAmount(null);
             }}
             className={
-              tipAmount === 0 || selectedPriceTag != "2.00"
+              tipAmount === 0 || selectedPriceTag !== "2.00"
                 ? `price-button`
                 : ` price-button_focus `
             }
@@ -184,7 +189,7 @@ function PrivateHomeClient() {
                   <Form.Control
                     type="text"
                     inputMode="numeric"
-                    placeholder="Enter Amount"
+                    placeholder="Entrer le montant"
                     className="customPriceForm "
                     disabled={selectedPriceTag === 0 ? false : true}
                     value={enteredAmount}
@@ -200,7 +205,7 @@ function PrivateHomeClient() {
               </Row>
               <Form.Control
                 type="text"
-                placeholder="Leave a comment"
+                placeholder="Laisser un commentaire"
                 className="customForm1"
                 style={{ height: "95px" }}
                 value={comment}
@@ -220,7 +225,7 @@ function PrivateHomeClient() {
                   className="customButton1"
                   value={enteredAmount}
                 >
-                  {`Pay (${tipAmount}) €`}
+                  {`Aller au paiement (${tipAmount}) €`}
                 </Button>
               ) : (
                 <Button
@@ -232,14 +237,25 @@ function PrivateHomeClient() {
                 </Button>
               )}
             </div>
-            {tipAmount !== 0 && selectedStaff !== null && rating !== 0 && (
-              <div className="justify-content-center mx-auto mt-4">
-                <p className="text-center">Or pay with PayPal</p>
-                <PaypalCheckoutButton product={product} />
-              </div>
-            )}
+
+            {tipAmount !== 0 &&
+              selectedStaff !== null &&
+              rating !== 0 &&
+              product && (
+                <div>
+                  <div className="justify-content-center mx-auto mt-4">
+                    <p className="text-center">Ou payer avec Adyen</p>
+                    <AydenDropIn details={product} />
+                  </div>
+                  <div className="justify-content-center mx-auto mt-4">
+                    <p className="text-center">Ou payer avec Paypal</p>
+                    <PaypalCheckoutButton product={product} />
+                  </div>
+                </div>
+              )}
           </Form>
         </div>
+        <div id="dropin-container"></div>
       </Stack>
     </Container>
   );

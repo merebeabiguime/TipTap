@@ -1,17 +1,16 @@
 import React from "react";
-import Col from "react-bootstrap/Col";
 import UploadImage from "../images/upload_image_signup.png";
 import "../style.css";
 
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { useEffect, useState } from "react";
+import { Spinner } from "react-bootstrap";
 import { useUserContext } from "../contexts/AuthContext";
 import { storage } from "../firebase";
-import { Spinner } from "react-bootstrap";
 
 export default function UploadingImage() {
   const [file, setFile] = useState("");
-  const { data, setData, setPercentage, percentage } = useUserContext();
+  const { data, setData, setPercentage } = useUserContext();
   const [loading, setLoading] = useState(false);
 
   const uploadFile = () => {

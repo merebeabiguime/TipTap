@@ -3,7 +3,6 @@ import Row from "react-bootstrap/Row";
 import vector3 from "../images/Vector 3.png";
 import vector4 from "../images/Vector 4.png";
 import UserIcon from "../images/signup_user_icon.png";
-import UploadImage from "../images/upload_image_signup.png";
 import "../style.css";
 
 import { useRef, useState } from "react";
@@ -41,10 +40,10 @@ function ForgotPassword() {
           </div>
         </Col>
         <Col className="d-flex justify-content-center  col-m-200" sm={12}>
-          <h1 className="col-m-25">Forgot Password </h1>
+          <h1 className="col-m-25">Mot de passe oublié</h1>
         </Col>
         <Col className="d-flex justify-content-center  col-m-50" sm={12}>
-          <p>Enter your email adress</p>
+          <p>Veuillez entrer votre adresse email</p>
         </Col>
         <Col className=" d-flex justify-content-center" sm={12}>
           <Form onSubmit={handleForm} ref={formRef}>
@@ -63,7 +62,7 @@ function ForgotPassword() {
 
             <Col className="d-flex justify-content-center  col-m-25" sm={12}>
               <Button type="submit" className="customButton1">
-                Send Email Verification
+                Réinitialiser le mot de passe
               </Button>
             </Col>
           </Form>

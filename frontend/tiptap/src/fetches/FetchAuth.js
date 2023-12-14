@@ -1,4 +1,3 @@
-import axios from "axios";
 import { myAxios } from "../axios/axios";
 
 export function useFetchAuth() {

@@ -1,6 +1,6 @@
 import "../style.css";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Button,
   Container,
@@ -12,18 +12,10 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../contexts/AuthContext";
 import PreviousPageButton from "../features/PreviousPageButton";
-import { useFetchUsers } from "../fetches/FetchUsers";
 
 function ValidatePhone() {
   const { userObject, setOtpPhoneNumber, getUserInfos } = useUserContext();
-  const inputs = useRef([]);
   const navigate = useNavigate();
-  const fetchUser = useFetchUsers();
-  const [timer, setTimer] = useState(30); // Use a number instead of string for the timer
-  const [validation, setValidation] = useState("");
-  const otpCodeExpired = useRef(false);
-  const [animationActive, setAnimationActive] = useState(false);
-  const [emailSent, setEmailSent] = useState(false);
 
   const [newPhoneNumber, setNewPhoneNumber] = useState("");
   const handlePhoneNumberChange = (event) => {
@@ -67,8 +59,9 @@ function ValidatePhone() {
         <div className="" style={{ marginRight: "38px", marginLeft: "38px" }}>
           <h1 className="h1-mt-33">Vérifier le numéro</h1>
           <p className="p-mt-15">
-            Veuillez vérifier que ce numéro de téléphone est valide(format
-            +330*********)
+            Vous avez la possibilité de modifier le numéro de téléphone avant
+            d'envoyer le code. Si vous ne souhaitez pas le modifier veuillez
+            simplement cliquer sur continuer(format +330762575658)
           </p>
         </div>
         <div className=" d-flex justify-content-center form-mt-74" sm={12}>
@@ -87,7 +80,7 @@ function ValidatePhone() {
                 className="customButton1"
                 onClick={goToOtp}
               >
-                Valider
+                Continuer
               </Button>
             </InputGroup>
           </Form>

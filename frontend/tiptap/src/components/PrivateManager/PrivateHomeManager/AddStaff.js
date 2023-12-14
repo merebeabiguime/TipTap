@@ -20,22 +20,6 @@ function AddStaff() {
   const fetchStaff = useFetchStaff();
   const [showVideo, setShowVideo] = useState(false);
 
-  /*const scanner = new Html5QrcodeScanner("reader", {
-    qrbox: { width: 250, height: 250 },
-    fps: 5,
-  });
-
-  scanner.render(success, error);
-
-  function success(result) {
-    scanner.clear();
-    window.location.href = result;
-  }
-
-  function error(err) {
-    console.log(err);
-  }*/
-
   const handleQRCodeScannerClick = () => {
     setShowVideo(true);
   };
@@ -88,10 +72,10 @@ function AddStaff() {
           <img src={vector4} alt="Vector 4" className="vector" />
         </div>
         <div className="" style={{ marginRight: "38px", marginLeft: "38px" }}>
-          <h1 className="h1-mt-33">Add Staff </h1>
+          <h1 className="h1-mt-33">Ajouter du personnel</h1>
           <p className="p-mt-15">
-            Enter the staff that are working in the hotel like chef,cleaner,
-            waiter
+            Veuillez entrer l'adresse email des membres du personnel déjà
+            inscrit ou alors veuillez scanner leur QR CODE
           </p>
         </div>
         <div className=" d-flex justify-content-center form-mt-89">
@@ -101,7 +85,7 @@ function AddStaff() {
               <Form.Control
                 ref={addInput}
                 type="text"
-                placeholder="Staff Email"
+                placeholder="Email du personnel"
                 className="customForm"
               />
             </InputGroup>
@@ -110,13 +94,13 @@ function AddStaff() {
 
             <Col className="d-flex justify-content-center  col-m-25" sm={12}>
               <Button type="submit" className="customButton1">
-                Add Staff
+                Ajouter personnel
               </Button>
             </Col>
           </Form>
         </div>
         <div className="mx-auto mt-4 mb-4">
-          <h1>--OR--</h1>
+          <h1>--OU--</h1>
         </div>
         <div
           className="mx-auto qrCodeScanner"

@@ -8,6 +8,7 @@ import qrCodeRoutes from "./routes/qrCode.js";
 import restaurantRoutes from "./routes/restaurant.js";
 import staffRoutes from "./routes/staff.js";
 import userRoutes from "./routes/user.js";
+import aydenRoutes from "./routes/ayden.js";
 
 const app = express();
 const port = 8081;
@@ -16,15 +17,21 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/restaurant", restaurantRoutes);
+/*AYDEN PAYMENTS */
 
-app.use("/auth", authRoutes);
+app.use("/api/ayden", aydenRoutes);
 
-app.use("/staff", staffRoutes);
+/* PROJECT ROOTS */
 
-app.use("/user", userRoutes);
+app.use("/api/restaurant", restaurantRoutes);
 
-app.use("/qrcode", qrCodeRoutes);
+app.use("/api/auth", authRoutes);
+
+app.use("/api/staff", staffRoutes);
+
+app.use("/api/user", userRoutes);
+
+app.use("/api/qrcode", qrCodeRoutes);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

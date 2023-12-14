@@ -271,7 +271,7 @@ export async function getAllStaff() {
 export async function getStaffList() {
   const allStaff = await getAllStaff();
   const staffList = [];
-  const roleMap = ["Unknown", "Waiter", "Cleaner", "Chef"];
+  const roleMap = ["Inconnu", "Serveur", "Nettoyeur", "Cuisinier"];
   if (allStaff != 0) {
     for (let i = 0; i < allStaff.length; i++) {
       const users = await getUserFromId(allStaff[i].ID_user);
@@ -280,7 +280,7 @@ export async function getStaffList() {
         staffList.push({
           role: roleMap[allStaff[i].role] || "Unknown",
           stars: allStaff[i].stars,
-          ID: users[0].ID,
+          ID: allStaff[i].ID,
           firstName: users[0].firstName,
           lastName: users[0].lastName,
           pictureUrl: users[0].pictureUrl,
@@ -295,14 +295,14 @@ export async function getStaffList() {
 
 // Supprimer un membre du personnel
 export async function deleteStaff(id) {
-  const user = await getStaff(id);
+  const staffExists = await getStaff(id);
 
-  if (staff === 0) {
-    return "Aucun staff n'existe pour cet ID.";
+  if (staffExists === 0) {
+    return 0;
   }
 
   const [rows] = await pool.query("DELETE FROM staff WHERE ID = ?", [id]);
-  return "Staff supprimé avec succès.";
+  return rows.length === 0 ? 0 : rows;
 }
 
 /************************************** QUERIES DES RESTAURANTS **********************************************/

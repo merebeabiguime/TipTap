@@ -1,4 +1,4 @@
-const allowedOrigins = "http://localhost:3000";
+const allowedOrigins = "https://tiptap.biz";
 
 const corsOptions = {
   origin: (origin, callback) => {

@@ -26,8 +26,10 @@ export default function PrivateHomeWorker() {
   };
 
   useEffect(() => {
-    if (qrCodeRef.current && !canvasRendered) {
-      const canvas = qrCodeRef.current.querySelector("canvas");
+    const currentQrCodeRef = qrCodeRef.current;
+
+    if (currentQrCodeRef && !canvasRendered) {
+      const canvas = currentQrCodeRef.querySelector("canvas");
 
       if (canvas) {
         canvas.addEventListener("click", saveToGallery);
@@ -36,7 +38,7 @@ export default function PrivateHomeWorker() {
     }
 
     return () => {
-      const canvas = qrCodeRef.current?.querySelector("canvas");
+      const canvas = currentQrCodeRef?.querySelector("canvas");
 
       if (canvas) {
         canvas.removeEventListener("click", saveToGallery);
@@ -59,14 +61,14 @@ export default function PrivateHomeWorker() {
       <Stack>
         <Stack direction="horizontal" className="mb-4">
           <div style={{ marginTop: " 65px", marginLeft: "20px" }}>
-            <h1 className="customTitle1">Tip QR Code </h1>
+            <h1 className="customTitle1">QR Code personnel</h1>
           </div>
         </Stack>
         <div className="" style={{ marginRight: "38px", marginLeft: "38px" }}>
-          <h4 className="">Your tip QR </h4>
+          <h4 className="">Votre QR Code personnel</h4>
           <p className="p-mt-15">
-            Share this QR Code with the hotel manager, or they can scan it from
-            your phone to add you as their employee
+            Partagez ce code QR avec le responsable ou laissez-le le scanner
+            depuis votre téléphone pour vous ajouter en tant qu'employé.
           </p>
         </div>
         <div className="d-flex justify-content-center" sm={12} ref={qrCodeRef}>
@@ -96,21 +98,30 @@ export default function PrivateHomeWorker() {
             onClick={saveToGallery}
             style={{ marginBottom: "15px" }}
           >
-            <img src={SaveIcon} style={{ marginRight: "24px" }} />
-            Save to Gallery
+            <img
+              src={SaveIcon}
+              style={{ marginRight: "24px" }}
+              alt="save to gallery"
+            />
+            Enregistrer dans la gallerie
           </Button>
           <RWebShare
             data={{
               text: { qrCodeUrl },
               url: { qrCodeUrl }, // Change this to the appropriate URL
-              title: "Scan this QRCODE to add a worker as a staff member",
+              title:
+                "Scannez ce QR Code pour ajouter un employé en tant que membre du personnel",
             }}
             //Messaage d'erreur/succès dans ce cas
             /*onClick={() => console.log("shared successfully!")}*/
           >
             <Button type="submit" className="customButton2">
-              <img src={shareIcon} style={{ marginRight: "24px" }} />
-              Share QR Code
+              <img
+                src={shareIcon}
+                style={{ marginRight: "24px" }}
+                alt="share qr code"
+              />
+              Partager le QR Code
             </Button>
           </RWebShare>
         </div>

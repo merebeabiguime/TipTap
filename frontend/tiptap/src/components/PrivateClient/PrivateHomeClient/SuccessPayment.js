@@ -1,7 +1,7 @@
 import { Button, Container, Spinner, Stack } from "react-bootstrap";
 
 import { useStaffContext } from "../../../contexts/fetches-contexts/StaffContext";
-import logo from "../../../images/logo.PNG";
+import logo from "../../../images/logo.png";
 import Success from "../../../images/payment_success_icon.png";
 import "../../../style.css";
 import { useNavigate } from "react-router-dom";
@@ -65,11 +65,11 @@ function SuccessPayment() {
 
   useEffect(() => {
     //On teste si commentaire est nul ou non pour savoir si on ajoute un commentaire
-    if (tipComment != "") {
+    if (tipComment !== "") {
       addCommentMutation.mutate();
     }
 
-    if (tipAmount != 0) {
+    if (tipAmount !== 0) {
       if (restaurantIdParams.current != null) {
         addTipMutation.mutate();
       }
@@ -84,8 +84,8 @@ function SuccessPayment() {
         </div>
         <div className=" mx-auto mb-4">
           <p className="payment-success text-center">
-            Your tip is greatly appreciated. I hope you had a lovley dining
-            experience
+            Votre pourboire est grandement apprécié. Nous esperons que vous avez
+            eu une merveilleuse expérience culinaire
           </p>
         </div>
         <div className=" mx-auto mb-4">
@@ -96,7 +96,7 @@ function SuccessPayment() {
         </div>
         <div className=" mx-auto mb-4">
           <p className="payment-success-message">
-            Your tip has been successfully sent
+            Votre pourboire a été envoyé avec succès
           </p>
         </div>
 
@@ -108,7 +108,7 @@ function SuccessPayment() {
               navigate("/");
             }}
           >
-            Back To Home
+            Retournner à l'accueil
           </Button>
         </div>
       </Stack>

@@ -2,7 +2,7 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import vector3 from "../images/Vector 3.png";
 import vector4 from "../images/Vector 4.png";
-import logo from "../images/logo.PNG";
+import logo from "../images/logo.png";
 import icon from "../images/select_role_icon.png";
 import "../style.css";
 

@@ -87,4 +87,30 @@ router.post("/addStaff", async (req, res) => {
   }
 });
 
+router.delete("/delete/:id", async (req, res) => {
+  // Récupérez les données de la demande POST
+  const id = req.params.id;
+
+  console.log(id);
+  try {
+    // Appelez la fonction pour ajouter un utilisateur
+    const result = await db.deleteStaff(id);
+
+    if (result === 0) {
+      return res.send({
+        status: "Error",
+        response: "Impossible de supprimer le staff'",
+      });
+    }
+
+    res.send({ status: "Success", response: result });
+  } catch (err) {
+    res.send({
+      status: "Error",
+      response: "Une erreur s'est produite",
+      code: 404,
+    });
+  }
+});
+
 export default router;
