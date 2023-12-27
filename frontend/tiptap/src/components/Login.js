@@ -58,8 +58,18 @@ function Login() {
       <Stack>
         <div className="vector-container">
           <PreviousPageButton />
-          <img src={vector3} alt="Vector 3" className="vector" />
-          <img src={vector4} alt="Vector 4" className="vector" />
+          <img
+            src={vector3}
+            alt="Vector 3"
+            className="vector"
+            style={{ width: "169.5px", height: "215px" }}
+          />
+          <img
+            src={vector4}
+            alt="Vector 4"
+            className="vector"
+            style={{ width: "187px", height: "243px" }}
+          />
         </div>
         <div className="" style={{ marginRight: "38px", marginLeft: "38px" }}>
           <h1 className="h1-mt-33">Connexion</h1>

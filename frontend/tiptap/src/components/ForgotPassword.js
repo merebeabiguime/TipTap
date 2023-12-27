@@ -33,10 +33,20 @@ function ForgotPassword() {
       <Row>
         <Col className="justify-content-end" sm={12}>
           <div>
-            <img src={vector3} alt="Vector 3" className="vector" />
+            <img
+              src={vector3}
+              alt="Vector 3"
+              className="vector"
+              style={{ width: "169.5px", height: "215px" }}
+            />
           </div>
           <div>
-            <img src={vector4} alt="Vector 4" className="vector" />
+            <img
+              src={vector4}
+              alt="Vector 4"
+              className="vector"
+              style={{ width: "187px", height: "243px" }}
+            />
           </div>
         </Col>
         <Col className="d-flex justify-content-center  col-m-200" sm={12}>
