@@ -43,6 +43,7 @@ function Login() {
         inputs.current[1].value
       );
       setCurrentUser(cred.user);
+      console.log("dans la page login cred user", cred.user);
     } catch (err) {
       setValidation("Email or password incorrect");
       console.error(err);

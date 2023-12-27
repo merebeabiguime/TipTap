@@ -26,7 +26,6 @@ function SignUp() {
   const [validation, setValidation] = useState("");
   const navigate = useNavigate();
   const fetchAuth = useFetchAuth();
-  const addUserEnabled = useRef(false);
   const jsonData = useRef([]);
   const formRef = useRef();
 
@@ -44,7 +43,6 @@ function SignUp() {
     onError: (data) => {
       console.log("erreur", data);
     },
-    enabled: addUserEnabled.current,
   });
 
   const addInput = (el) => {

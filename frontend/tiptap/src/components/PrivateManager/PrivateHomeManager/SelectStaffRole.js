@@ -26,11 +26,13 @@ function SelectStaffRole() {
   }, [role]);
 
   async function submitStaffObject() {
+    console.log("submit", staffObject.current.id_restaurant);
     const jsonData = [
       {
         role: staffObject.current.role,
         stars: 5,
-        ID_users: staffObject.current.ID,
+        ID_user: staffObject.current.ID_USER,
+        id_restaurant: staffObject.current.id_restaurant,
       },
     ];
     console.log("json", jsonData);
@@ -42,10 +44,10 @@ function SelectStaffRole() {
           navigate("/privateManager/private-home-manager");
         }, 2000);
       } else {
-        //Message d'erreur
+        console.log("erreur", addStaffResponse.response);
       }
     } catch (err) {
-      //Message d'erreur
+      console.error(err);
     }
   }
 
@@ -101,7 +103,11 @@ function SelectStaffRole() {
             >
               <Col>
                 <div className="">
-                  <img src={iconWaiter} alt="logo" />
+                  <img
+                    src={iconWaiter}
+                    style={{ width: "86px", height: "67px" }}
+                    alt="logo"
+                  />
                 </div>
                 <div className="">
                   <h3 className="">Serveur</h3>
@@ -117,7 +123,11 @@ function SelectStaffRole() {
             >
               <Col>
                 <div className="">
-                  <img src={iconCleaner} alt="logo" />
+                  <img
+                    src={iconCleaner}
+                    style={{ width: "90px", height: "73px" }}
+                    alt="logo"
+                  />
                 </div>
                 <div className="">
                   <h3 className="">Nettoyeur</h3>
@@ -133,7 +143,11 @@ function SelectStaffRole() {
             >
               <Col>
                 <div className="">
-                  <img src={iconChef} alt="logo" />
+                  <img
+                    src={iconChef}
+                    style={{ width: "101px", height: "73px" }}
+                    alt="logo"
+                  />
                 </div>
                 <div className="">
                   <h3 className="">Cuisinier</h3>

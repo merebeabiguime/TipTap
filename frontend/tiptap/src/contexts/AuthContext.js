@@ -51,20 +51,26 @@ export function UserContextProvider(props) {
     resetPasswordURL.current = url;
   }
 
-  const [currentUser, setCurrentUser] = useState(null);
+  const currentUser = useRef(null);
+
+  function setCurrentUser(user) {
+    currentUser.current = user;
+  }
 
   const getUserInfos = useQuery({
-    queryFn: async () => await fetchUser.getUser(currentUser.uid),
+    queryFn: async () => await fetchUser.getUser(currentUser.current.uid),
     queryKey: "User Infos",
-    enabled: !!currentUser,
+    enabled: !!currentUser.current,
     refetchOnWindowFocus: false,
     onSuccess: (data) => {
+      console.log("en train de chercher");
       if (data.status === "Success") {
         console.log("successsss");
         //Pourquoi setAccess Token avant d'appeler loginMutation ?
         setUserObject(data.response);
+        console.log(data.response);
         if (
-          !currentUser.emailVerified &&
+          !currentUser.current.emailVerified &&
           data.response[0].verified === 0 &&
           resetPasswordURL.current === ""
         ) {

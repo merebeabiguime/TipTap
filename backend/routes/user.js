@@ -35,14 +35,18 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.get("/uid/:id", async (req, res) => {
+router.get("/uid/:uid", async (req, res) => {
   try {
-    const id = req.params.id;
-    const result = await db.getUser(id);
+    console.log("user connected an dtrying...");
+    const uid = req.params.uid;
+    console.log(uid);
+    const result = await db.getUserFromUID(uid);
     if (result == 0) {
+      console.log("utilisateur introuvable", result);
       res.send({ status: "Error", response: "Utilisateur Introuvable" });
     } else {
       res.send({ status: "Success", response: result });
+      console.log(result);
     }
   } catch (err) {
     res.send({
@@ -50,6 +54,7 @@ router.get("/uid/:id", async (req, res) => {
       response: "Une erreur s'est produite",
       code: 404,
     });
+    console.error(err);
   }
 });
 
@@ -96,6 +101,32 @@ router.post("/verify", async (req, res) => {
       response: "Une erreur s'est produtie",
       code: 404,
     });
+  }
+});
+
+router.put("/update", async (req, res) => {
+  try {
+    console.log("update");
+    const userObject = req.body;
+    console.log("body", userObject);
+    const result = await db.updateUser(userObject);
+    if (result === 0)
+      return res.send({
+        status: "Error",
+        response: result,
+      });
+
+    res.send({
+      status: "Success",
+      response: "L'utilisateur a été modifié avec succès",
+    });
+  } catch (error) {
+    res.send({
+      status: "Error",
+      response: "Une erreur s'est produtie",
+      code: 404,
+    });
+    console.error(error);
   }
 });
 

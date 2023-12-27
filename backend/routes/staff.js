@@ -69,7 +69,19 @@ router.get("/list", async (req, res) => {
 router.post("/addStaff", async (req, res) => {
   // Récupérez les données de la demande POST
   const staffObject = req.body; // Assurez-vous que les données POST sont correctement formatées
+  console.log(staffObject);
+  console.log(staffObject[0].ID_user);
   try {
+    const updateUserRestaurant = await db.updateUserRestaurant(
+      staffObject[0].id_restaurant,
+      staffObject[0].ID_user
+    );
+    console.log("updateResto", updateUserRestaurant);
+    if (updateUserRestaurant === 0)
+      return res.send({
+        status: "Error",
+        response: "Impossible d'assigner l'utilisateur au restaurant",
+      });
     // Appelez la fonction pour ajouter un utilisateur
     const result = await db.addStaff(staffObject);
 
@@ -84,6 +96,7 @@ router.post("/addStaff", async (req, res) => {
       response: "Une erreur s'est produite",
       code: 404,
     });
+    console.error(err);
   }
 });
 

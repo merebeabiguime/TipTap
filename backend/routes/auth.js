@@ -61,21 +61,35 @@ router.post("/other", async (req, res) => {
 router.post("/register", async (req, res) => {
   try {
     const userObject = req.body.current;
+    var newRestaurantId = 0;
+    if (userObject[0].role === 2) {
+      const addRestaurant = await db.addBlankRestaurant();
+      if (addRestaurant === 0)
+        return res.send({
+          status: "Error",
+          response: "Impossible d'ajouter le restaurant",
+        });
+      console.log(addRestaurant);
+      newRestaurantId = addRestaurant.insertId;
+    }
+    userObject[0].ID_restaurant = newRestaurantId;
+
     const result = await db.addUser(userObject);
     if (result == 0) {
-      res.send({
+      return res.send({
         status: "Error",
         response: "Impossible d'ajouter l'utilisateur",
       });
-    } else {
-      res.send({ status: "Success", response: result });
     }
+
+    res.send({ status: "Success", response: result });
   } catch (err) {
     res.send({
       status: "Error",
       response: "Une erreur s'est produite",
       code: 404,
     });
+    console.error(err);
   }
 });
 

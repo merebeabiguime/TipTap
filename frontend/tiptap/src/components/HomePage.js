@@ -6,6 +6,8 @@ import vector4 from "../images/Vector 4.png";
 import homepageIcon from "../images/homepage_icon.png";
 import logo from "../images/logo.png";
 import "../style.css";
+import { render } from "@react-email/components";
+import FirstTemplate from "../email_templates/FirstTemplate";
 
 function HomePage() {
   useEffect(() => {
@@ -23,7 +25,12 @@ function HomePage() {
           <img className="logo" src={logo} alt="logo" />
         </div>
         <div className="mx-auto">
-          <img src={homepageIcon} className="image_selectRole" alt="icon" />
+          <img
+            src={homepageIcon}
+            style={{ width: "193px", height: "122px" }}
+            className="image_selectRole"
+            alt="icon"
+          />
         </div>
         <div
           className="text-center"

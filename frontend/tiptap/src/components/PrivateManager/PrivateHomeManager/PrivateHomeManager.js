@@ -1,9 +1,11 @@
 import Col from "react-bootstrap/Col";
-import customerIcon from "../../../images/customer_icon.png";
-import managerIcon from "../../../images/manager_icon.png";
+import iconStaff from "../../../images/icon_staff.png";
+import qrCodeIcon from "../../../images/qrcode_icon.png";
+
+import icon_cleaner from "../../../images/icon_cleaner.png";
 import "../../../style.css";
 
-import { Container, Stack } from "react-bootstrap";
+import { Container, Row, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useUserContext } from "../../../contexts/AuthContext";
 
@@ -22,48 +24,68 @@ function PrivateHomeManager() {
   };
 
   return (
-    <Container>
+    <Container className="gx-0 fluid ">
       <Stack>
         <Col
           className="d-flex justify-content-center  col-m-200
         "
-          sm={12}
         >
           <h1 className="text-center">Tous les détails</h1>
         </Col>
         <Link
           to="/privateManager/private-home-manager/all-staff"
-          style={{ textDecoration: "none", color: "inherit" }}
+          style={{ textDecoration: "none", color: "inherit", margin: "30px" }}
           onClick={() => selectRole(1)}
         >
-          <Col
-            className="d-flex border border-gray mx-auto align-items-center customButton4 col-button"
-            sm={12}
-          >
-            <div className="mr-4 ">
-              <img src={customerIcon} alt="logo" />
-            </div>
-            <div className="flex-grow-1  text-right d-flex justify-content-center align-items-center">
-              <h1 className="mb-0">Le personnel</h1>
-            </div>
-          </Col>
+          <Row className="customButton4 d-flex align-items-center">
+            <Col className="col-4">
+              <img
+                src={iconStaff}
+                alt="logo"
+                style={{ width: "107px", height: "82px" }}
+              />
+            </Col>
+            <Col>
+              <h1 className=" text-center">Le personnel</h1>
+            </Col>
+          </Row>
         </Link>
         <Link
           to="/privateManager/private-home-manager/add-staff"
-          style={{ textDecoration: "none", color: "inherit" }}
+          style={{ textDecoration: "none", color: "inherit", margin: "30px" }}
           onClick={() => selectRole(1)}
         >
-          <Col
-            className="d-flex border border-gray mx-auto align-items-center customButton4 col-button"
-            sm={12}
-          >
-            <div className="mr-4 ">
-              <img src={managerIcon} alt="logo" />
-            </div>
-            <div className="flex-grow-1  text-right d-flex justify-content-center align-items-center">
-              <h1 className="mb-0">Ajouter</h1>
-            </div>
-          </Col>
+          <Row className="customButton4 d-flex align-items-center">
+            <Col className="col-4">
+              <img
+                src={icon_cleaner}
+                alt="logo"
+                style={{ width: "107px", height: "82px" }}
+              />
+            </Col>
+            <Col>
+              <h1 className=" text-center">Ajouter</h1>
+            </Col>
+          </Row>
+        </Link>
+        <Link
+          to="/privateManager/private-home-manager/order-qrcode"
+          style={{ textDecoration: "none", color: "inherit", margin: "30px" }}
+          onClick={() => selectRole(1)}
+        >
+          <Row className="customButton4 d-flex align-items-center">
+            <Col className="col-4 text-center">
+              <img
+                src={qrCodeIcon}
+                alt="logo"
+                style={{ width: "64px", height: "64px" }}
+                className="text-center"
+              />
+            </Col>
+            <Col className=" text-center">
+              <h1>Commandez votre Qr-Code</h1>
+            </Col>
+          </Row>
         </Link>
         <div className="d-flex justify-content-center mt-4">
           <p onClick={handleLogout}>Déconnexion</p>
