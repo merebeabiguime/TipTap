@@ -12,9 +12,15 @@ export function useFetchUsers() {
 
     return response.data;
   };
+  const update = async (jsonData) => {
+    console.log("updateeee", jsonData);
+    const response = await myAxios.put("/user/update", jsonData);
+    return response.data;
+  };
 
   return {
     getUser,
     verify,
+    update,
   };
 }

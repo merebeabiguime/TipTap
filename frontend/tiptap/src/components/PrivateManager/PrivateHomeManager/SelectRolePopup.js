@@ -22,7 +22,7 @@ export default function SelectRolePopup() {
         <h1 className="justify-content-center d-flex col-m-25">Select Role</h1>
         <Button
           onClick={() => {
-            handleRoleFilterChange("Waiter");
+            handleRoleFilterChange("Serveur");
           }}
           type="submit"
           className="popup-button-gray"
@@ -31,7 +31,7 @@ export default function SelectRolePopup() {
         </Button>
         <Button
           onClick={() => {
-            handleRoleFilterChange("Cleaner");
+            handleRoleFilterChange("Nettoyeur");
           }}
           type="submit"
           className="popup-button-gray"
@@ -40,7 +40,7 @@ export default function SelectRolePopup() {
         </Button>
         <Button
           onClick={() => {
-            handleRoleFilterChange("Chef");
+            handleRoleFilterChange("Cuisinier");
           }}
           type="submit"
           className="popup-button-gray"

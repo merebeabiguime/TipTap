@@ -11,7 +11,7 @@ export function StaffContextProvider(props) {
   const [staffList, setStaffList] = useState([]);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [selectedStaff, setSelectedStaff] = useState(null);
-  const [transactionId, setTransactionid] = useState(null);
+  const [transactionId, setTransactionId] = useState(null);
   const [tipComment, setTipComment] = useState("");
   const [tipAmount, setTipAmount] = useState(0);
   const [rating, setRating] = useState(0);
@@ -19,6 +19,8 @@ export function StaffContextProvider(props) {
   const fetchStaff = useFetchStaff();
   const [navigateTo, setNavigateTo] = useState(null);
   const [selectedStaffTip, setSelectedStaffTip] = useState(null);
+  const orderType = useRef(null);
+  const orderDetails = useRef(null);
 
   const allStaffMutation = useMutation({
     mutationFn: async () => await fetchStaff.getStaffList(),
@@ -59,7 +61,9 @@ export function StaffContextProvider(props) {
         navigateTo,
         setNavigateTo,
         transactionId,
-        setTransactionid,
+        setTransactionId,
+        orderType,
+        orderDetails,
       }}
     >
       {props.children}
@@ -92,7 +96,9 @@ export function useStaffContext() {
     navigateTo,
     setNavigateTo,
     transactionId,
-    setTransactionid,
+    setTransactionId,
+    orderType,
+    orderDetails,
   } = useContext(StaffContext);
 
   return {
@@ -119,6 +125,8 @@ export function useStaffContext() {
     navigateTo,
     setNavigateTo,
     transactionId,
-    setTransactionid,
+    setTransactionId,
+    orderType,
+    orderDetails,
   };
 }

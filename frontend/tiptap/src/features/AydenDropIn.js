@@ -1,9 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-import { QueryClient } from "react-query";
-import { useLocation } from "react-router-dom";
+import { QueryClient, useMutation } from "react-query";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useFetchAyden } from "../fetches/fetchAyden";
 import AdyenCheckout from "@adyen/adyen-web";
 import "@adyen/adyen-web/dist/adyen.css";
+import { useStaffContext } from "../contexts/fetches-contexts/StaffContext";
+import { useFetchEmail } from "../fetches/FetchEmail";
+import { render } from "@react-email/components";
+import FirstTemplate from "../email_templates/FirstTemplate";
 
 const AydenDropIn = (props) => {
   const { details } = props;
@@ -14,31 +18,15 @@ const AydenDropIn = (props) => {
   const sessionId = urlParams.get("sessionId");
   const redirectResult = urlParams.get("redirectResult");
   const PaymentDetails = [{ amount: details.price, returnURL: "test" }];
-
-  const createAydenCheckout = async (sessionParam) => {
-    const configuration = {
-      environment: "test",
-      clientKey: process.env.AYDEN_CLIENT_KEY,
-      analytics: {
-        enabled: true,
-      },
-      session: sessionParam,
-      onPaymentCompleted: (result, component) => {
-        console.info(result, component);
-      },
-      onError: (error, component) => {
-        console.error(error.name, error.message, error.stack, component);
-      },
-      paymentMethodsConfiguration: {
-        card: {
-          hasHolderName: true,
-          holderNameRequired: true,
-          billingAddressRequired: true,
-        },
-      },
-    };
-    return new AdyenCheckout(sessionParam);
-  };
+  const navigate = useNavigate();
+  const {
+    restaurantIdParams,
+    setTransactionId,
+    selectedStaff,
+    tipAmount,
+    rating,
+    orderType,
+  } = useStaffContext();
 
   const [session, setSession] = useState(null);
 
@@ -58,7 +46,9 @@ const AydenDropIn = (props) => {
       });
 
       if (data.status === "Success") {
-        setSession("raesponse du fetch", data.response);
+        console.log("il y a eu un succes", data.response);
+        setSession(data.response);
+        setTransactionId(data.response.reference);
       } else {
         console.log("Erreur du fetch", data.response);
       }
@@ -74,23 +64,74 @@ const AydenDropIn = (props) => {
     if (sessionId && redirectResult) {
       finalizeCheckout();
     }
-
-    return () => {
-      dropinInstance.current && dropinInstance.current.unmount();
-    };
   }, []);
+
+  useEffect(() => {
+    !sessionId &&
+      !redirectResult &&
+      session !== null &&
+      initializeAydenCheckout();
+  }, [session, sessionId, redirectResult]);
+
+  const fetchEmail = useFetchEmail();
+  const emailMutation = useMutation({
+    mutationFn: async () =>
+      await fetchEmail.sendEmail([
+        {
+          idStaff: selectedStaff,
+          idRestaurant: restaurantIdParams.current,
+          html: render(
+            <FirstTemplate details={{ amount: tipAmount, rating: rating }} />
+          ),
+        },
+      ]),
+    refetchOnWindowFocus: false,
+    onSuccess: (data) => {
+      console.log("onSuccess", data.response);
+      navigate(`/privateClient/${restaurantIdParams.current}/success-payment`);
+    },
+  });
 
   const initializeAydenCheckout = async () => {
     try {
-      const checkout = await createAydenCheckout(session);
+      console.log("dans le initizialise");
+
+      const configuration = {
+        environment: "test",
+        clientKey: "test_3VKOQZ63JVG6FFO5KTKKFAU5GASVPYSK",
+        session: session,
+        onPaymentCompleted: (result, component) => {
+          switch (orderType.current) {
+            case "tip": {
+              if ((result.resultCode = "Authorised")) {
+                emailMutation.mutate();
+              }
+              break;
+            }
+            case "qrcode": {
+              navigate("/privateManager/private-home-manager/success-payment");
+              break;
+            }
+          }
+        },
+        onError: (error, component) => {
+          console.error(error.name, error.message, error.stack, component);
+        },
+        paymentMethodsConfiguration: {
+          card: {
+            hasHolderName: false,
+            holderNameRequired: false,
+            billingAddressRequired: false,
+          },
+        },
+      };
+
+      const checkout = await AdyenCheckout(configuration);
 
       if (sessionId && redirectResult) {
         checkout.submitDetails({ details: { redirectResult: redirectResult } });
       }
-
-      dropinInstance.current = checkout
-        .create("dropin")
-        .mount(dropinContainerRef.current);
+      checkout.create("dropin").mount(dropinContainerRef.current);
     } catch (error) {
       console.log("Error Adyen", error);
     }
@@ -98,19 +139,46 @@ const AydenDropIn = (props) => {
 
   const finalizeCheckout = async () => {
     try {
-      const checkout = await createAydenCheckout({ id: sessionId });
+      const configuration = {
+        environment: "test",
+        clientKey: "test_3VKOQZ63JVG6FFO5KTKKFAU5GASVPYSK",
+        session: { id: sessionId },
+        onPaymentCompleted: (result, component) => {
+          switch (orderType.current) {
+            case "tip": {
+              if ((result.resultCode = "Authorised")) {
+                emailMutation.mutate();
+              }
+              break;
+            }
+            case "qrcode": {
+              navigate("/privateManager/private-home-manager/success-payment");
+              break;
+            }
+          }
+        },
+        onError: (error, component) => {
+          console.error(error.name, error.message, error.stack, component);
+        },
+        paymentMethodsConfiguration: {
+          card: {
+            hasHolderName: false,
+            holderNameRequired: false,
+            billingAddressRequired: false,
+          },
+        },
+      };
+      const checkout = await AdyenCheckout(configuration);
       checkout.submitDetails({ details: { redirectResult: redirectResult } });
     } catch (error) {
       console.log("Error Adyen", error);
     }
   };
 
-  useEffect(() => {
-    !sessionId && !redirectResult && initializeAydenCheckout();
-  }, [session]);
-
   // Conditionally render the drop-in container
-  return session ? <div ref={dropinContainerRef}></div> : null;
+  return session && !sessionId && !redirectResult ? (
+    <div ref={dropinContainerRef}></div>
+  ) : null;
 };
 
 export default AydenDropIn;

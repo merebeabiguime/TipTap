@@ -1,16 +1,9 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import {
-  Navigate,
-  Outlet,
-  useLocation,
-  useNavigate,
-  useParams,
-} from "react-router-dom";
-import { useUserContext } from "../../contexts/AuthContext";
+import React, { useEffect, useState } from "react";
 import { Spinner } from "react-bootstrap";
-import { useFetchRestaurant } from "../../fetches/FetchRestaurant";
-import { QueryClient, useQuery } from "react-query";
+import { QueryClient } from "react-query";
+import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { useStaffContext } from "../../contexts/fetches-contexts/StaffContext";
+import { useFetchRestaurant } from "../../fetches/FetchRestaurant";
 export default function PrivateClient() {
   let { restaurantId } = useParams();
   const restaurantIdValue = restaurantId.split("=")[1];

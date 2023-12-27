@@ -10,7 +10,7 @@ import { storage } from "../firebase";
 
 export default function UploadingImage() {
   const [file, setFile] = useState("");
-  const { data, setData, setPercentage } = useUserContext();
+  const { data, setData, setPercentage, userObject } = useUserContext();
   const [loading, setLoading] = useState(false);
 
   const uploadFile = () => {
@@ -70,7 +70,19 @@ export default function UploadingImage() {
         <img src={data.img} alt="Profile" className="circular-image" />
       ) : (
         <label htmlFor="file" className="btn">
-          <img src={UploadImage} alt="Upload" className="mr-2" />
+          <img
+            src={
+              userObject && userObject[0].pictureUrl
+                ? userObject[0].pictureUrl
+                : UploadImage
+            }
+            alt="Upload"
+            className={
+              userObject && userObject[0].pictureUrl
+                ? `mr-2 circular-image`
+                : `mr-2`
+            }
+          />
         </label>
       )}
     </div>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import IconCleaner from "../../../images/icon_cleaner.png";
-import IconWaiter from "../../../images/icon_waiter.png";
-import IconChef from "../../../images/icon_chef.png";
+import IconNettoyeur from "../../../images/icon_cleaner.png";
+import IconServeur from "../../../images/icon_waiter.png";
+import IconCuisinier from "../../../images/icon_chef.png";
 import { Button, Carousel } from "react-bootstrap";
 import { useStaffContext } from "../../../contexts/fetches-contexts/StaffContext";
 
@@ -17,10 +17,10 @@ export default function StaffCaroussel() {
     if (isCarousselVisible && newRoleFilter === selectedRole) {
       setIsCarousselVisible(false);
       selectStaff(null);
-    } else if (newRoleFilter === "Cleaner") {
+    } else if (newRoleFilter === "Nettoyeur") {
       setIsCarousselVisible(false);
       selectStaff(-1);
-    } else if (newRoleFilter === "Chef") {
+    } else if (newRoleFilter === "Cuisinier") {
       setIsCarousselVisible(false);
       selectStaff(0);
     } else {
@@ -39,38 +39,38 @@ export default function StaffCaroussel() {
     <div>
       <div className="mx-auto mb-4 d-flex justify-content-center align-items-center">
         <img
-          src={IconChef}
+          src={IconCuisinier}
           className={
-            selectedRole === "Chef"
+            selectedRole === "Cuisinier"
               ? `image_selectRoleOther`
               : `image_selectRole`
           }
           alt="icon"
           onClick={() => {
-            handleRoleFilterChange("Chef");
-            setSelectedRole("Chef");
+            handleRoleFilterChange("Cuisinier");
+            setSelectedRole("Cuisinier");
           }}
         />
         <img
-          src={IconCleaner}
-          className={
-            selectedRole === "Cleaner"
-              ? `image_selectRoleOther`
-              : `image_selectRole`
-          }
-          alt="icon"
-          onClick={() => {
-            handleRoleFilterChange("Cleaner");
-            setSelectedRole("Cleaner");
-          }}
-        />
-        <img
-          src={IconWaiter}
+          src={IconServeur}
           className="image_selectRole"
           alt="icon"
           onClick={() => {
-            handleRoleFilterChange("Waiter");
-            setSelectedRole("Waiter");
+            handleRoleFilterChange("Serveur");
+            setSelectedRole("Serveur");
+          }}
+        />
+        <img
+          src={IconNettoyeur}
+          className={
+            selectedRole === "Nettoyeur"
+              ? `image_selectRoleOther`
+              : `image_selectRole`
+          }
+          alt="icon"
+          onClick={() => {
+            handleRoleFilterChange("Nettoyeur");
+            setSelectedRole("Nettoyeur");
           }}
         />
       </div>

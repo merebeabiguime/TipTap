@@ -12,8 +12,10 @@ import { useNavigate } from "react-router-dom";
 import { useStaffContext } from "../../../contexts/fetches-contexts/StaffContext";
 import PreviousPageButton from "../../../features/PreviousPageButton";
 import { useFetchStaff } from "../../../fetches/FetchStaff";
+import { useUserContext } from "../../../contexts/AuthContext";
 function AddStaff() {
   const { staffObject } = useStaffContext();
+  const { userObject } = useUserContext();
   const inputs = useRef("");
   const [validation, setValidation] = useState("");
   const navigate = useNavigate();
@@ -44,13 +46,15 @@ function AddStaff() {
       const getValidStaffResponse = await fetchStaff.isEmailValid(
         inputs.current.value
       );
+      console.log("id res", userObject[0].ID_restaurant);
       if (getValidStaffResponse.status === "Success") {
         staffObject.current = {
           firstName: getValidStaffResponse.response[0].firstName,
           lastName: getValidStaffResponse.response[0].lastName,
           ID_USER: getValidStaffResponse.response[0].ID,
           pictureUrl: getValidStaffResponse.response[0].pictureUrl,
-          stars: 5,
+          id_restaurant: userObject[0].ID_restaurant,
+          stars: 0,
           role: 0,
         };
         navigate(
@@ -64,13 +68,13 @@ function AddStaff() {
     }
   };
   return (
-    <Container>
+    <Container className="gx-0 fluid ">
       <Stack>
         <div className="vector-container">
-          <PreviousPageButton />
           <img src={vector3} alt="Vector 3" className="vector" />
           <img src={vector4} alt="Vector 4" className="vector" />
         </div>
+        <PreviousPageButton />
         <div className="" style={{ marginRight: "38px", marginLeft: "38px" }}>
           <h1 className="h1-mt-33">Ajouter du personnel</h1>
           <p className="p-mt-15">

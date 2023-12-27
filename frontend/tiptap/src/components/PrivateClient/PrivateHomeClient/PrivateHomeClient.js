@@ -11,6 +11,7 @@ import IconStarUnselected from "../../../images/other_stars_unselected.png";
 import "../../../style.css";
 import StaffCaroussel from "./StaffCaroussel";
 import AydenDropIn from "../../../features/AydenDropIn";
+import { useNavigate } from "react-router-dom";
 
 function PrivateHomeClient() {
   const {
@@ -21,11 +22,14 @@ function PrivateHomeClient() {
     setRating,
     getAllStaff,
     selectedStaff,
+    restaurantIdParams,
+    orderType,
   } = useStaffContext();
   const [selectedPriceTag, setSelectedPriceTag] = useState(0);
   const [enteredAmount, setEnteredAmount] = useState("");
   const [comment, setComment] = useState("");
   const [product, setProduct] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (tipAmount !== 0) {
@@ -58,6 +62,7 @@ function PrivateHomeClient() {
 
     // Vérifiez si la valeur entrée ne contient que des chiffres
     if (/^\d*\.?\d*$/.test(inputAmount) || inputAmount === "") {
+      setSelectedPriceTag(0);
       setEnteredAmount(inputAmount);
       setTipAmount(parseFloat(inputAmount) || 0); // Convertissez la chaîne en nombre ou 0 si la conversion échoue
     }
@@ -91,7 +96,14 @@ function PrivateHomeClient() {
 
   useEffect(() => {
     getAllStaff();
+    orderType.current = "tip";
   }, []);
+
+  const handlePayButton = () => {
+    navigate(
+      `/privateClient/restaurantId=${restaurantIdParams.current}/adyen/`
+    );
+  };
 
   return (
     <Container className="gx-0 fluid">
@@ -99,6 +111,7 @@ function PrivateHomeClient() {
         <div className=" mx-auto">
           <img key="star1" className="logo" src={logo} alt="logo" />
         </div>
+        <p> Choisissez à qui vous souhaitez envoyer votre pourboire.</p>
         <StaffCaroussel />
         <div className="mx-auto">
           {[1, 2, 3, 4, 5].map((star) => (
@@ -191,7 +204,6 @@ function PrivateHomeClient() {
                     inputMode="numeric"
                     placeholder="Entrer le montant"
                     className="customPriceForm "
-                    disabled={selectedPriceTag === 0 ? false : true}
                     value={enteredAmount}
                     onChange={handleAmountChange}
                   />
@@ -224,6 +236,9 @@ function PrivateHomeClient() {
                   type="submit"
                   className="customButton1"
                   value={enteredAmount}
+                  onClick={() => {
+                    handlePayButton();
+                  }}
                 >
                   {`Aller au paiement (${tipAmount}) €`}
                 </Button>
@@ -244,10 +259,6 @@ function PrivateHomeClient() {
               product && (
                 <div>
                   <div className="justify-content-center mx-auto mt-4">
-                    <p className="text-center">Ou payer avec Adyen</p>
-                    <AydenDropIn details={product} />
-                  </div>
-                  <div className="justify-content-center mx-auto mt-4">
                     <p className="text-center">Ou payer avec Paypal</p>
                     <PaypalCheckoutButton product={product} />
                   </div>
@@ -255,7 +266,6 @@ function PrivateHomeClient() {
               )}
           </Form>
         </div>
-        <div id="dropin-container"></div>
       </Stack>
     </Container>
   );

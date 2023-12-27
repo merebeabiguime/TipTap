@@ -17,11 +17,15 @@ import SignUp from "./SignUp";
 import { StaffContextProvider } from "../contexts/fetches-contexts/StaffContext";
 import WorkerQrCode from "./PrivateManager/PrivateHomeManager/WorkerQrCode";
 import PrivateClient from "./PrivateClient/PrivateClient";
-import SuccessPayment from "./PrivateClient/PrivateHomeClient/SuccessPayment";
 import VerifyUser from "./VerifyUser";
 import SelectStaff from "./PrivateClient/PrivateHomeClient/SelectStaff";
 import ChooseVerifMethod from "./ChooseVerifMethod";
 import ValidatePhone from "./ValidatePhone";
+import Cashout from "./PrivateWorker/PrivateHomeWorker/Cashout";
+import OrderQrCode from "./PrivateManager/PrivateHomeManager/OrderQrCode";
+import SuccessPayment from "./reusable/SuccessPayment";
+import Checkout from "./reusable/Checkout";
+import ModifyAccount from "./PrivateWorker/PrivateHomeWorker/ModifyAccount";
 
 function App() {
   return (
@@ -57,6 +61,18 @@ function App() {
             path="/privateManager/private-home-manager/worker-qrcode/:userId"
             element={<WorkerQrCode />}
           />
+          <Route
+            path="/privateManager/private-home-manager/order-qrcode"
+            element={<OrderQrCode />}
+          />
+          <Route
+            path="/privateManager/private-home-manager/adyen"
+            element={<Checkout />}
+          />
+          <Route
+            path="/privateManager/private-home-manager/success-payment"
+            element={<SuccessPayment />}
+          />
 
           <Route
             path="/privateManager/private-home-manager/all-staff"
@@ -76,7 +92,16 @@ function App() {
             path="/privateWorker/private-home-worker"
             element={<PrivateHomeWorker />}
           />
+          <Route
+            path="/privateWorker/private-home-worker/modify-user"
+            element={<ModifyAccount />}
+          />
+          <Route
+            path="/privateWorker/private-home-worker/cashout"
+            element={<Cashout />}
+          />
         </Route>
+
         <Route
           path="/privateClient/:restaurantId"
           element={
@@ -87,6 +112,10 @@ function App() {
             </>
           }
         >
+          <Route
+            path="/privateClient/:restaurantId/adyen"
+            element={<Checkout />}
+          />
           <Route
             path="/privateClient/:restaurantId/select-staff"
             element={<SelectStaff />}

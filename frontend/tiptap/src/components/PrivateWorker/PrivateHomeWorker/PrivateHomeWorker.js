@@ -7,9 +7,11 @@ import { RWebShare } from "react-web-share";
 import { useUserContext } from "../../../contexts/AuthContext";
 import SaveIcon from "../../../images/save_to_gallery_icon.png";
 import shareIcon from "../../../images/share_icon.png";
+import { useNavigate } from "react-router-dom";
 
 export default function PrivateHomeWorker() {
   const { userObject, signOutFirebase } = useUserContext();
+  const navigate = useNavigate();
 
   const qrCodeRef = useRef();
   const [canvasRendered, setCanvasRendered] = useState(false);
@@ -126,7 +128,16 @@ export default function PrivateHomeWorker() {
           </RWebShare>
         </div>
         <div className="d-flex justify-content-center mt-4">
-          <p onClick={handleLogout}>Logout</p>
+          <p
+            onClick={() => {
+              navigate("/privateWorker/private-home-worker/modify-user");
+            }}
+          >
+            Modifier
+          </p>
+        </div>
+        <div className="d-flex justify-content-center mt-4">
+          <p onClick={handleLogout}>Déconnexion</p>
         </div>
       </Stack>
     </Container>
