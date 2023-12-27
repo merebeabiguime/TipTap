@@ -18,8 +18,18 @@ function HomePage() {
     <Container className="gx-0 fluid ">
       <Stack>
         <div className="vector-container">
-          <img src={vector3} alt="Vector 3" className="vector" />
-          <img src={vector4} alt="Vector 4" className="vector" />
+          <img
+            src={vector3}
+            alt="Vector 3"
+            className="vector"
+            style={{ width: "169.5px", height: "215px" }}
+          />
+          <img
+            src={vector4}
+            alt="Vector 4"
+            className="vector"
+            style={{ width: "187px", height: "243px" }}
+          />
         </div>
         <div className=" mx-auto">
           <img className="logo" src={logo} alt="logo" />

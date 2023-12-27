@@ -71,8 +71,18 @@ function AddStaff() {
     <Container className="gx-0 fluid ">
       <Stack>
         <div className="vector-container">
-          <img src={vector3} alt="Vector 3" className="vector" />
-          <img src={vector4} alt="Vector 4" className="vector" />
+          <img
+            src={vector3}
+            alt="Vector 3"
+            className="vector"
+            style={{ width: "169.5px", height: "215px" }}
+          />
+          <img
+            src={vector4}
+            alt="Vector 4"
+            className="vector"
+            style={{ width: "187px", height: "243px" }}
+          />
         </div>
         <PreviousPageButton />
         <div className="" style={{ marginRight: "38px", marginLeft: "38px" }}>
