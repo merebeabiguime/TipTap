@@ -4,6 +4,7 @@ import vector3 from "../../../images/Vector 3.png";
 import vector4 from "../../../images/Vector 4.png";
 import iconChef from "../../../images/icon_chef.png";
 import iconCleaner from "../../../images/icon_cleaner.png";
+import vectorGroup from "../../../images/vector_group.png";
 import iconWaiter from "../../../images/icon_waiter.png";
 import "../../../style.css";
 
@@ -53,22 +54,7 @@ function SelectStaffRole() {
 
   return (
     <Container>
-      <Stack>
-        <div className="vector-container">
-          <PreviousPageButton />
-          <img
-            src={vector3}
-            alt="Vector 3"
-            className="vector"
-            style={{ width: "169.5px", height: "215px" }}
-          />
-          <img
-            src={vector4}
-            alt="Vector 4"
-            className="vector"
-            style={{ width: "187px", height: "243px" }}
-          />
-        </div>
+      <Stack style={{ marginLeft: "25px", marginRight: "25px" }}>
         <Modal show={showPopup} onHide={() => setShowPopup(false)}>
           <Modal.Header closeButton>
             <Modal.Title>Staff ajouté avec succès</Modal.Title>
@@ -77,12 +63,16 @@ function SelectStaffRole() {
             La redirection se fera dans quelques instants...
           </Modal.Body>
         </Modal>
-        <div className="" style={{ marginRight: "38px", marginLeft: "38px" }}>
-          <h1 className="h1-mt-33">Sélectionner un rôle</h1>
-          <p className="p-mt-15">Choisissez la catégorie du personnel</p>
+        <div className="justify-content-end">
+          <img src={vectorGroup} alt="Vector" className="vector " />
+          <PreviousPageButton
+            secondTitle="Sélectionner un rôle"
+            subTitle="Choisissez la catégorie du personnel
+"
+          />
         </div>
 
-        <div className=" d-flex justify-content-center mb-3 mt-3" sm={12}>
+        <div className=" d-flex justify-content-center mb-3 mt-3">
           <img
             src={staffObject.current.pictureUrl}
             alt="Upload"
@@ -96,10 +86,7 @@ function SelectStaffRole() {
         </div>
         <div className="">
           {/*<h6 style={{ marginLeft: "38px" }}>Select Role</h6>*/}
-          <Row
-            className=" mx-auto"
-            style={{ paddingLeft: "38px", paddingRight: "38px" }}
-          >
+          <Row className=" mx-auto">
             <Button
               className="button_role_addStaff col-5"
               style={{

@@ -45,7 +45,7 @@ export default function SelectRolePopup() {
           type="submit"
           className="popup-button-gray"
         >
-          Chefs
+          Cuisiniers
         </Button>
         <Button
           onClick={() => {
@@ -54,7 +54,7 @@ export default function SelectRolePopup() {
           type="submit"
           className="popup-button-gray"
         >
-          All
+          Tout
         </Button>
       </div>
       <div

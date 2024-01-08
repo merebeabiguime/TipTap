@@ -1,33 +1,37 @@
-import MailIcon from "../images/signup_mail_icon.png";
-import PasswordIcon from "../images/signup_password_icon.png";
-import PhoneIcon from "../images/signup_phone_icon.png";
-import UserIcon from "../images/signup_user_icon.png";
 import "../style.css";
 
 import { useEffect, useRef, useState } from "react";
-import {
-  Button,
-  Container,
-  Form,
-  InputGroup,
-  Spinner,
-  Stack,
-} from "react-bootstrap";
+import { Container, Stack } from "react-bootstrap";
 import { useMutation } from "react-query";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { signupForm } from "../constants/FormFields";
 import { useUserContext } from "../contexts/AuthContext";
 import PreviousPageButton from "../features/PreviousPageButton";
 import UploadingImage from "../features/UploadingImage";
 import { useFetchAuth } from "../fetches/FetchAuth";
+import useHookForm from "../forms/hook/HookForm";
 
 function SignUp() {
-  const { userRole, signUp, data, percentage } = useUserContext();
+  const { signUp, data, percentage, navigateTo } = useUserContext();
   const inputs = useRef([]);
   const [validation, setValidation] = useState("");
   const navigate = useNavigate();
   const fetchAuth = useFetchAuth();
+  let { role } = useParams();
+  const roleParamsValue = role && role.split("=")[1];
   const jsonData = useRef([]);
-  const formRef = useRef();
+
+  useEffect(() => {
+    console.log("roleValue", roleParamsValue);
+  }, []);
+  const {
+    getValue,
+    showInputs,
+    setInputList,
+    setLoading,
+    setDisabled,
+    getFormIsSucces,
+  } = useHookForm({ inputs: signupForm, btnText: "S'insrire" });
 
   const signUpWithMysqlMutation = useMutation({
     mutationFn: async () => await fetchAuth.register(jsonData),
@@ -45,29 +49,38 @@ function SignUp() {
     },
   });
 
-  const addInput = (el) => {
-    if (el && !inputs.current.includes(el)) {
-      inputs.current.push(el);
-    }
-  };
+  useEffect(() => {
+    percentage !== null && percentage < 100
+      ? setDisabled(true)
+      : setDisabled(false);
+  }, [percentage]);
+  useEffect(() => {
+    !signUpWithMysqlMutation.isLoading ? setLoading(false) : setLoading(true);
+  }, [signUpWithMysqlMutation]);
+  useEffect(() => {
+    navigate(navigateTo);
+  }, [navigateTo]);
+
+  useEffect(() => {
+    console.log("params", roleParamsValue);
+  }, []);
 
   async function tryToSignUp() {
+    const test = getValue("password1");
+    console.log("dans le try", test);
     //Signing up in Firebase
     try {
       const credentials = await signUp(
-        inputs.current[2].value,
-        inputs.current[4].value
+        getValue("email"),
+        getValue("password1")
       );
-      console.log("this user", credentials.user);
-      //setCurrentUser(credentials.user);
-      //Creating temporary variable to store input data
       jsonData.current.push({
-        firstName: inputs.current[0].value,
-        lastName: inputs.current[1].value,
-        email: inputs.current[2].value,
-        phone: inputs.current[3].value,
+        firstName: getValue("firstName"),
+        lastName: getValue("lastName"),
+        email: getValue("email"),
+        phone: getValue("phoneNumber"),
         password: "password",
-        role: userRole,
+        role: roleParamsValue && roleParamsValue === 2 ? 2 : 1,
         pictureUrl: data.img
           ? data.img
           : "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Windows_10_Default_Profile_Picture.svg/2048px-Windows_10_Default_Profile_Picture.svg.png",
@@ -87,126 +100,32 @@ function SignUp() {
       }
     }
   }
+  const formIsSuccess = getFormIsSucces();
 
-  const isValidPhoneNumber = (phoneNumber) => {
-    // Expression régulière pour valider le numéro de téléphone
-    const phoneNumberRegex = /^\+330\d{9}$/;
-
-    // Vérifier si le numéro de téléphone correspond à l'expression régulière
-    return phoneNumberRegex.test(phoneNumber);
-  };
-
-  const handleForm = async (e) => {
-    e.preventDefault();
-
-    if (
-      (inputs.current[4].value.length || inputs.current[5].value.length) < 6
-    ) {
-      setValidation(
-        "Votre mot de passe doit contenir 6 caractères au minimum."
-      );
-      return;
-    } else if (inputs.current[4].value !== inputs.current[5].value) {
-      setValidation("Veuillez entrer des mots de passe qui correspondent.");
-      return;
-    } else if (!isValidPhoneNumber(inputs.current[3].value)) {
-      setValidation("Veuillez entrer un numéro de téléphone valide.");
-      return;
-    } else if (!isValidPhoneNumber(inputs.current[3].value)) {
-      setValidation("Veuillez entrer un numéro de téléphone valide.");
-      return;
-    }
-
-    tryToSignUp();
-  };
   useEffect(() => {
-    // This effect will be called when the userRole changes
-    if (userRole === 0) {
-      navigate("/selectRole");
+    console.log("deeee", formIsSuccess);
+    if (formIsSuccess === true) {
+      console.log("dada");
+      setLoading(true);
+      tryToSignUp();
     }
-  }, [userRole]);
+  }, [formIsSuccess]);
+
   return (
     <Container>
-      <Stack>
+      <Stack style={{ marginLeft: "25px", marginRight: "25px" }}>
         <PreviousPageButton />
-        <div className="" style={{ marginRight: "38px", marginLeft: "38px" }}>
-          <h1 className="h1-mt-33">Créer un compte</h1>
+        <div>
+          <h1>Créer un compte</h1>
           <p className="p-mt-15">
-            Rejoignez la communauté en quelques clics seulement. Entrez les
-            informations suivante
+            Rejoignez la communauté en quelques clics. Entrez les informations
+            suivante
           </p>
         </div>
         <UploadingImage />
-        <div className=" d-flex justify-content-center mt-4">
-          <Form onSubmit={handleForm} ref={formRef}>
-            <InputGroup>
-              <img className="iconForm" src={UserIcon} alt="User" />
-              <Form.Control
-                ref={addInput}
-                type="text"
-                placeholder="Prénom"
-                className="customForm"
-              />
-            </InputGroup>
-            <InputGroup>
-              <img className="iconForm" src={UserIcon} alt="User" />
-              <Form.Control
-                ref={addInput}
-                type="text"
-                placeholder="Nom"
-                className="customForm"
-              />
-            </InputGroup>
-            <InputGroup>
-              <img className="iconForm" src={MailIcon} alt="User" />
-              <Form.Control
-                ref={addInput}
-                type="email"
-                placeholder="Email"
-                className="customForm"
-              />
-            </InputGroup>
-            <InputGroup>
-              <img className="iconForm" src={PhoneIcon} alt="User" />
-              <Form.Control
-                ref={addInput}
-                type="text"
-                placeholder="Téléphone : +330769575354"
-                className="customForm"
-              />
-            </InputGroup>
-            <InputGroup>
-              <img className="iconForm" src={PasswordIcon} alt="User" />
-              <Form.Control
-                ref={addInput}
-                type="password"
-                placeholder="Mot de passe"
-                className="customForm"
-              />
-            </InputGroup>
-            <InputGroup>
-              <img className="iconForm" src={PasswordIcon} alt="User" />
-              <Form.Control
-                ref={addInput}
-                type="password"
-                placeholder="Confirmer le mot de passe"
-                className="customForm"
-              />
-            </InputGroup>
-            <p className="text-danger mt-1">{validation}</p>
-            <Button
-              disabled={percentage !== null && percentage < 100}
-              type="submit"
-              className="customButton1"
-            >
-              {!signUpWithMysqlMutation.isLoading ? (
-                `S'inscrire`
-              ) : (
-                <Spinner animation="border" />
-              )}
-            </Button>
-          </Form>
-        </div>
+
+        {showInputs()}
+        <h1>{validation}</h1>
       </Stack>
     </Container>
   );

@@ -3,6 +3,7 @@ import { Button, Container, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import vector3 from "../images/Vector 3.png";
 import vector4 from "../images/Vector 4.png";
+import vectorGroup from "../images/vector_group.png";
 import homepageIcon from "../images/homepage_icon.png";
 import logo from "../images/logo.png";
 import "../style.css";
@@ -16,22 +17,11 @@ function HomePage() {
   }, []);
   return (
     <Container className="gx-0 fluid ">
-      <Stack>
-        <div className="vector-container">
-          <img
-            src={vector3}
-            alt="Vector 3"
-            className="vector"
-            style={{ width: "169.5px", height: "215px" }}
-          />
-          <img
-            src={vector4}
-            alt="Vector 4"
-            className="vector"
-            style={{ width: "187px", height: "243px" }}
-          />
+      <Stack style={{ marginRight: "25px", marginLeft: "25px" }}>
+        <div className="justify-content-end">
+          <img src={vectorGroup} alt="Vector" className="vector " />
         </div>
-        <div className=" mx-auto">
+        <div className=" mx-auto" style={{ marginTop: "150px" }}>
           <img className="logo" src={logo} alt="logo" />
         </div>
         <div className="mx-auto">
@@ -64,10 +54,7 @@ function HomePage() {
             </Button>
           </div>
         </Link>
-        <Link
-          to="/selectRole"
-          style={{ textDecoration: "none", color: "inherit" }}
-        >
+        <Link to="/signup" style={{ textDecoration: "none", color: "inherit" }}>
           <div className="d-flex justify-content-center col-m-25 col-button ">
             <Button
               style={{ marginLeft: "35px", marginRight: "35px" }}

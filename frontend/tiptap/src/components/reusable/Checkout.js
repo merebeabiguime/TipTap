@@ -47,8 +47,8 @@ export default function Checkout() {
 
   return (
     <Container className="gx-0 fluid">
-      <Stack>
-        <PreviousPageButton title={{ title: "Informations de paiement" }} />
+      <Stack style={{ marginRight: "25px", marginLeft: "25px" }}>
+        <PreviousPageButton firstTitle="Informations de paiement" />
 
         {staffToShow && (
           <div

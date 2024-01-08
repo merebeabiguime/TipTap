@@ -1,44 +1,59 @@
 import { useEffect, useRef, useState } from "react";
-import MailIcon from "../../../images/signup_mail_icon.png";
-import PasswordIcon from "../../../images/signup_password_icon.png";
-import PhoneIcon from "../../../images/signup_phone_icon.png";
-import UserIcon from "../../../images/signup_user_icon.png";
 import "../../../style.css";
 
-import { Button, Container, Form, InputGroup, Stack } from "react-bootstrap";
+import { Container, Stack } from "react-bootstrap";
 import { useMutation } from "react-query";
-import { useFetchUsers } from "../../../fetches/FetchUsers";
+import { modifyAccountForm } from "../../../constants/FormFields";
 import { useUserContext } from "../../../contexts/AuthContext";
-import UploadingImage from "../../../features/UploadingImage";
 import PreviousPageButton from "../../../features/PreviousPageButton";
+import UploadingImage from "../../../features/UploadingImage";
+import { useFetchUsers } from "../../../fetches/FetchUsers";
+import useHookForm from "../../../forms/hook/HookForm";
+import ReLoginPopup from "../../popup/ReLoginPopup";
 
 function ModifyAccount() {
   const [inputChanged, setInputChanged] = useState(true);
-  const { userObject, data } = useUserContext();
+  const {
+    userObject,
+    data,
+    updateUserEmail,
+    userReauthenticated,
+    currentUser,
+  } = useUserContext();
   const formRef = useRef(null);
   const [errorMessage, setErrorMessage] = useState("");
-  const fetchUser = useFetchUsers();
-  const inputValues = useRef({
-    firstName: userObject[0].firstName,
-    lastName: userObject[0].lastName,
-    email: userObject[0].email,
-    phoneNumber: userObject[0].phone,
-    pictureUrl: userObject[0].pictureUrl,
-    ID: userObject[0].ID,
+  const pictureUrl = useRef(null);
+  const [showPopup, setShowPopup] = useState(false);
+
+  const {
+    getValue,
+    showInputs,
+    setInputList,
+    setFormIsSuccess,
+    setLoading,
+    setDisabled,
+    getFormIsSucces,
+    getFormChanged,
+    setCustomError,
+  } = useHookForm({
+    inputs: modifyAccountForm(
+      userObject[0].firstName,
+      userObject[0].lastName,
+      userObject[0].email,
+      userObject[0].phone
+    ),
+    btnText: "Modifier",
   });
+  const fetchUser = useFetchUsers();
+
+  const inputValues = useRef({});
   useEffect(() => {
     if (data.img) {
       setInputChanged(false);
       console.log(data.img);
-      inputValues.current.pictureUrl = data.img;
+      pictureUrl.current = data.img;
     }
   }, [data]);
-  const onChangeInput = (value, index) => {
-    console.log("changed", value.nativeEvent.data);
-    setInputChanged(false);
-
-    inputValues.current[index] = value.nativeEvent.data;
-  };
 
   const modifyUserMutation = useMutation({
     mutationFn: async () => await fetchUser.update([inputValues.current]),
@@ -49,85 +64,92 @@ function ModifyAccount() {
       } else {
         setErrorMessage(data.response);
         console.log(data.response);
+        setLoading(false);
+        setDisabled(false);
       }
     },
     refetchOnWindowFocus: false,
   });
 
-  const handleOnSubmit = (event) => {
-    event.preventDefault();
-    if (!inputChanged) {
-      modifyUserMutation.mutate();
+  useEffect(() => {
+    setDisabled(true);
+  }, []);
+
+  const formChanged = getFormChanged();
+
+  useEffect(() => {
+    if (formChanged || pictureUrl.current) {
+      setDisabled(false);
+    }
+  }, [formChanged]);
+
+  const isFormSuccessfull = getFormIsSucces();
+
+  const updateEmail = async (email) => {
+    if (userReauthenticated) {
+      try {
+        const result = await updateUserEmail(email);
+        console.log("result", result);
+        modifyUserMutation.mutate();
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      setDisabled(false);
+      setLoading(false);
+      setShowPopup(true);
     }
   };
 
+  useEffect(() => {
+    console.log("is", isFormSuccessfull);
+    if (isFormSuccessfull) {
+      setDisabled(true);
+      setLoading(true);
+      console.log("dedans");
+
+      const firstName = getValue("modifyAccount_firstName");
+      const lastName = getValue("modifyAccount_lastName");
+      const email = getValue("modifyAccount_email");
+      const phoneNumber = getValue("modifyAccount_phoneNumber");
+      inputValues.current = {
+        firstName: firstName,
+        lastName: lastName,
+        email: userObject[0].email,
+        phoneNumber: phoneNumber,
+        pictureUrl: pictureUrl.current,
+        ID: userObject[0].ID,
+      };
+      if (email !== currentUser.email) {
+        console.log("tata");
+        updateEmail(email);
+      } else {
+        console.log("didians");
+        modifyUserMutation.mutate();
+      }
+      setFormIsSuccess(false);
+    }
+  }, [isFormSuccessfull]);
+
   return (
     <Container>
-      <Stack>
-        <PreviousPageButton />
-        <div className="" style={{ marginRight: "38px", marginLeft: "38px" }}>
-          <h1 className="h1-mt-33">Modifier le compte</h1>
-          <p className="p-mt-15">Veuillez entrer vos nouvelles informations</p>
+      <Stack style={{ marginRight: "25px", marginLeft: "25px" }}>
+        {showPopup && (
+          <ReLoginPopup title="Vous devez vous reconnecter pour pouvoir modifier votre profil" />
+        )}
+        <PreviousPageButton firstTitle="Modifier le compte" />
+        <div className="">
+          <p className="p-mt-15">Veuillez entrer vos nouvelles informations.</p>
+          {showPopup && (
+            <p className="p-mt-15">
+              Vous pouvez désormais cliquer sur le boutton Modifier. Un email de
+              vérification vous sera envoyé.
+            </p>
+          )}
         </div>
         <UploadingImage />
-        <div className=" d-flex justify-content-center mt-4">
-          <Form onSubmit={handleOnSubmit} ref={formRef}>
-            <InputGroup>
-              <img className="iconForm" src={UserIcon} alt="User" />
-              <Form.Control
-                onChange={(value) => {
-                  onChangeInput(value, "firstName");
-                }}
-                type="text"
-                placeholder={userObject[0].firstName}
-                className="customForm"
-              />
-            </InputGroup>
-            <InputGroup>
-              <img className="iconForm" src={UserIcon} alt="User" />
-              <Form.Control
-                type="text"
-                onChange={(value) => {
-                  onChangeInput(value, "lastName");
-                }}
-                className="customForm"
-                value={userObject[0].lastName}
-              />
-            </InputGroup>
-            <InputGroup>
-              <img className="iconForm" src={MailIcon} alt="User" />
-              <Form.Control
-                type="email"
-                placeholder={userObject[0].email}
-                onChange={(value) => {
-                  onChangeInput(value, "email");
-                }}
-                className="customForm"
-                value={userObject[0].email}
-              />
-            </InputGroup>
-            <InputGroup>
-              <img className="iconForm" src={PhoneIcon} alt="User" />
-              <Form.Control
-                type="text"
-                placeholder={userObject[0].phone}
-                value={userObject[0].phone}
-                onChange={(value) => {
-                  onChangeInput(value, "phoneNumber");
-                }}
-                className="customForm"
-              />
-            </InputGroup>
-            <p className="text-danger mt-1">{errorMessage}</p>
-            <Button
-              type="submit"
-              className="customButton1"
-              disabled={inputChanged}
-            >
-              Modifier
-            </Button>
-          </Form>
-        </div>
+        {showInputs()}
+        <p>{errorMessage}</p>
       </Stack>
     </Container>
   );

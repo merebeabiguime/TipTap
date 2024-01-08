@@ -1,7 +1,7 @@
 import axios from "axios";
 axios.defaults.withCredentials = true;
 
-const baseURL = "https://tiptap.biz/api";
+const baseURL = process.env.BACKEND_URL;
 
 //const baseURL = "http://localhost:8081";
 

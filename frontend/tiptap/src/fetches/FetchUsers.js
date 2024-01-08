@@ -7,6 +7,12 @@ export function useFetchUsers() {
     return response.data;
   };
 
+  const updateEmail = async (jsonData) => {
+    const response = await myAxios.put(`/user/updateEmail`, jsonData);
+
+    return response.data;
+  };
+
   const verify = async (uid) => {
     const response = await myAxios.post(`/user/verify`, [{ UID: uid }]);
 
@@ -21,6 +27,7 @@ export function useFetchUsers() {
   return {
     getUser,
     verify,
+    updateEmail,
     update,
   };
 }

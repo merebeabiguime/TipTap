@@ -1,33 +1,41 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-
-import previousIcon from "../images/previous_icon.png"; // Importez votre icône ici
-import { Row } from "react-bootstrap";
+import TitleSubtitle from "../components/reusable/TitleSubtitle";
+import previousIcon from "../images/previous_icon.png"; // Import your icon here
 
 export default function PreviousPageButton(props) {
   const navigate = useNavigate();
-  const { title } = props;
+  const { firstTitle, secondTitle, subTitle } = props;
 
   const handleGoBack = () => {
-    navigate(-1); // Naviguer à la page précédente
+    navigate(-2); // Navigate to the previous page
   };
 
   return (
-    <div style={{ marginTop: "40px" }}>
-      <Row>
-        <div className="col-12  ">
-          <button
-            className="btn "
-            style={{ position: "absolute", top: "35px" }}
-            onClick={handleGoBack}
-          >
-            <img src={previousIcon} alt="Custom Icon" className="mr-2" />
-          </button>
-          <h6 className="text-center" style={{ paddingLeft: "40px" }}>
-            {title ? title.title : ""}
-          </h6>
+    <div>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          marginTop: "75px",
+        }}
+      >
+        <div style={{ marginRight: "10px" }}>
+          <img src={previousIcon} alt="Custom Icon" onClick={handleGoBack} />
         </div>
-      </Row>
+        <div
+          style={{ textAlign: "center", paddingRight: "20px" }}
+          className="text-center mx-auto d-flex"
+        >
+          <h6>{firstTitle ? firstTitle : ""}</h6>
+        </div>
+      </div>
+      <div>
+        <TitleSubtitle
+          title={secondTitle ? secondTitle : ""}
+          subTitle={subTitle ? subTitle : ""}
+        />
+      </div>
     </div>
   );
 }

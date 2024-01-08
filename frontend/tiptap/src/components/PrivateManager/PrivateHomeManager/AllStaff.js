@@ -24,18 +24,17 @@ export default function AllStaff() {
   return (
     <Container>
       <Stack>
-        <PreviousPageButton />
-        <div className="col-12 d-flex justify-content-center align-items-center mb-2">
-          <h2 className=" ">All Staff</h2>
+        <PreviousPageButton firstTitle="Tout le personnel" />
+        {/*<div className="col-12 d-flex justify-content-center align-items-center mb-2">
           <img
             className=" profile-picure"
             src={userObject[0].pictureUrl}
             style={{ position: "absolute", right: "18px" }}
             alt="photo de profil"
           />
-        </div>
+  </div>*/}
 
-        <div className="d-flex justify-content-end mt-2">
+        <div className="d-flex justify-content-end mt-4">
           <Button
             onClick={() => setIsPopupVisible(!isPopupVisible)}
             style={{ backgroundColor: "transparent", border: "0" }}

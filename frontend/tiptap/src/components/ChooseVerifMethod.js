@@ -1,11 +1,8 @@
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
-import vector3 from "../images/Vector 3.png";
-import vector4 from "../images/Vector 4.png";
+import vectorGroup from "../images/vector_group.png";
 import "../style.css";
 
 import { useState } from "react";
-import { Button, Spinner } from "react-bootstrap";
+import { Button, Container, Spinner, Stack } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../contexts/AuthContext";
 
@@ -32,36 +29,21 @@ function ChooseVerifMethod() {
   };
 
   return !getUserInfos.isLoading && getUserInfos.isSuccess ? (
-    <div>
-      <Row>
-        <Col className="justify-content-end" sm={12}>
-          <div>
-            <img
-              src={vector3}
-              alt="Vector 3"
-              className="vector"
-              style={{ width: "169.5px", height: "215px" }}
-            />
-          </div>
-          <div>
-            <img
-              src={vector4}
-              alt="Vector 4"
-              className="vector"
-              style={{ width: "187px", height: "243px" }}
-            />
-          </div>
-        </Col>
-        <Col
-          className="d-flex justify-content-center  col-m-200 mx-auto text-center"
-          sm={12}
-        >
+    <Container>
+      <Stack style={{ marginLeft: "25px", marginRight: "25px" }}>
+        <div className="justify-content-end" style={{ marginBottom: "150px" }}>
+          <img src={vectorGroup} alt="Vector" className="vector " />
+        </div>
+        <div>
           <h1 className="col-m-25">Choix de la méthode de vérificaiton </h1>
-          <p className="p-mt-15">
+        </div>
+        <div>
+          <p>
             Veuillez choisir la méthode de validation qui vous convient le
             mieux.
           </p>
-        </Col>
+        </div>
+
         <div className="d-flex justify-content-center col-button button-mt-40">
           <Button
             style={{ marginLeft: "35px", marginRight: "35px" }}
@@ -96,8 +78,8 @@ function ChooseVerifMethod() {
             {sendingEmailMessage !== "" && `${sendingEmailMessage}`}
           </Button>
         </div>
-      </Row>
-    </div>
+      </Stack>
+    </Container>
   ) : (
     <div className="centered-div">
       <Spinner animation="border" />
