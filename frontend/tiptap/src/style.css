@@ -17,19 +17,19 @@
   src: url("./fonts/ABeeZee/ABeeZee-Regular.ttf") format("truetype");
 }
 
+p {
+  font-family: "Arial", sans-serif !important;
+  font-size: 16px !important;
+  color: black !important;
+}
+
 /* Styles pour les éléments HTML */
 h1 {
   font-family: "Satoshi Black", sans-serif !important;
   font-size: 28px !important;
-  color: #492b29 !important;
+  color: black !important;
   font-weight: 900;
   line-height: 37.8px;
-}
-p {
-  font-family: Arial;
-  color: #757575;
-  font-size: 16px !important;
-  font-weight: 400;
 }
 h3 {
   font-family: "Satoshi Variable", sans-serif !important;
@@ -43,12 +43,6 @@ h2 {
   color: black !important;
   font-weight: 700;
   line-height: 37.8px;
-}
-
-form {
-  width: 100% !important;
-  margin-right: 25px !important;
-  margin-left: 25px !important;
 }
 
 /* Styles pour les éléments React Bootstrap */
@@ -162,22 +156,43 @@ form {
   background-color: rgba(255, 255, 255, 0.538) !important;
 }
 
-.customForm {
-  width: 100% !important;
-  height: 65px !important;
-  border: 0 !important;
+.inputGroup {
   border-radius: 10px !important;
-  color: rgba(117, 117, 117, 1) !important;
-  background-color: rgba(217, 217, 217, 0.46) !important;
-  margin-bottom: 15px !important;
+  margin-bottom: 25px;
+}
+.form-control:focus {
+  border: 0 !important;
+  border-color: rgba(217, 217, 217, 0.46);
+  box-shadow: 0 0 0 0.1rem rgba(217, 217, 217, 0.46);
+}
+.customForm {
+  border: 0 !important;
+  background-color: rgba(217, 217, 217, 0.46);
   font-size: 14px !important;
-  padding-left: 60px !important;
+}
+/*.customPhoneField {
+  border: 0 !important;
+  background-color: rgba(217, 217, 217, 0.46);
+  font-size: 14px !important;
+  margin-bottom: 25px;
+  padding-left: 35px;
+}*/
+
+/* style.css */
+
+.customPhoneField {
+  border: 0 !important;
+  background-color: rgba(217, 217, 217, 0.46);
+  font-size: 14px !important;
+}
+.react-tel-input .flag-dropdown {
+  border: none !important;
+  background-color: rgba(217, 217, 217, 0.46) !important;
 }
 
 .iconForm {
-  position: absolute !important;
-  top: 25% !important;
-  left: 1.25rem !important;
+  width: 24px;
+  height: 24px;
 }
 .col-m-50 {
   margin-bottom: 50px !important;
@@ -297,7 +312,6 @@ h4 {
 
 /**********************************/
 .logo {
-  margin-top: 152px;
   width: 103px !important;
   height: 56px !important;
 }
@@ -309,6 +323,8 @@ h4 {
 .image_selectRoleOther {
   margin-top: 42px;
   width: 30% !important;
+  transform: scale(1.3);
+  transition: transform 0.3s ease-in-out;
 }
 /***** Margins *****/
 .h1-mt-15 {
@@ -349,22 +365,23 @@ h4 {
 }
 
 .vector-container {
-  position: relative;
-  margin-bottom: 100px;
+  margin-bottom: 125px;
 }
 .vector {
   position: absolute;
   top: 0;
   right: 0;
+  margin-bottom: 100px;
 }
-p {
-  font-family: "Satoshi Variable", sans-serif !important;
-  font-size: 16px;
-  line-height: 21.6px;
-  font-weight: 300;
-  color: black;
-  text-align: justify;
+.vector3 {
+  width: 187;
+  height: 243;
 }
+.vector4 {
+  width: 169.5px;
+  height: 215px;
+}
+
 h5 {
   font-family: "Satoshi Variable", sans-serif !important;
   font-size: 22px;
@@ -663,8 +680,10 @@ h6 {
   height: 50px !important;
 }
 
-.phoneInput {
-}
 .phoneInputDropDown {
   background-color: red;
+}
+
+.error_message {
+  color: #ff4d4f !important;
 }

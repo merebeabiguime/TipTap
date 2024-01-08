@@ -67,16 +67,28 @@ export async function verifyUser(uid) {
 // Mettre à jour un utilisateur
 export async function updateUser(userObject) {
   const [rows] = await pool.query(
-    "UPDATE user SET firstName = ?, lastName = ?, email = ?, phone = ?,pictureUrl = ? WHERE ID = ?",
+    "UPDATE user SET firstName = ?, lastName = ?, phone = ?,pictureUrl = ? WHERE ID = ?",
     [
       userObject[0].firstName,
       userObject[0].lastName,
-      userObject[0].email,
       userObject[0].phoneNumber,
       userObject[0].pictureUrl,
       userObject[0].ID,
     ]
   );
+  // Vérifiez si la mise à jour a réussi (aucune exception n'a été levée)
+  if (rows.affectedRows === 1) {
+    return 1; // Retournez 1 pour indiquer que la mise à jour a réussi
+  } else {
+    return 0; // Retournez 0 pour indiquer que la mise à jour a échoué
+  }
+}
+
+export async function updateUserEmail(email, uid) {
+  const [rows] = await pool.query("UPDATE user SET email = ? WHERE uid = ?", [
+    email,
+    uid,
+  ]);
   // Vérifiez si la mise à jour a réussi (aucune exception n'a été levée)
   if (rows.affectedRows === 1) {
     return 1; // Retournez 1 pour indiquer que la mise à jour a réussi
@@ -111,10 +123,10 @@ export async function getUserFromId(id) {
   return rows.length === 0 ? 0 : rows;
 }
 
-export async function getUserFromUID(id) {
-  const [rows] = await pool.query("SELECT * FROM user WHERE UID=?", [id]);
+export async function getUserFromUID(uid) {
+  const [rows] = await pool.query("SELECT * FROM user WHERE UID=?", [uid]);
   var accountBalance = 0;
-  if (rows.length === 0) {
+  if (!rows) {
     return 0;
   } else {
     const [balance] = await pool.query(

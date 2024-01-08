@@ -1,5 +1,5 @@
 const credentials = (req, res, next) => {
-  const allowedOrigins = "https://tiptap.biz";
+  const allowedOrigins = process.env.ALLOWED_ORIGINS;
   const origin = req.headers.origin;
 
   if (allowedOrigins.includes(origin)) {

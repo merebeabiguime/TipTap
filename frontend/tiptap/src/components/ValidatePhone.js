@@ -1,27 +1,29 @@
 import "../style.css";
 
-import { useEffect, useState } from "react";
-import {
-  Button,
-  Container,
-  Form,
-  InputGroup,
-  Spinner,
-  Stack,
-} from "react-bootstrap";
+import { useEffect } from "react";
+import { Container, Spinner, Stack } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { validatePhoneForm } from "../constants/FormFields";
 import { useUserContext } from "../contexts/AuthContext";
 import PreviousPageButton from "../features/PreviousPageButton";
+import useHookForm from "../forms/hook/HookForm";
 
 function ValidatePhone() {
-  const { userObject, setOtpPhoneNumber, getUserInfos } = useUserContext();
+  const { userObject, setOtpPhoneNumber, getUserInfos, otpPhoneNumber } =
+    useUserContext();
   const navigate = useNavigate();
 
-  const [newPhoneNumber, setNewPhoneNumber] = useState("");
-  const handlePhoneNumberChange = (event) => {
-    setNewPhoneNumber(event.target.value);
-    setOtpPhoneNumber(event.target.value);
-  };
+  const {
+    getValue,
+    showInputs,
+    setInputList,
+    setLoading,
+    setDisabled,
+    getFormIsSucces,
+  } = useHookForm({
+    inputs: validatePhoneForm({ phone: userObject ? userObject[0].phone : "" }),
+    btnText: "Continuer",
+  });
 
   useEffect(() => {
     setOtpPhoneNumber(userObject[0].phone);
@@ -46,45 +48,42 @@ function ValidatePhone() {
     };
   }, []);*/
 
-  const goToOtp = () => {
-    navigate("/verifyUser");
-  };
+  const formIsSuccess = getFormIsSucces();
+
+  useEffect(() => {
+    console.log("deeee", formIsSuccess);
+    if (formIsSuccess === true) {
+      const phoneNumber = getValue("chooseVerifMethode_phoneNumber");
+      if (
+        phoneNumber !== undefined &&
+        phoneNumber !== null &&
+        phoneNumber !== "" &&
+        phoneNumber != userObject[0].phone
+      ) {
+        setOtpPhoneNumber(phoneNumber);
+      }
+      if (formIsSuccess) {
+        navigate("/verifyUser");
+        console.log("success");
+      }
+      console.log("otp", otpPhoneNumber);
+    }
+  }, [formIsSuccess]);
 
   return !getUserInfos.isLoading && getUserInfos.isSuccess ? (
     <Container className="gx-0 fluid ">
-      <Stack>
+      <Stack style={{ marginLeft: "25px", marginRight: "25px" }}>
         <div>
-          <PreviousPageButton />
+          <PreviousPageButton firstTitle="Vérifier le numéro" />
         </div>
-        <div className="" style={{ marginRight: "38px", marginLeft: "38px" }}>
-          <h1 className="h1-mt-33">Vérifier le numéro</h1>
-          <p className="p-mt-15">
+        <div>
+          <p>
             Vous avez la possibilité de modifier le numéro de téléphone avant
             d'envoyer le code. Si vous ne souhaitez pas le modifier veuillez
             simplement cliquer sur continuer(format +330762575658)
           </p>
         </div>
-        <div className=" d-flex justify-content-center form-mt-74" sm={12}>
-          <Form>
-            <InputGroup className="mb-4">
-              <Form.Control
-                type="text"
-                placeholder={userObject[0].phone}
-                value={newPhoneNumber}
-                onChange={handlePhoneNumberChange} // Gérer le changement du numéro de téléphone
-                className="customForm1"
-                style={{ height: "65px" }}
-              />
-              <Button
-                style={{ marginLeft: "35px", marginRight: "35px" }}
-                className="customButton1"
-                onClick={goToOtp}
-              >
-                Continuer
-              </Button>
-            </InputGroup>
-          </Form>
-        </div>
+        {showInputs()}
       </Stack>
     </Container>
   ) : (

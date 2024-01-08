@@ -2,10 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { useUserContext } from "../../contexts/AuthContext";
 export default function PrivateManager() {
-  const { currentUser, userObject, getUserInfos, resetPasswordURL } =
-    useUserContext();
+  const {
+    currentUser,
+    userObject,
+    getUserInfos,
+    navigateTo,
+    resetPasswordURL,
+  } = useUserContext();
   const [myReturn, setMyreturn] = useState(<Outlet />);
-
+  const navigate = useNavigate();
   useEffect(() => {
     if (!currentUser) {
       window.location.href = "/signin";
@@ -13,17 +18,11 @@ export default function PrivateManager() {
   }, [currentUser]);
 
   useEffect(() => {
-    if (getUserInfos.isSuccess) {
-      if (
-        currentUser &&
-        !currentUser.emailVerified &&
-        userObject[0].verified === 0 &&
-        resetPasswordURL.current === ""
-      ) {
-        setMyreturn(<Navigate to="/choose-verif-method"></Navigate>);
-      }
+    console.log("userboejct");
+    if (userObject && userObject[0].verified === 0) {
+      navigate(navigateTo);
     }
-  }, [getUserInfos]);
+  }, [navigateTo]);
 
   useEffect(() => {
     if (resetPasswordURL.current !== "") {

@@ -60,20 +60,18 @@ export default function PrivateHomeWorker() {
 
   return (
     <Container>
-      <Stack>
-        <Stack direction="horizontal" className="mb-4">
-          <div style={{ marginTop: " 65px", marginLeft: "20px" }}>
-            <h1 className="customTitle1">QR Code personnel</h1>
-          </div>
-        </Stack>
-        <div className="" style={{ marginRight: "38px", marginLeft: "38px" }}>
-          <h4 className="">Votre QR Code personnel</h4>
+      <Stack style={{ marginRight: "25px", marginLeft: "25px" }}>
+        <div>
+          <h6 className="text-center mt-4">QR Code personnel</h6>
+        </div>
+        <div className="mt-4">
+          <h4 className="">Votre QR Code</h4>
           <p className="p-mt-15">
             Partagez ce code QR avec le responsable ou laissez-le le scanner
             depuis votre téléphone pour vous ajouter en tant qu'employé.
           </p>
         </div>
-        <div className="d-flex justify-content-center" sm={12} ref={qrCodeRef}>
+        <div className="d-flex justify-content-center" ref={qrCodeRef}>
           <QRCode
             size={256}
             style={{ height: "auto", maxWidth: "50%", width: "50%" }}
@@ -81,7 +79,7 @@ export default function PrivateHomeWorker() {
             viewBox={`0 0 256 256`}
           />
         </div>
-        <div className="d-flex justify-content-center" sm={12}>
+        <div className="d-flex justify-content-center">
           <h1
             style={{ color: "rgba(251, 188, 4, 1) !important" }}
             className="customName"

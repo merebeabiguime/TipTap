@@ -3,12 +3,14 @@ import Row from "react-bootstrap/Row";
 import vector3 from "../images/Vector 3.png";
 import vector4 from "../images/Vector 4.png";
 import UserIcon from "../images/signup_user_icon.png";
+import vectorGroup from "../images/vector_group.png";
 import "../style.css";
 
 import { useRef, useState } from "react";
-import { Button, Form, InputGroup } from "react-bootstrap";
+import { Button, Container, Form, InputGroup, Stack } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../contexts/AuthContext";
+import PreviousPageButton from "../features/PreviousPageButton";
 function ForgotPassword() {
   const { forgotPassword } = useUserContext();
   const [validation, setValidation] = useState("");
@@ -29,33 +31,20 @@ function ForgotPassword() {
     }
   };
   return (
-    <div>
-      <Row>
-        <Col className="justify-content-end" sm={12}>
-          <div>
-            <img
-              src={vector3}
-              alt="Vector 3"
-              className="vector"
-              style={{ width: "169.5px", height: "215px" }}
-            />
-          </div>
-          <div>
-            <img
-              src={vector4}
-              alt="Vector 4"
-              className="vector"
-              style={{ width: "187px", height: "243px" }}
-            />
-          </div>
-        </Col>
-        <Col className="d-flex justify-content-center  col-m-200" sm={12}>
-          <h1 className="col-m-25">Mot de passe oublié</h1>
-        </Col>
-        <Col className="d-flex justify-content-center  col-m-50" sm={12}>
-          <p>Veuillez entrer votre adresse email</p>
-        </Col>
-        <Col className=" d-flex justify-content-center" sm={12}>
+    <Container className="gx-0 fluid ">
+      <Stack style={{ marginRight: "25px", marginLeft: "25px" }}>
+        <div>
+          <PreviousPageButton firstTitle="Mot de passe oublié" />
+        </div>
+        <div>
+          <p>
+            Afin de réinitialiser votre mot de passe, veuillez entrer votre
+            adresse email. Si cette adresse email existe dans notre base de
+            données, nous vous enverrons un email de réinitilisation du mot de
+            passe.
+          </p>
+        </div>
+        <div className=" d-flex justify-content-center mt-4">
           <Form onSubmit={handleForm} ref={formRef}>
             <InputGroup>
               <img className="iconForm" src={UserIcon} alt="User" />
@@ -76,9 +65,9 @@ function ForgotPassword() {
               </Button>
             </Col>
           </Form>
-        </Col>
-      </Row>
-    </div>
+        </div>
+      </Stack>
+    </Container>
   );
 }
 

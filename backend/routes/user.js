@@ -130,4 +130,31 @@ router.put("/update", async (req, res) => {
   }
 });
 
+router.put("/updateEmail", async (req, res) => {
+  try {
+    const userObject = req.body;
+    const result = await db.updateUserEmail(
+      userObject[0].email,
+      userObject[0].uid
+    );
+    if (result === 0)
+      return res.send({
+        status: "Error",
+        response: result,
+      });
+
+    res.send({
+      status: "Success",
+      response: "L'email a été modifié avec succès",
+    });
+  } catch (error) {
+    res.send({
+      status: "Error",
+      response: "Une erreur s'est produtie",
+      code: 404,
+    });
+    console.error(error);
+  }
+});
+
 export default router;

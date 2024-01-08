@@ -32,8 +32,10 @@ router.get("/email/:email", async (req, res) => {
     const result = await db.isEmailOfWorker(email);
     if (result === 0) {
       res.send({ status: "Error", response: "Email Invalide" });
+      return;
     } else if (result === 2) {
       res.send({ status: "Error", response: "Staff déjà existant" });
+      return;
     } else {
       res.send({ status: "Success", response: result });
     }

@@ -1,4 +1,4 @@
-const allowedOrigins = "https://tiptap.biz";
+const allowedOrigins = process.env.ALLOWED_ORIGINS;
 
 const corsOptions = {
   origin: (origin, callback) => {

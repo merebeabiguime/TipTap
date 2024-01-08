@@ -19,7 +19,24 @@ function VerifyUser() {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [realOtp, setRealOtp] = useState(null);
 
-  const phoneNumber = otpPhoneNumber;
+  const [phoneNumber, setPhoneNumber] = useState(null);
+
+  const verifyUserMutation = useMutation({
+    mutationFn: async () => await fetchUser.verify(userObject[0].UID),
+    refetchOnWindowFocus: false,
+    onSuccess: (data) => {
+      if (data.status === "Success") {
+        window.location.href = "/signin";
+      } else {
+        console.log(data);
+      }
+    },
+  });
+
+  useEffect(() => {
+    // Assuming otpPhoneNumber is a string
+    setPhoneNumber(`+${otpPhoneNumber}`);
+  }, [otpPhoneNumber]);
 
   useEffect(() => {
     if (otpTime <= 30 && otpTime > 0) {
@@ -31,6 +48,7 @@ function VerifyUser() {
   }, [otpTime]);
 
   const sendOtp = async () => {
+    setMessage("");
     const recaptchaVerifier = window.recaptchaVerifier;
     try {
       const confirmation = await signInWithPhoneNumber(
@@ -58,6 +76,19 @@ function VerifyUser() {
     }
   };
 
+  const initializeRecaptchaVerifier = async () => {
+    try {
+      window.recaptchaVerifier = new RecaptchaVerifier(
+        "recaptcha",
+        { size: "invisible" },
+        auth
+      );
+    } catch (error) {
+      setMessage("Une erreur s'est produite");
+      console.log("error", error);
+    }
+  };
+
   useEffect(() => {
     initializeRecaptchaVerifier();
     return () => {
@@ -75,34 +106,14 @@ function VerifyUser() {
     resetOtpFields();
     sendOtp();
   };
-  const initializeRecaptchaVerifier = async () => {
-    if (phoneNumber == null) {
-      setMessage("something wrong try to again send otp");
-      return;
-    }
 
-    try {
-      window.recaptchaVerifier = new RecaptchaVerifier(
-        "recaptcha",
-        { size: "invisible" },
-        auth
+  useEffect(() => {
+    if (otpTime <= 0) {
+      setMessage(
+        "Vous avez atteint la limite de temps. Veuillez cliquer à nouveau sur envoyer."
       );
-    } catch (error) {
-      setMessage("Une erreur s'est produite");
     }
-  };
-
-  const verifyUserMutation = useMutation({
-    mutationFn: async () => await fetchUser.verify(userObject[0].UID),
-    refetchOnWindowFocus: false,
-    onSuccess: (data) => {
-      if (data.status === "Success") {
-        window.location.href = "/signin";
-      } else {
-        //Message d'erreur
-      }
-    },
-  });
+  }, [otpTime]);
 
   const handleInputChange = async (index, value) => {
     // Validate input to allow only numeric values
@@ -133,8 +144,14 @@ function VerifyUser() {
           }
         } else {
           setMessage("Ce code n'est plus valide. Veuillez réessayer.");
-          setOtpTime(31);
           return;
+        }
+      }
+      if (value === "" || value === null) {
+        // Move focus to the previous input if a digit is deleted
+        const previousIndex = index - 1;
+        if (previousIndex >= 0 && inputs.current[previousIndex]) {
+          inputs.current[previousIndex].focus();
         }
       } else if (value !== "") {
         // Move focus to the next input if a digit is entered
@@ -145,51 +162,60 @@ function VerifyUser() {
       }
     }
   };
+  const maskedPhoneNumber = phoneNumber
+    ? phoneNumber.replace(/(?<=\+\d{3})\d+(?=\d{3}$)/, "***")
+    : "";
 
   return !getUserInfos.isLoading && getUserInfos.isSuccess ? (
     <Container className="gx-0 fluid ">
-      <Stack>
+      <Stack style={{ marginLeft: "25px", marginRight: "25px" }}>
         <div>
-          <PreviousPageButton />
+          <PreviousPageButton firstTitle="Vérifier le compte" />
         </div>
-        <div className="" style={{ marginRight: "38px", marginLeft: "38px" }}>
-          <h1 className="h1-mt-33">Vérifier le compte</h1>
-          <p className="p-mt-15">
+        <div>
+          <p>
             Cliquez sur le bouton "Envoyer le code" puis entrez le mot de passe
             à usage unique que vous avez reçu dans votre téléphone.
           </p>
         </div>
-        <div className="" style={{ marginRight: "38px", marginLeft: "38px" }}>
-          <h1 className="h1-mt-33 text-center">Entrez l'OTP</h1>
-          <p className="mx-auto text-center">
-            Nous avons envoyé votre code à 4 chiffres au{" "}
-            {`+${phoneNumber.slice(-3)} ***. Ce code expirera dans`}{" "}
-            <span style={{ color: "red" }}>{`00:${otpTime}`}</span>
-          </p>
-        </div>
-        <div className="input-field mx-auto">
-          <Stack direction="horizontal">
-            {otp.map((digit, index) => (
-              <Form.Control
-                key={index}
-                className={`otp-input ${
-                  animationActive ? "otp-input-success" : ""
-                }`}
-                type="number"
-                placeholder="*"
-                value={digit}
-                onChange={(e) => handleInputChange(index, e.target.value)}
-                ref={(input) => (inputs.current[index] = input)}
-              />
-            ))}
-          </Stack>
-        </div>
-        <div className="mx-auto text-center m-4">
-          <p className="text-danger">{message}</p>
-        </div>
-        <div className="d-flex justify-content-center col-button button-mt-40">
+        {otpTime <= 30 && (
+          <div className="">
+            <h1 className="h1-mt-33 text-center">Entrez l'OTP</h1>
+            <p className="mx-auto ">
+              Nous avons envoyé votre code à 4 chiffres au{" "}
+              {`${maskedPhoneNumber}. Ce code expirera dans`}{" "}
+              <span style={{ color: "red" }}>{`00:${otpTime}`}</span>
+            </p>
+            <div className="input-field mx-auto">
+              <Stack direction="horizontal">
+                {otp.map((digit, index) => (
+                  <Form.Control
+                    key={index}
+                    className={`otp-input ${
+                      animationActive ? "otp-input-success" : ""
+                    }`}
+                    type="number"
+                    placeholder="*"
+                    value={digit}
+                    onChange={(e) => handleInputChange(index, e.target.value)}
+                    ref={(input) => (inputs.current[index] = input)}
+                  />
+                ))}
+              </Stack>
+            </div>
+            <div className="mx-auto text-center">
+              <p className="text-danger">{message}</p>
+            </div>
+          </div>
+        )}
+
+        <div className="d-flex justify-content-center col-button">
           <Button
-            style={{ marginLeft: "35px", marginRight: "35px" }}
+            style={{
+              marginLeft: "35px",
+              marginRight: "35px",
+              marginTop: "50px",
+            }}
             className="customButton1"
             onClick={handleButton}
           >

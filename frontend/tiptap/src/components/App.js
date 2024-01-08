@@ -1,31 +1,29 @@
-import Container from "react-bootstrap/Container";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { StaffContextProvider } from "../contexts/fetches-contexts/StaffContext";
+import ChooseVerifMethod from "./ChooseVerifMethod";
 import ForgotPassword from "./ForgotPassword";
 import HomePage from "./HomePage";
 import Login from "./Login";
+import PrivateClient from "./PrivateClient/PrivateClient";
+import PrivateHomeClient from "./PrivateClient/PrivateHomeClient/PrivateHomeClient";
+import SelectStaff from "./PrivateClient/PrivateHomeClient/SelectStaff";
 import AddStaff from "./PrivateManager/PrivateHomeManager/AddStaff";
 import AllStaff from "./PrivateManager/PrivateHomeManager/AllStaff";
+import OrderQrCode from "./PrivateManager/PrivateHomeManager/OrderQrCode";
 import PrivateHomeManager from "./PrivateManager/PrivateHomeManager/PrivateHomeManager";
-import PrivateHomeClient from "./PrivateClient/PrivateHomeClient/PrivateHomeClient";
 import SelectStaffRole from "./PrivateManager/PrivateHomeManager/SelectStaffRole";
+import WorkerQrCode from "./PrivateManager/PrivateHomeManager/WorkerQrCode";
 import PrivateManager from "./PrivateManager/PrivateManager";
+import Cashout from "./PrivateWorker/PrivateHomeWorker/Cashout";
+import ModifyAccount from "./PrivateWorker/PrivateHomeWorker/ModifyAccount";
 import PrivateHomeWorker from "./PrivateWorker/PrivateHomeWorker/PrivateHomeWorker";
 import PrivateWorker from "./PrivateWorker/PrivateWorker";
-import ResetPassword from "./ResetPassword";
-import SelectRole from "./SelectRole";
 import SignUp from "./SignUp";
-import { StaffContextProvider } from "../contexts/fetches-contexts/StaffContext";
-import WorkerQrCode from "./PrivateManager/PrivateHomeManager/WorkerQrCode";
-import PrivateClient from "./PrivateClient/PrivateClient";
-import VerifyUser from "./VerifyUser";
-import SelectStaff from "./PrivateClient/PrivateHomeClient/SelectStaff";
-import ChooseVerifMethod from "./ChooseVerifMethod";
 import ValidatePhone from "./ValidatePhone";
-import Cashout from "./PrivateWorker/PrivateHomeWorker/Cashout";
-import OrderQrCode from "./PrivateManager/PrivateHomeManager/OrderQrCode";
-import SuccessPayment from "./reusable/SuccessPayment";
+import ResetPassword from "./Verification";
+import VerifyUser from "./VerifyUser";
 import Checkout from "./reusable/Checkout";
-import ModifyAccount from "./PrivateWorker/PrivateHomeWorker/ModifyAccount";
+import SuccessPayment from "./reusable/SuccessPayment";
 
 function App() {
   return (
@@ -37,11 +35,10 @@ function App() {
         ></Route>
         <Route path="/validate-phone" Component={ValidatePhone}></Route>
         <Route path="/" Component={HomePage}></Route>
-        <Route path="/selectRole" Component={SelectRole}></Route>
-        <Route path="/signup" Component={SignUp}></Route>
+        <Route path="/signup/:role?" Component={SignUp}></Route>
         <Route path="/signIn" Component={Login}></Route>
         <Route path="/forgotpassword" Component={ForgotPassword}></Route>
-        <Route path="/resetpassword" Component={ResetPassword}></Route>
+        <Route path="/verification" Component={ResetPassword}></Route>
         <Route path="/verifyUser" Component={VerifyUser}></Route>
         <Route
           path="/privateManager"

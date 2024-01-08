@@ -17,6 +17,7 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
+  verifyBeforeUpdateEmail,
 } from "firebase/auth";
 import { Spinner } from "react-bootstrap";
 import { useIsFetching, useMutation, useQuery } from "react-query";
@@ -28,7 +29,7 @@ export const UserContext = createContext();
 
 export function UserContextProvider(props) {
   const [userRole, setUserRole] = useState(0);
-  const [userObject, setUserObject] = useState({});
+  const [userObject, setUserObject] = useState(null);
   const [accessToken, setAccessToken] = useState(null);
   const userObjectRole = useRef(0);
   const [percentage, setPercentage] = useState(null);
@@ -51,26 +52,23 @@ export function UserContextProvider(props) {
     resetPasswordURL.current = url;
   }
 
-  const currentUser = useRef(null);
-
-  function setCurrentUser(user) {
-    currentUser.current = user;
-  }
+  const [currentUser, setCurrentUser] = useState(null);
 
   const getUserInfos = useQuery({
-    queryFn: async () => await fetchUser.getUser(currentUser.current.uid),
+    queryFn: async () => await fetchUser.getUser(currentUser.uid),
     queryKey: "User Infos",
-    enabled: !!currentUser.current,
+    enabled: !!currentUser,
     refetchOnWindowFocus: false,
     onSuccess: (data) => {
       console.log("en train de chercher");
       if (data.status === "Success") {
         console.log("successsss");
+        console.log("cred", currentUser);
         //Pourquoi setAccess Token avant d'appeler loginMutation ?
         setUserObject(data.response);
         console.log(data.response);
         if (
-          !currentUser.current.emailVerified &&
+          !currentUser.emailVerified &&
           data.response[0].verified === 0 &&
           resetPasswordURL.current === ""
         ) {
@@ -83,10 +81,29 @@ export function UserContextProvider(props) {
           setNavigateTo("/privateManager/private-home-manager");
         }
       } else {
-        //Message d'erreur
+        console.log("erreur", data);
       }
     },
   });
+
+  /*const updateEmailMutation = useMutation({
+    mutationFn: async () =>
+      await fetchUser.updateEmail([
+        {
+          email: currentUser.email,
+          uid: currentUser.uid,
+        },
+      ]),
+    refetchOnWindowFocus: false,
+  });
+
+  useEffect(() => {
+    if (userObject) {
+      if (currentUser.email !== userObject[0].email) {
+        updateEmailMutation.mutate();
+      }
+    }
+  }, [userObject]);*/
 
   const otherAuthMutation = useMutation({
     mutationFn: async () => await fetchAuth.otherAuth(googleUser.current[0]),
@@ -100,8 +117,20 @@ export function UserContextProvider(props) {
     },
   });
 
+  const [userReauthenticated, setUserReauthenticated] = useState(false);
+
   function selectRole(userRole) {
     setUserRole(userRole);
+  }
+
+  function updateUserEmail(email) {
+    try {
+      const result = verifyBeforeUpdateEmail(auth.currentUser, email);
+      return 1;
+    } catch (error) {
+      console.error(error);
+      return 0;
+    }
   }
 
   function signUp(email, password) {
@@ -190,9 +219,12 @@ export function UserContextProvider(props) {
         setResetPasswordURL,
         otpPhoneNumber,
         setOtpPhoneNumber,
+        updateUserEmail,
+        userReauthenticated,
+        setUserReauthenticated,
       }}
     >
-      {!isFetching && !loadingData ? (
+      {!loadingData ? (
         props.children
       ) : (
         <div className="centered-div">
@@ -234,6 +266,9 @@ export function useUserContext() {
     otpPhoneNumber,
     setOtpPhoneNumber,
     setCurrentUser,
+    updateUserEmail,
+    userReauthenticated,
+    setUserReauthenticated,
   } = useContext(UserContext);
 
   return {
@@ -266,5 +301,8 @@ export function useUserContext() {
     otpPhoneNumber,
     setOtpPhoneNumber,
     setCurrentUser,
+    updateUserEmail,
+    userReauthenticated,
+    setUserReauthenticated,
   };
 }

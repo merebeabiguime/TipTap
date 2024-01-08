@@ -107,11 +107,14 @@ function PrivateHomeClient() {
 
   return (
     <Container className="gx-0 fluid">
-      <Stack>
+      <Stack style={{ marginRight: "25px", marginLeft: "25px" }}>
         <div className=" mx-auto">
           <img key="star1" className="logo" src={logo} alt="logo" />
         </div>
-        <p> Choisissez à qui vous souhaitez envoyer votre pourboire.</p>
+        <p style={{ marginTop: "25px" }}>
+          {" "}
+          Choisissez à qui vous souhaitez envoyer votre pourboire.
+        </p>
         <StaffCaroussel />
         <div className="mx-auto">
           {[1, 2, 3, 4, 5].map((star) => (
